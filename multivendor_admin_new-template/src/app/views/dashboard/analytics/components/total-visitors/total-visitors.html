@@ -1,0 +1,73 @@
+<div class="card card-h-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start flex-wrap">
+      <div>
+        <h4 class="fs-13 mb-2 fw-bold text-uppercase text-muted">Total Visitors</h4>
+        <div class="d-flex align-items-center gap-2 mb-2 py-1">
+          <div class="avatar-md flex-shrink-0">
+            <span class="avatar-title text-bg-secondary rounded-circle">
+              <app-icon icon="eye" class="fs-xxl"></app-icon>
+            </span>
+          </div>
+          <h3 class="mb-0">
+            <span [countUp]="82.3" [countUpOptions]="{ decimalPlaces: 2, suffix: 'M' }"></span>
+          </h3>
+          <span class="badge fs-13 ms-auto badge-soft-success"> <app-icon icon="arrow-up"></app-icon> 6.84% </span>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="app-search app-search-sm">
+        <select class="form-select form-control form-select-sm">
+          <option value="All">All Time</option>
+          <option value="today">Today</option>
+          <option value="last_7_days">Last 7 Days</option>
+          <option value="last_30_days">Last 30 Days</option>
+          <option value="last_90_days" selected>Last 90 Days</option>
+          <option value="this_month">This Month</option>
+          <option value="last_month">Last Month</option>
+        </select>
+        <app-icon icon="calendar" class="app-search-icon text-muted"></app-icon>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between gap-1">
+      <div style="width: 69.4%">
+        <p class="mb-1 mt-2 text-muted text-uppercase fs-13 fw-medium">Mobile Phone</p>
+        <h3 class="fw-normal mb-2 fs-xl">69.40%</h3>
+        <ngb-progressbar [value]="100" type="secondary" [striped]="false" [animated]="false" class="progress-lg rounded-0 rounded-start mb-1"></ngb-progressbar>
+        <p class="text-muted mb-0">41,927 Sessions</p>
+      </div>
+
+      <div style="width: 30.6%">
+        <p class="mb-1 mt-2 text-muted text-uppercase fs-13 fw-medium">Desktop</p>
+        <h3 class="fw-normal mb-2 fs-xl">30.60%</h3>
+        <ngb-progressbar [value]="100" type="info" [striped]="false" [animated]="false" class="progress-lg rounded-0 rounded-end mb-1"></ngb-progressbar>
+        <p class="text-muted mb-0">18,476 Sessions</p>
+      </div>
+    </div>
+
+    <div class="table-responsive mb-n2 mt-3">
+      <table class="table table-sm table-nowrap table-borderless table-centered mb-0">
+        <thead class="bg-light bg-opacity-50 thead-sm">
+          <tr class="text-uppercase fs-xxs">
+            <th>Goal</th>
+            <th>Completed</th>
+            <th>Target</th>
+            <th>Progress</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(item of visitorData; track $index){
+          <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ item.completed }}</td>
+            <td>{{ item.target }}</td>
+            <td>{{ item.progress }}%</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

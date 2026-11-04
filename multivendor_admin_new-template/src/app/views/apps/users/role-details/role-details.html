@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex align-items-sm-center flex-sm-row flex-column my-3">
+        <div class="flex-grow-1">
+          <h4 class="fs-xl mb-1">Role Details</h4>
+          <p class="text-muted mb-0">Define and manage roles to streamline operations and ensure secure access control.</p>
+        </div>
+
+        <div class="text-end mt-3 mt-sm-0">
+          <a [routerLink]="[]" class="btn btn-success"> <app-icon icon="plus" class="me-1"></app-icon> Add New Role </a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 col-lg-3">
+          <app-user-role-details-card />
+        </div>
+
+        <div class="col-md-8 col-lg-9">
+          <app-user-role-details-table />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

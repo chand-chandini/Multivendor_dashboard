@@ -1,0 +1,235 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Projects" subTitle="Apps"></app-page-breadcrumb>
+
+  <div class="row mb-3">
+    <div class="col-lg-12">
+      <form class="bg-light-subtle rounded border p-3">
+        <div class="row gap-3">
+          <div class="col">
+            <div class="row gap-3">
+              <div class="col-lg-4">
+                <div class="app-search">
+                  <input type="text" class="form-control" placeholder="Search project name..." />
+                  <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+                </div>
+              </div>
+              <div class="col-auto">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                  <span class="me-2 fw-semibold">Filter By:</span>
+
+                  <!-- Status Filter -->
+                  <div class="app-search">
+                    <select class="form-select form-control my-1 my-md-0">
+                      <option selected>Status</option>
+                      <option value="On Track">On Track</option>
+                      <option value="Delayed">Delayed</option>
+                      <option value="At Risk">At Risk</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                    <app-icon icon="activity" class="app-search-icon text-muted"></app-icon>
+                  </div>
+
+                  <!-- Team Filter -->
+                  <div class="app-search">
+                    <select class="form-select form-control my-1 my-md-0">
+                      <option selected>Team</option>
+                      <option value="Design">Design</option>
+                      <option value="Development">Development</option>
+                      <option value="Marketing">Marketing</option>
+                      <option value="QA">QA</option>
+                    </select>
+                    <app-icon icon="users" class="app-search-icon text-muted"></app-icon>
+                  </div>
+
+                  <!-- Deadline Filter -->
+                  <div class="app-search">
+                    <select class="form-select form-control my-1 my-md-0">
+                      <option selected>Deadline</option>
+                      <option value="This Week">This Week</option>
+                      <option value="This Month">This Month</option>
+                      <option value="Next Month">Next Month</option>
+                      <option value="No Deadline">No Deadline</option>
+                    </select>
+                    <app-icon icon="calendar-clock" class="app-search-icon text-muted"></app-icon>
+                  </div>
+
+                  <button type="submit" class="btn btn-secondary">Apply</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto">
+            <div class="d-flex gap-1">
+              <a routerLink="/apps/projects/grid" class="btn btn-primary btn-icon">
+                <app-icon icon="category" class="fs-lg"></app-icon>
+              </a>
+              <a routerLink="/apps/projects/list" class="btn btn-soft-primary btn-icon">
+                <app-icon icon="list-check" class="fs-lg"></app-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    @for (item of projectData; track $index) {
+    <div class="col-md-6 col-xxl-3">
+      <div class="card">
+        <div class="card-body d-flex flex-column">
+          <!-- Header -->
+          <div class="d-flex align-items-start border-bottom border-dashed pb-3 mb-3">
+            <div class="avatar-xl me-3">
+              <span class="avatar-title {{ item.iconClassName }} rounded">
+                <app-icon [icon]="item.icon" class="fs-24"></app-icon>
+              </span>
+            </div>
+
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-start gap-2">
+                <h5 class="mb-1 lh-sm flex-grow-1">
+                  <a routerLink="/apps/projects/details" class="link-reset">{{ item.title }}</a>
+                </h5>
+
+                <!-- Status Badge With Condition -->
+                <span
+                  class="badge badge-label fs-xxs align-self-start"
+                  [class]="
+                    item.status === 'pending'
+                      ? 'badge-soft-warning'
+                      : item.status === 'delayed'
+                      ? 'badge-soft-secondary'
+                      : 'badge-soft-success'
+                  "
+                >
+                  {{ toPascalCase(item.status) }}
+                </span>
+              </div>
+
+              <p class="text-muted fs-xxs mb-0">Updated {{ item.updatedTime }}</p>
+            </div>
+
+            <div class="ms-2">
+              <div ngbDropdown>
+                <a ngbDropdownToggle class="btn btn-icon btn-ghost-light text-muted drop-arrow-none">
+                  <app-icon icon="dots-vertical" class="fs-xl"></app-icon>
+                </a>
+                <ul ngbDropdownMenu class="dropdown-menu-end">
+                  <li>
+                    <a ngbDropdownItem><app-icon icon="share" class="me-2"></app-icon>Share</a>
+                  </li>
+                  <li>
+                    <a ngbDropdownItem><app-icon icon="edit" class="me-2"></app-icon>Edit</a>
+                  </li>
+                  <li>
+                    <a ngbDropdownItem><app-icon icon="ban" class="me-2"></app-icon>Block</a>
+                  </li>
+                  <li>
+                    <a ngbDropdownItem class="dropdown-item text-danger"><app-icon icon="trash" class="me-2"></app-icon>Delete</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Section -->
+          <div class="row g-3 mb-3">
+            <!-- Tasks -->
+            <div class="col-6">
+              <div class="d-flex align-items-center gap-2">
+                <app-icon icon="list-check" class="text-muted fs-lg"></app-icon>
+                <div>
+                  <div class="fw-medium">{{ item.task.completed }}/{{ item.task.total }}</div>
+                  <small class="text-muted fs-xs">{{ item.task.label }}</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Files -->
+            <div class="col-6">
+              <div class="d-flex align-items-center gap-2">
+                <app-icon icon="paperclip" class="text-muted fs-lg"></app-icon>
+                <div>
+                  <div class="fw-medium">{{ item.files.count }} Files</div>
+                  <small class="text-muted fs-xs">{{ item.files.description }}</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comments -->
+            <div class="col-6">
+              <div class="d-flex align-items-center gap-2">
+                <app-icon icon="message" class="text-muted fs-lg"></app-icon>
+                <div>
+                  <div class="fw-medium">{{ item.comments.count }} Comments</div>
+                  <small class="text-muted fs-xs">{{ item.comments.description }}</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Due Date -->
+            <div class="col-6">
+              <div class="d-flex align-items-center gap-2">
+                <app-icon icon="calendar-clock" class="text-muted fs-lg"></app-icon>
+                <div>
+                  <div class="fw-medium">{{ item.dueDate.date }}</div>
+                  <small class="text-muted fs-xs">{{ item.dueDate.description }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team Members -->
+          <div class="mb-3">
+            <p class="my-2 text-muted fw-semibold fs-xs">Team Members</p>
+
+            <div class="avatar-group avatar-group-xs">
+              @for (member of item.members; track $index) {
+              <div class="avatar">
+                <img [src]="member.image" class="rounded-circle avatar-xs" alt="" />
+              </div>
+              }
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="mt-auto">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <p class="mb-0 text-muted fw-semibold fs-xs">Progress</p>
+              <p class="fw-semibold mb-0">{{ item.progress }}%</p>
+            </div>
+
+            <ngb-progressbar
+              [value]="item.progress"
+              [type]="
+                item.status === 'in-progress'
+                  ? 'success'
+                  : item.status === 'pending'
+                  ? 'warning'
+                  : 'secondary'
+              "
+              height="5px"
+              [striped]="false"
+              [animated]="false"
+            >
+            </ngb-progressbar>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <ul class="pagination pagination-rounded pagination-boxed justify-content-center">
+    <ngb-pagination [collectionSize]="50" [(page)]="page" [maxSize]="4" [ellipses]="true">
+      <ng-template ngbPaginationPrevious>
+        <span aria-hidden="true">«</span>
+      </ng-template>
+      <ng-template ngbPaginationNext>
+        <span aria-hidden="true">»</span>
+      </ng-template>
+    </ngb-pagination>
+  </ul>
+</div>

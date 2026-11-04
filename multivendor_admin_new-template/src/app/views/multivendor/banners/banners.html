@@ -1,0 +1,250 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Banners" subTitle="Marketing" />
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Banners"
+        searchPlaceholder="Search banners..."
+        itemsName="banners"
+        addLabel="Add Banner"
+        emptyMessage="No banners added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ editingId() ? 'Update Banner' : 'Add Banner' }}
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body">
+        <div class="row g-3">
+
+          <!-- Banner Image -->
+          <div class="col-12">
+            <label for="bannerImage" class="form-label">
+              Banner Image
+             <span class="text-danger">*</span></label>
+
+            <div class="d-flex align-items-center gap-3">
+              <div class="input-group">
+                <label
+                  for="bannerImage"
+                  class="input-group-text"
+                  style="cursor: pointer"
+                >
+                  Choose File
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="selectedImageName() || 'No file chosen'"
+                  readonly
+                  aria-label="Selected banner image filename"
+                />
+              </div>
+
+              <input
+                type="file"
+                id="bannerImage"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
+                (change)="onImageSelected($event)"
+                hidden
+              />
+                @if (fieldError(form, 'banner_image', 'Banner Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'banner_image', 'Banner Image') }}</div>
+                }
+
+              @if (imagePreview()) {
+                <img
+                  [src]="imagePreview()"
+                  [alt]="selectedImageName() || 'Banner image preview'"
+                  width="55"
+                  height="55"
+                  class="rounded border"
+                  style="object-fit: cover; flex-shrink: 0"
+                />
+              }
+            </div>
+          </div>
+
+          <!-- Link Type -->
+          <div class="col-md-6">
+            <label for="linkType" class="form-label">
+              Link Type
+            </label>
+
+            <select
+              id="linkType"
+              formControlName="link_type"
+              class="form-select"
+            >
+              @for (type of linkTypes; track type.value) {
+                <option [value]="type.value">
+                  {{ type.label }}
+                </option>
+              }
+            </select>
+                @if (fieldError(form, 'link_type', 'Link Type')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'link_type', 'Link Type') }}</div>
+                }
+          </div>
+
+          <!-- Vendor -->
+          @if (form.controls.link_type.value === 'vendor') {
+            <div class="col-md-6">
+              <label for="vendorId" class="form-label">
+                Vendor
+               <span class="text-danger">*</span></label>
+
+              <select
+                id="vendorId"
+                formControlName="vendor_id"
+                class="form-select"
+              >
+                <option [ngValue]="null">Select vendor</option>
+
+                @for (vendor of vendors(); track vendor.id) {
+                  <option [ngValue]="vendor.id">
+                    {{ vendor.vendor_name || vendor.name || vendor.shop_name }}
+                  </option>
+                }
+              </select>
+                @if (fieldError(form, 'vendor_id', 'Vendor')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'vendor_id', 'Vendor') }}</div>
+                }
+            </div>
+          }
+
+          <!-- Product -->
+          @if (form.controls.link_type.value === 'product') {
+            <div class="col-md-6">
+              <label for="productId" class="form-label">
+                Product
+               <span class="text-danger">*</span></label>
+
+              <select
+                id="productId"
+                formControlName="product_id"
+                class="form-select"
+              >
+                <option [ngValue]="null">Select product</option>
+
+                @for (product of products(); track product.id) {
+                  <option [ngValue]="product.id">
+                    {{ product.product_name || product.name }}
+                  </option>
+                }
+              </select>
+                @if (fieldError(form, 'product_id', 'Product')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'product_id', 'Product') }}</div>
+                }
+            </div>
+          }
+
+          <!-- External URL -->
+          @if (form.controls.link_type.value === 'external') {
+            <div class="col-12">
+              <label for="externalUrl" class="form-label">
+                External URL
+               <span class="text-danger">*</span></label>
+
+              <input
+                type="url"
+                id="externalUrl"
+                formControlName="external_url"
+                class="form-control"
+                placeholder="https://example.com"
+              />
+                @if (fieldError(form, 'external_url', 'External URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'external_url', 'External URL') }}</div>
+                }
+            </div>
+          }
+
+          <!-- Display Order -->
+          <div class="col-md-6">
+            <label for="bannerOrder" class="form-label">
+              Display Order
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="number"
+              id="bannerOrder"
+              formControlName="banner_order"
+              class="form-control"
+              min="0"
+            />
+                @if (fieldError(form, 'banner_order', 'Display Order')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'banner_order', 'Display Order') }}</div>
+                }
+          </div>
+
+          <!-- Status -->
+          <div class="col-md-6">
+            <label for="bannerStatus" class="form-label">
+              Status
+             <span class="text-danger">*</span></label>
+
+            <select
+              id="bannerStatus"
+              formControlName="is_active"
+              class="form-select"
+            >
+              <option [ngValue]="1">Active</option>
+              <option [ngValue]="0">Inactive</option>
+            </select>
+                @if (fieldError(form, 'is_active', 'Status')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'is_active', 'Status') }}</div>
+                }
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+            ></span>
+          }
+
+          {{ editingId() ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

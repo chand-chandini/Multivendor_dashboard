@@ -1,0 +1,217 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Issue List" subTitle="Apps"></app-page-breadcrumb>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header border-light justify-content-between">
+          <div class="app-search">
+            <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search issues..." />
+            <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+          </div>
+
+          <button type="submit" class="btn btn-success">Add New Issues</button>
+        </div>
+
+        <div class="table-responsive">
+          <div class="table-responsive">
+            <table class="table table-custom table-centered table-hover w-100 mb-0">
+              <tbody>
+                @if ((total$ | async)! > 0) { @for (issue of (issueData$ | async); track $index) {
+                <tr>
+                  <td>
+                    <span
+                      class="badge fs-xxs badge-label"
+                      [class]="
+                          issue.status === 'in-progress'
+                            ? 'text-bg-warning'
+                            : issue.status === 'open'
+                            ? 'text-bg-danger'
+                            : issue.status === 'resolved'
+                            ? 'text-bg-success'
+                            : issue.status === 'review'
+                            ? 'text-bg-info'
+                            : 'text-bg-secondary'
+                        "
+                    >
+                      {{ toTitleCase(issue.status) }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <a (click)="openModal(content)" [routerLink]="[]" class="link-reset text-uppercase fw-semibold"> {{ issue.id }} </a>
+                    <p class="mb-0 text-muted">{{ issue.description }}</p>
+                  </td>
+
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="avatar avatar-xs">
+                        <img [src]="issue.user.image" [alt]="issue.user.name" class="img-fluid rounded-circle" />
+                      </div>
+                      <div>
+                        <h5 class="mb-0 lh-base">{{ issue.user.name }}</h5>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <p class="mb-0 d-flex align-items-center gap-1">
+                      <app-icon icon="calendar"></app-icon>
+                      <span class="fw-semibold">Created:</span> {{ issue.createdAt }}
+                    </p>
+                    <p class="mb-0 d-flex align-items-center gap-1">
+                      <app-icon icon="clock"></app-icon>
+                      <span class="fw-semibold">{{ issue.status === 'resolved' ? 'Resolved:' : 'Due:' }}</span>
+                      {{ issue.dueDate }}
+                    </p>
+                  </td>
+
+                  <td>
+                    @for (tags of issue.tags; track $index) {
+                    <a [routerLink]="[]" class="badge badge-label badge-default me-1">{{ tags }}</a>
+                    }
+                  </td>
+
+                  <td>
+                    <ngb-progressbar [value]="issue.progress" [type]="issue.variant" [animated]="true" height="6px" class="w-100"> </ngb-progressbar>
+                    <small class="text-muted">{{ issue.progress }}% Complete</small>
+                  </td>
+
+                  <td>
+                    <div class="d-flex align-items-center gap-1">
+                      <app-icon icon="message-circle" class="text-muted me-1"></app-icon>
+                      {{ issue.comments }} comments
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="d-flex align-items-center gap-1">
+                      <app-icon icon="paperclip" class="text-muted me-1"></app-icon>
+                      {{ issue.files }} files
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="d-flex justify-content-center gap-1">
+                      <button class="btn btn-default btn-icon btn-sm">
+                        <app-icon icon="eye" class="fs-lg"></app-icon>
+                      </button>
+                      <button class="btn btn-default btn-icon btn-sm">
+                        <app-icon icon="edit" class="fs-lg"></app-icon>
+                      </button>
+                      <button class="btn btn-default btn-icon btn-sm" (click)="tableService.deleteItem(issue)">
+                        <app-icon icon="trash" class="fs-lg"></app-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                } } @else {
+                <tr class="no-results">
+                  <td colspan="11" class="text-center text-muted py-3">Nothing found.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer">
+            @if ((total$ | async)! > 0) {
+            <app-custom-pagination itemsName="issues" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+            }
+          </div>
+        </div>
+
+        <!-- end card-body-->
+      </div>
+      <!-- end card-->
+    </div>
+    <!-- end col-->
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title fw-bold" id="issueDetailsModalLabel">Issue Details</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <div class="modal-body">
+    <!-- Status + Title -->
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="badge bg-warning-subtle text-warning px-2 py-1 rounded-pill fs-xs">In Progress</span>
+      <h5 class="mb-0 fw-semibold">ISSUE-104 — User profile update not saving on mobile devices</h5>
+    </div>
+
+    <!-- Assigned User -->
+    <div class="d-flex align-items-center mb-3">
+      <img src="assets/images/users/user-1.jpg" class="rounded-circle me-2" width="40" height="40" alt="User" />
+      <div>
+        <h5 class="mb-0">Jason Lee</h5>
+        <small class="text-muted">Assigned User</small>
+      </div>
+    </div>
+
+    <!-- Dates -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <strong>Created:</strong>
+        10 Feb 2025
+      </div>
+      <div class="col-md-4">
+        <strong>Due:</strong>
+        15 Feb 2025
+      </div>
+      <div class="col-md-4">
+        <!-- Tags -->
+        <div class="mb-1">
+          <span class="badge badge-label text-bg-light fs-xxs me-1">Mobile</span>
+          <span class="badge badge-label text-bg-light fs-xxs me-1">UI</span>
+          <span class="badge bg-light text-danger fs-xxs">Urgent</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <p class="text-muted">User profile update is not saving correctly on mobile devices. This issue occurs on iOS Safari and Android Chrome. Needs urgent fix before next release.</p>
+
+    <!-- Progress -->
+    <div class="mb-3">
+      <div class="d-flex justify-content-between">
+        <small class="mb-2 text-uppercase">Progress</small>
+        <small class="fw-bold text-warning">60% Complete</small>
+      </div>
+      <div class="progress" style="height: 6px">
+        <div class="progress-bar bg-warning" style="width: 60%"></div>
+      </div>
+    </div>
+
+    <!-- Comments & Files -->
+    <div class="row text-center mb-3">
+      <div class="col-md-6">
+        <app-icon icon="message" class="me-1"></app-icon>
+        <strong>12 Comments</strong>
+      </div>
+      <div class="col-md-6">
+        <app-icon icon="paperclip" class="me-1"></app-icon>
+        <strong>3 Files Attached</strong>
+      </div>
+    </div>
+
+    <!-- File List Example -->
+    <ul class="list-group mb-3">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span> profile-update-bug.txt </span>
+        <a [routerLink]="[]" class="btn btn-sm btn-outline-primary">Download</a>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span> screenshot-mobile.png </span>
+        <a [routerLink]="[]" class="btn btn-sm btn-outline-primary">Download</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.dismiss()">Close</button>
+    <button type="button" class="btn btn-primary">Edit Issue</button>
+    <button type="button" class="btn btn-danger">Delete Issue</button>
+  </div>
+</ng-template>

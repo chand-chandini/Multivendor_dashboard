@@ -1,0 +1,636 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Delivery Partners" subTitle="Delivery" />
+
+  <!-- Active Status -->
+  <ng-template #activeCell let-row>
+    <div class="form-check form-switch d-inline-block">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        [checked]="row.active_status === 1"
+        [disabled]="!permissions.canEdit()"
+        (change)="toggleActive(row, $any($event.target).checked)"
+        [attr.aria-label]="'Toggle active status for ' + row.name"
+      />
+    </div>
+  </ng-template>
+
+  <!-- Login Status -->
+  <ng-template #loginCell let-row>
+    <div class="form-check form-switch d-inline-block">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        [checked]="row.login_status === 1"
+        [disabled]="!permissions.canEdit()"
+        (change)="toggleLogin(row, $any($event.target).checked)"
+        [attr.aria-label]="'Toggle login access for ' + row.name"
+      />
+    </div>
+  </ng-template>
+
+  <!-- Delivery Partners Table -->
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Delivery Partners"
+        searchPlaceholder="Search delivery partners..."
+        itemsName="partners"
+        addLabel="Add Partner"
+        emptyMessage="No delivery partners added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        [cellTemplates]="cellTemplates()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- VIEW MODAL (Quick Glance / Read-Only)      -->
+  <!-- ========================================== -->
+  <ng-template #viewModal let-modal>
+    <div class="modal-header bg-light border-bottom">
+      <h5 class="modal-title fw-semibold">View Delivery Partner</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <div class="modal-body p-4">
+      @if (selectedRow(); as row) {
+        <div class="row g-4">
+          
+          <!-- Basic Info -->
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-muted fw-bold mb-3 fs-xs border-bottom pb-2">Partner Info</h6>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Name:</span>
+              <span class="fw-medium text-dark w-50">{{ row.name || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Mobile:</span>
+              <span class="fw-medium text-dark w-50">{{ row.mobile_number || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Location:</span>
+              <span class="fw-medium text-dark w-50">{{ row.location_name || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">COD Limit:</span>
+              <span class="fw-medium text-dark w-50">₹{{ row.cod_limit || 0 }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Address:</span>
+              <span class="fw-medium text-dark w-50">{{ row.address || '-' }}</span>
+            </div>
+          </div>
+
+          <!-- Bank Details -->
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-muted fw-bold mb-3 fs-xs border-bottom pb-2">Bank Details</h6>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Account No:</span>
+              <span class="fw-medium text-dark w-50">{{ row.bank_account_number || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">IFSC Code:</span>
+              <span class="fw-medium text-dark w-50">{{ row.bank_ifsc_code || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2 align-items-start">
+              <span class="text-muted w-50 mt-1">Bank Image:</span>
+              <div class="w-50">
+                @if (row.bank_details_image) {
+                  <img [src]="row.bank_details_image" class="rounded border shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+                } @else { <span class="text-muted fs-xs">No image</span> }
+              </div>
+            </div>
+          </div>
+
+          <!-- Identity Documents -->
+          <div class="col-12 mt-4">
+            <h6 class="text-uppercase text-muted fw-bold mb-3 fs-xs border-bottom pb-2">Identity Documents</h6>
+            <div class="d-flex gap-4 flex-wrap">
+              
+              <div class="text-center" style="width: 120px;">
+                <small class="d-block text-muted mb-1">Aadhar ({{ row.aadhar_display || 'N/A' }})</small>
+                @if (row.aadhar_image) {
+                  <img [src]="row.aadhar_image" class="rounded border shadow-sm" style="width: 100px; height: 100px; object-fit: cover;">
+                } @else { <span class="text-muted fs-xs">No image</span> }
+              </div>
+
+              <div class="text-center" style="width: 120px;">
+                <small class="d-block text-muted mb-1">PAN ({{ row.pan_number || 'N/A' }})</small>
+                @if (row.pan_image) {
+                  <img [src]="row.pan_image" class="rounded border shadow-sm" style="width: 100px; height: 100px; object-fit: cover;">
+                } @else { <span class="text-muted fs-xs">No image</span> }
+              </div>
+
+              <div class="text-center" style="width: 120px;">
+                <small class="d-block text-muted mb-1">License ({{ row.driving_license_number || 'N/A' }})</small>
+                @if (row.driving_license_image) {
+                  <img [src]="row.driving_license_image" class="rounded border shadow-sm" style="width: 100px; height: 100px; object-fit: cover;">
+                } @else { <span class="text-muted fs-xs">No image</span> }
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      }
+    </div>
+
+    <div class="modal-footer bg-light border-top">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">
+        Cancel
+      </button>
+      <!-- ADDED: Download Button in View Modal -->
+      @if (selectedRow()) {
+        <button type="button" class="btn btn-primary" (click)="downloadPartnerDetails(selectedRow())">
+  <i class="bi bi-download me-1"></i> Download
+</button>
+      }
+    </div>
+  </ng-template>
+
+
+  <!-- ========================================== -->
+  <!-- ADD / EDIT MODAL (Original Form)           -->
+  <!-- ========================================== -->
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ editingId() ? 'Update Delivery Partner' : 'Add Delivery Partner' }}
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+        <div class="row g-3">
+          <!-- Name -->
+          <div class="col-md-6">
+            <label for="partnerName" class="form-label">
+              Name <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              id="partnerName"
+              formControlName="name"
+              class="form-control"
+              placeholder="Enter name"
+            />
+                @if (fieldError(form, 'name', 'Name')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'name', 'Name') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Phone Number -->
+          <div class="col-md-6">
+            <label for="partnerMobile" class="form-label">
+              Phone Number <span class="text-danger">*</span>
+            </label>
+            <input
+              type="tel"
+              id="partnerMobile"
+              formControlName="mobile_number"
+              class="form-control"
+              maxlength="10"
+              inputmode="numeric"
+              placeholder="Enter 10-digit phone number"
+            />
+                @if (fieldError(form, 'mobile_number', 'Phone Number')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'mobile_number', 'Phone Number') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Password - Add Only -->
+          @if (!editingId()) {
+            <div class="col-md-6">
+              <label for="partnerPwd" class="form-label">
+                Password <span class="text-danger">*</span>
+              </label>
+              <input
+                type="password"
+                id="partnerPwd"
+                formControlName="pwd"
+                class="form-control"
+                placeholder="Enter password"
+              />
+                @if (fieldError(form, 'pwd', 'Password')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'pwd', 'Password') }}</div>
+                }
+
+
+            </div>
+          }
+
+          <!-- Address -->
+          <div class="col-md-6">
+            <label for="partnerAddress" class="form-label">Address <span class="text-danger">*</span></label>
+            <textarea
+              id="partnerAddress"
+              formControlName="address"
+              class="form-control"
+              rows="3"
+              placeholder="Enter address"
+            ></textarea>
+                @if (fieldError(form, 'address', 'Address')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'address', 'Address') }}</div>
+                }
+          </div>
+
+          <!-- Location -->
+          <div class="col-md-6">
+            <label for="partnerLocation" class="form-label">Location <span class="text-danger">*</span></label>
+            <select
+              id="partnerLocation"
+              formControlName="location_id"
+              class="form-select"
+            >
+              <option [ngValue]="null">Select a location</option>
+              @for (location of locations(); track location.id) {
+                <option [ngValue]="location.id">
+                  {{ location.city }} - {{ location.area }}
+                </option>
+              }
+            </select>
+                @if (fieldError(form, 'location_id', 'Location')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'location_id', 'Location') }}</div>
+                }
+          </div>
+
+          <!-- COD Limit -->
+          <div class="col-md-6">
+            <label for="codLimit" class="form-label">COD Limit <span class="text-danger">*</span></label>
+            <input
+              type="number"
+              id="codLimit"
+              formControlName="cod_limit"
+              class="form-control"
+              min="0"
+              step="0.01"
+              placeholder="Enter COD limit"
+            />
+                @if (fieldError(form, 'cod_limit', 'COD Limit')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'cod_limit', 'COD Limit') }}</div>
+                }
+          </div>
+
+          <!-- Aadhar Number -->
+          <div class="col-md-6">
+            <label for="aadhar" class="form-label">Aadhar Number <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              id="aadhar"
+              formControlName="aadhar_number"
+              (blur)="normalizeIdentityDetails()"
+              class="form-control"
+              placeholder="Enter Aadhar number"
+            />
+                @if (fieldError(form, 'aadhar_number', 'Aadhar Number')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'aadhar_number', 'Aadhar Number') }}</div>
+                }
+          </div>
+
+          <!-- Aadhar Image -->
+          <div class="col-md-6">
+            <label for="aadharImage" class="form-label">Aadhar Image <span class="text-danger">*</span></label>
+            <div class="d-flex align-items-center gap-3">
+              <div class="input-group">
+                <label
+                  for="aadharImage"
+                  class="input-group-text"
+                  style="cursor: pointer"
+                >Choose File</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="
+                    selectedImageNames().aadhar_image ||
+                    savedImageNames().aadhar_image ||
+                    'No file chosen'
+                  "
+                  readonly
+                  aria-label="Aadhar image filename"
+                />
+              </div>
+
+              <input
+                type="file"
+                id="aadharImage"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
+                (change)="onImageSelected($event, 'aadhar_image')"
+                hidden
+              />
+                @if (fieldError(form, 'aadhar_image', 'Aadhar Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'aadhar_image', 'Aadhar Image') }}</div>
+                }
+
+              @if (
+                selectedImagePreviews().aadhar_image ||
+                savedImages().aadhar_image
+              ) {
+                <img
+                  [src]="
+                    selectedImagePreviews().aadhar_image ||
+                    savedImages().aadhar_image
+                  "
+                  [alt]="
+                    selectedImageNames().aadhar_image ||
+                    savedImageNames().aadhar_image ||
+                    'Aadhar image preview'
+                  "
+                  width="55"
+                  height="55"
+                  class="rounded border"
+                  style="object-fit: cover; flex-shrink: 0"
+                />
+              }
+            </div>
+          </div>
+
+          <!-- Pancard Number -->
+          <div class="col-md-6">
+            <label for="pan" class="form-label">Pancard Number <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              id="pan"
+              formControlName="pan_number"
+              (blur)="normalizeIdentityDetails()"
+              class="form-control"
+              placeholder="Enter Pancard number"
+            />
+                @if (fieldError(form, 'pan_number', 'Pancard Number')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'pan_number', 'Pancard Number') }}</div>
+                }
+          </div>
+
+          <!-- Pancard Image -->
+          <div class="col-md-6">
+            <label for="panImage" class="form-label">Pancard Image <span class="text-danger">*</span></label>
+            <div class="d-flex align-items-center gap-3">
+              <div class="input-group">
+                <label
+                  for="panImage"
+                  class="input-group-text"
+                  style="cursor: pointer"
+                >Choose File</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="
+                    selectedImageNames().pan_image ||
+                    savedImageNames().pan_image ||
+                    'No file chosen'
+                  "
+                  readonly
+                  aria-label="Pancard image filename"
+                />
+              </div>
+
+              <input
+                type="file"
+                id="panImage"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
+                (change)="onImageSelected($event, 'pan_image')"
+                hidden
+              />
+                @if (fieldError(form, 'pan_image', 'Pancard Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'pan_image', 'Pancard Image') }}</div>
+                }
+
+              @if (
+                selectedImagePreviews().pan_image ||
+                savedImages().pan_image
+              ) {
+                <img
+                  [src]="
+                    selectedImagePreviews().pan_image ||
+                    savedImages().pan_image
+                  "
+                  [alt]="
+                    selectedImageNames().pan_image ||
+                    savedImageNames().pan_image ||
+                    'Pancard image preview'
+                  "
+                  width="55"
+                  height="55"
+                  class="rounded border"
+                  style="object-fit: cover; flex-shrink: 0"
+                />
+              }
+            </div>
+          </div>
+
+          <!-- Driving License Number -->
+          <div class="col-md-6">
+            <label for="license" class="form-label">Driving License <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              id="license"
+              formControlName="driving_license_number"
+              (blur)="normalizeIdentityDetails()"
+              class="form-control"
+              placeholder="Enter driving license number"
+            />
+                @if (fieldError(form, 'driving_license_number', 'Driving License')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'driving_license_number', 'Driving License') }}</div>
+                }
+          </div>
+
+          <!-- Driving License Image -->
+          <div class="col-md-6">
+            <label for="licenseImage" class="form-label">
+              Driving License Image
+             <span class="text-danger">*</span></label>
+            <div class="d-flex align-items-center gap-3">
+              <div class="input-group">
+                <label
+                  for="licenseImage"
+                  class="input-group-text"
+                  style="cursor: pointer"
+                >Choose File</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="
+                    selectedImageNames().driving_license_image ||
+                    savedImageNames().driving_license_image ||
+                    'No file chosen'
+                  "
+                  readonly
+                  aria-label="Driving license image filename"
+                />
+              </div>
+
+              <input
+                type="file"
+                id="licenseImage"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
+                (change)="onImageSelected($event, 'driving_license_image')"
+                hidden
+              />
+                @if (fieldError(form, 'driving_license_image', 'Driving License Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'driving_license_image', 'Driving License Image') }}</div>
+                }
+
+              @if (
+                selectedImagePreviews().driving_license_image ||
+                savedImages().driving_license_image
+              ) {
+                <img
+                  [src]="
+                    selectedImagePreviews().driving_license_image ||
+                    savedImages().driving_license_image
+                  "
+                  [alt]="
+                    selectedImageNames().driving_license_image ||
+                    savedImageNames().driving_license_image ||
+                    'Driving license image preview'
+                  "
+                  width="55"
+                  height="55"
+                  class="rounded border"
+                  style="object-fit: cover; flex-shrink: 0"
+                />
+              }
+            </div>
+          </div>
+
+          <!-- Bank Account Number -->
+          <div class="col-md-6">
+            <label for="partnerAccount" class="form-label">
+              Bank Details - Account Number
+             <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              id="partnerAccount"
+              formControlName="bank_account_number"
+              (blur)="normalizeIdentityDetails()"
+              class="form-control"
+              placeholder="Enter bank account number"
+            />
+                @if (fieldError(form, 'bank_account_number', 'Bank Details - Account Number')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'bank_account_number', 'Bank Details - Account Number') }}</div>
+                }
+          </div>
+
+          <!-- Bank IFSC Code -->
+          <div class="col-md-6">
+            <label for="partnerIfsc" class="form-label">
+              Bank Details - IFSC Code
+             <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              id="partnerIfsc"
+              formControlName="bank_ifsc_code"
+              (blur)="normalizeIdentityDetails()"
+              class="form-control"
+              placeholder="Enter IFSC code"
+            />
+                @if (fieldError(form, 'bank_ifsc_code', 'Bank Details - IFSC Code')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'bank_ifsc_code', 'Bank Details - IFSC Code') }}</div>
+                }
+          </div>
+
+          <!-- Bank Image -->
+          <div class="col-md-6">
+            <label for="bankDetailsImage" class="form-label">Bank Image <span class="text-danger">*</span></label>
+            <div class="d-flex align-items-center gap-3">
+              <div class="input-group">
+                <label
+                  for="bankDetailsImage"
+                  class="input-group-text"
+                  style="cursor: pointer"
+                >Choose File</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="
+                    selectedImageNames().bank_details_image ||
+                    savedImageNames().bank_details_image ||
+                    'No file chosen'
+                  "
+                  readonly
+                  aria-label="Bank image filename"
+                />
+              </div>
+
+              <input
+                type="file"
+                id="bankDetailsImage"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
+                (change)="onImageSelected($event, 'bank_details_image')"
+                hidden
+              />
+                @if (fieldError(form, 'bank_details_image', 'Bank Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'bank_details_image', 'Bank Image') }}</div>
+                }
+
+              @if (
+                selectedImagePreviews().bank_details_image ||
+                savedImages().bank_details_image
+              ) {
+                <img
+                  [src]="
+                    selectedImagePreviews().bank_details_image ||
+                    savedImages().bank_details_image
+                  "
+                  [alt]="
+                    selectedImageNames().bank_details_image ||
+                    savedImageNames().bank_details_image ||
+                    'Bank image preview'
+                  "
+                  width="55"
+                  height="55"
+                  class="rounded border"
+                  style="object-fit: cover; flex-shrink: 0"
+                />
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          }
+          {{ editingId() ? 'Update Partner' : 'Add Partner' }}
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

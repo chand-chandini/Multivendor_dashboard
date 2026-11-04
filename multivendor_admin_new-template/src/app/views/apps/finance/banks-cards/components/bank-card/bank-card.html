@@ -1,0 +1,111 @@
+<div class="row">
+  <!-- Section Header -->
+  <div class="col-12 d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-semibold fs-base text-muted text-uppercase mb-0">Cards</h5>
+    <button class="btn btn-primary btn-sm" (click)="openBankModal(content)"><app-icon icon="plus" class="me-1"></app-icon> Add Card</button>
+  </div>
+
+  <!-- Cards List -->
+  @for (card of paymentCardData; track $index) {
+  <div class="col-md-6 col-xxl-3">
+    <div class="card border border-dashed shadow-none">
+      <div class="card-body">
+        <!-- Top row: Image & Status Badge -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <img [src]="card.image" [alt]="card.brand" height="36" />
+          <span
+            class="badge"
+            [class]="
+              card.status === 'active'
+                ? 'bg-success-subtle text-success'
+                : card.status === 'inactive'
+                ? 'bg-warning-subtle text-warning':
+                'bg-danger-subtle text-danger' 
+            "
+          >
+            {{ toPascalCase(card.status) }}
+          </span>
+        </div>
+
+        <!-- Card Number & Expiry -->
+        <h4 class="fw-semibold mt-3">{{ card.number }}</h4>
+        <p class="text-muted fs-sm mb-0">Exp: {{ card.expiryDate }}</p>
+
+        <!-- Holder & Dropdown Actions -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <span class="fw-medium text-dark">{{ card.holder }}</span>
+          <div ngbDropdown>
+            <button class="btn btn-sm btn-light btn-icon rounded-circle drop-arrow-none" ngbDropdownToggle>
+              <app-icon icon="dots-vertical"></app-icon>
+            </button>
+            <ul ngbDropdownMenu class="dropdown-menu-end">
+              <li><a ngbDropdownItem [routerLink]="[]">Set as Default</a></li>
+              <li><a ngbDropdownItem [routerLink]="[]">Edit</a></li>
+              <li><a ngbDropdownItem class="text-danger" [routerLink]="[]">Remove</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title fw-semibold" id="addCardModalLabel">Add New Card</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <div class="modal-body">
+    <form id="cardForm">
+      <div class="mb-3">
+        <label class="form-label">Card Holder Name</label>
+        <input type="text" class="form-control" placeholder="Enter card holder name" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Card Number</label>
+        <input type="text" class="form-control" placeholder="XXXX XXXX XXXX XXXX" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Card Type</label>
+        <select class="form-select" required>
+          <option value="">Select type</option>
+          <option>Credit Card</option>
+          <option>Debit Card</option>
+          <option>Prepaid Card</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Expiry Date</label>
+        <input type="text" mwlFlatpickr [options]="flatPickrOptions" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">CVV</label>
+        <input type="password" class="form-control" placeholder="***" maxlength="3" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Bank Name</label>
+        <input type="text" class="form-control" placeholder="Enter bank name" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select class="form-select">
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer border-0 pt-0">
+    <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+    <button type="submit" form="cardForm" class="btn btn-primary">Save Card</button>
+  </div>
+</ng-template>

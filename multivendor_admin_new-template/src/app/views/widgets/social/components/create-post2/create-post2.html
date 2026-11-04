@@ -1,0 +1,45 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-3">
+      <div class="flex-grow-1">
+        <h5 class="fw-semibold mb-0">Create a Post</h5>
+        <span class="text-muted fs-xs">Share updates with your network</span>
+      </div>
+    </div>
+
+    <!-- New Post Form -->
+    <form>
+      <div class="position-relative">
+        <textarea rows="3" class="form-control rounded-3" placeholder="Write something meaningful..."></textarea>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <!-- New Icon Bar -->
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-light btn-sm d-flex align-items-center gap-1 px-2">
+            <app-icon icon="user" class="fs-md"></app-icon>
+            <span class="d-none d-sm-inline">Tag</span>
+          </button>
+
+          <button type="button" class="btn btn-light btn-sm d-flex align-items-center gap-1 px-2">
+            <app-icon icon="map-pin" class="fs-md"></app-icon>
+            <span class="d-none d-sm-inline">Location</span>
+          </button>
+
+          <button type="button" class="btn btn-light btn-sm d-flex align-items-center gap-1 px-2">
+            <app-icon icon="camera" class="fs-md"></app-icon>
+            <span class="d-none d-sm-inline">Photo</span>
+          </button>
+
+          <button type="button" class="btn btn-light btn-sm d-flex align-items-center gap-1 px-2">
+            <app-icon icon="mood-smile" class="fs-md"></app-icon>
+            <span class="d-none d-sm-inline">Feeling</span>
+          </button>
+        </div>
+
+        <!-- New Post Button -->
+        <button type="submit" class="btn btn-primary btn-sm px-3">Publish</button>
+      </div>
+    </form>
+  </div>
+</div>

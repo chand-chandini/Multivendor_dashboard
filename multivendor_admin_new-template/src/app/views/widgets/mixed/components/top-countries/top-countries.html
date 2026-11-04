@@ -1,0 +1,29 @@
+<app-card-with-action title="Top Countries" [isCloseable]="true" [isTogglable]="true" [isReloadable]="true">
+  <div card-body>
+    @for (item of topCountryData; track item.name) {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <img [src]="item.image" [alt]="item.name" class="avatar-xxs rounded" />
+      <h5 class="mb-0 fw-medium"><a [routerLink]="[]" class="link-reset"> {{ item.name }}</a> <small class="text-muted"> Pop: {{ item.population }}</small></h5>
+      <div class="ms-auto">
+        <div class="d-flex align-items-center gap-3 text-end">
+          <p class="mb-0 fw-medium">{{ item.visitors}}</p>
+          <p
+            class="badge badge-label fs-xxs mb-0"
+            [class]="
+                               item.change >  0 ? 'badge-soft-success' :
+                                item.change < 0 ?'badge-soft-danger' :'badge-soft-warning'
+                            "
+          >
+            {{ item.change > 0 ? '+' : '' }}{{ item.change }}%
+          </p>
+        </div>
+      </div>
+    </div>
+
+    }
+
+    <div class="text-center mt-4">
+      <a [routerLink]="[]" class="link-reset text-decoration-underline fw-semibold link-offset-3"> View all Countries <iconify-icon icon="tabler:world"></iconify-icon> </a>
+    </div>
+  </div>
+</app-card-with-action>

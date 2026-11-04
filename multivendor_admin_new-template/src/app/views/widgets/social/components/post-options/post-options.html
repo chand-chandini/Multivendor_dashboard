@@ -1,0 +1,76 @@
+<div class="card overflow-hidden">
+  <!-- Event Banner -->
+  <div class="position-relative">
+    <img src="assets/images/gallery/2.jpg" class="img-fluid w-100" style="height: 180px; object-fit: cover" alt="Event Banner" />
+
+    <span class="badge bg-primary position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill"> 📸 Photography Event </span>
+
+    <!-- Dropdown -->
+    <div ngbDropdown class="position-absolute top-0 end-0 m-3" placement="bottom-end">
+      <a ngbDropdownToggle [routerLink]="[]" class="text-white drop-arrow-none">
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="edit" class="me-2"></app-icon>Edit</a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="trash" class="me-2"></app-icon>Delete</a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="share" class="me-2"></app-icon>Share</a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="pin" class="me-2"></app-icon>Pin</a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="flag" class="me-2"></app-icon>Report</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="card-body">
+    <!-- Author Info -->
+    <div class="d-flex align-items-center mb-3">
+      <img src="assets/images/users/user-2.jpg" class="avatar-md rounded-circle me-2" alt="User" />
+      <div>
+        <h5 class="fw-semibold mb-0"><a [routerLink]="[]" class="link-reset">Anika Roy</a></h5>
+        <small class="text-muted">2 hours ago</small>
+      </div>
+    </div>
+
+    <!-- Event Title -->
+    <h4 class="fw-bold mb-2">Nature Photography Workshop 2025</h4>
+    <p class="text-muted">A weekend event designed for photographers and outdoor lovers to learn, collaborate, and capture stunning nature moments together.</p>
+
+    <!-- Info Boxes -->
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-4">
+        <div class="bg-light-subtle border border-light-subtle border-dashed rounded-3 p-3 h-100">
+          <small class="text-muted text-uppercase fw-bold">Date</small>
+          <div class="fw-semibold mt-1">14 September 2025</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="bg-light-subtle border border-light-subtle border-dashed rounded-3 p-3 h-100">
+          <small class="text-muted text-uppercase fw-bold">Time</small>
+          <div class="fw-semibold mt-1">10:00 AM – 4:00 PM</div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="bg-light-subtle border border-light-subtle border-dashed rounded-3 p-3 h-100">
+          <small class="text-muted text-uppercase fw-bold">Location</small>
+          <div class="fw-semibold mt-1">Green Valley National Park</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="d-flex justify-content-center gap-2 mt-2">
+      <button class="btn btn-outline-primary btn-sm"><app-icon icon="bell" class="me-1"></app-icon> Remind Me</button>
+      <button class="btn btn-primary btn-sm"><app-icon icon="user-plus" class="me-1"></app-icon> Register</button>
+    </div>
+  </div>
+</div>

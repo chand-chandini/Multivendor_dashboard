@@ -1,0 +1,21 @@
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-tabs nav-bordered mb-3" role="tablist">
+  <li [ngbNavItem]="1">
+    <a ngbNavLink>
+      <app-icon icon="message-circle" class="fs-lg me-md-1 align-middle"></app-icon>
+      <span class="d-none d-md-inline-block align-middle ms-1">Comments</span>
+    </a>
+    <ng-template ngbNavContent>
+      <app-comments />
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="2">
+    <a ngbNavLink>
+      <app-icon icon="activity" class="fs-lg me-md-1 align-middle"></app-icon>
+      <span class="d-none d-md-inline-block align-middle ms-1">Activity</span>
+    </a>
+    <ng-template ngbNavContent>
+      <app-activity />
+    </ng-template>
+  </li>
+</ul>
+<div class="tab-content" [ngbNavOutlet]="nav"></div>

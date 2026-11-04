@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Attendance" subTitle="HRM" />
+
+  <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 g-2">
+    @for (attendance of attendanceStatData; track attendance.title) {
+    <div class="col">
+      <app-attendance-widget [attendance]="attendance" />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-attendance-table />
+    </div>
+  </div>
+</div>

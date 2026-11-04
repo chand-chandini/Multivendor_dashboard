@@ -1,0 +1,202 @@
+diff --git a/dashboard_api/controllers/mainCtrl.js b/dashboard_api/controllers/mainCtrl.js
+index 4847015..9e1e7f5 100644
+--- a/dashboard_api/controllers/mainCtrl.js
++++ b/dashboard_api/controllers/mainCtrl.js
+@@ -4021,6 +4021,197 @@ exports.paycodsettlement = function(req, res) {
+     );
+ 
+ };
++// Delivery Boy Payments
++// Returns pending/unpaid delivery partner settlements for the current tenant.
++exports.getdeliveryboypayments = function(req, res) {
++
++    var tenant_id = req.admin.tenant_id;
++    var b = req.body || {};
++
++    var conditions = [
++        'dp.tenant_id=?',
++        'IFNULL(dps.d_in,0)=0',
++    ];
++
++    var params = [tenant_id];
++
++    // Delivery Boy filter
++    if (b.delivery_partner_id) {
++        conditions.push('dps.delivery_partner_id=?');
++        params.push(b.delivery_partner_id);
++    }
++
++    // Location filter
++    if (b.location_id) {
++        conditions.push('dp.location_id=?');
++        params.push(b.location_id);
++    }
++
++    // From Date + To Date
++    if (b.from_date && b.to_date) {
++        conditions.push(
++            'dps.settlement_period_start >= ? AND dps.settlement_period_end <= ?'
++        );
++
++        params.push(
++            b.from_date,
++            b.to_date
++        );
++    }
++
++    var WHERE = conditions.join(' AND ');
++
++    var QRY =
++        "SELECT " +
++        "dps.id, " +
++        "dps.delivery_partner_id, " +
++        "dps.settlement_period_start, " +
++        "dps.settlement_period_end, " +
++    "dps.cod_amount_collected AS total_amount, " +
++"dps.total_orders, " +
++"CASE " +
++"WHEN dps.total_orders > 0 " +
++"THEN ROUND(dps.delivery_earnings / dps.total_orders, 2) " +
++"ELSE 0 " +
++"END AS amount_per_order, " +
++"dps.net_payable AS net_pay, " +
++        "dps.settlement_status, " +
++        "dps.paid_at, " +
++        "dps.i_ts, " +
++        "dp.name AS delivery_partner_name, " +
++        "dp.mobile_number, " +
++        "dp.profile_image, " +
++        "dp.location_id " +
++        "FROM delivery_partner_settlements dps " +
++        "INNER JOIN delivery_partners dp " +
++        "ON dp.id=dps.delivery_partner_id " +
++        "WHERE " + WHERE +
++        " ORDER BY dps.i_ts DESC";
++
++    dbutil.sqlinjection(
++        sqldb.MySQLConPool,
++        QRY,
++        params,
++        'getdeliveryboypayments',
++        function(err, rows) {
++
++            if (err) {
++
++                console.log(
++                    'GET DELIVERY BOY PAYMENTS ERROR:',
++                    err
++                );
++
++                return res.json({
++                    status: 500,
++                    message: 'Internal server error'
++                });
++            }
++
++            return res.json({
++                status: 200,
++                data: rows || []
++            });
++        }
++    );
++};
++// Delivery Boy Payment History
++// Returns paid/processed delivery partner settlements for the current tenant.
++exports.getdeliveryboypaymenthistory = function(req, res) {
++
++    var tenant_id = req.admin.tenant_id;
++    var b = req.body || {};
++
++    var conditions = [
++        'dp.tenant_id=?',
++        'IFNULL(dps.d_in,0)=0',
++        '(dps.paid_at IS NOT NULL OR dps.settlement_status IN (1,2))'
++    ];
++
++    var params = [tenant_id];
++
++    // Delivery Boy filter
++    if (b.delivery_partner_id) {
++        conditions.push('dps.delivery_partner_id=?');
++        params.push(b.delivery_partner_id);
++    }
++
++    // Location filter
++    if (b.location_id) {
++        conditions.push('dp.location_id=?');
++        params.push(b.location_id);
++    }
++
++    // From Date + To Date
++    if (b.from_date && b.to_date) {
++        conditions.push(
++            'dps.settlement_period_start >= ? AND dps.settlement_period_end <= ?'
++        );
++
++        params.push(
++            b.from_date,
++            b.to_date
++        );
++    }
++
++    var WHERE = conditions.join(' AND ');
++
++    var QRY =
++        "SELECT " +
++        "dps.id, " +
++        "dps.delivery_partner_id, " +
++        "dps.settlement_period_start, " +
++        "dps.settlement_period_end, " +
++        "dps.total_orders, " +
++        "dps.cod_amount_collected AS total_amount, " +
++        "CASE " +
++        "WHEN dps.total_orders > 0 " +
++        "THEN ROUND(dps.delivery_earnings / dps.total_orders, 2) " +
++        "ELSE 0 " +
++        "END AS amount_per_order, " +
++        "dps.delivery_earnings, " +
++        "dps.advance_deducted, " +
++        "dps.net_payable AS net_pay, " +
++        "dps.settlement_status, " +
++        "dps.paid_at, " +
++        "dps.i_ts, " +
++        "dp.name AS delivery_partner_name, " +
++        "dp.mobile_number, " +
++        "dp.profile_image, " +
++        "dp.location_id " +
++        "FROM delivery_partner_settlements dps " +
++        "INNER JOIN delivery_partners dp " +
++        "ON dp.id=dps.delivery_partner_id " +
++        "WHERE " + WHERE +
++        " ORDER BY dps.paid_at DESC, dps.i_ts DESC";
++
++    dbutil.sqlinjection(
++        sqldb.MySQLConPool,
++        QRY,
++        params,
++        'getdeliveryboypaymenthistory',
++        function(err, rows) {
++
++            if (err) {
++
++                console.log(
++                    'GET DELIVERY BOY PAYMENT HISTORY ERROR:',
++                    err
++                );
++
++                return res.json({
++                    status: 500,
++                    message: 'Internal server error'
++                });
++            }
++
++            return res.json({
++                status: 200,
++                data: rows || []
++            });
++        }
++    );
++};
+ exports.getvendorsettlements = function(req, res) {
+ 
+     var tenant_id = req.admin.tenant_id;

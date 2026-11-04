@@ -1,0 +1,41 @@
+<div class="position-absolute top-0 end-0">
+  <img src="assets/images/auth-card-bg.svg" class="auth-card-bg-img" alt="auth-card-bg" />
+</div>
+<div class="position-absolute bottom-0 start-0" style="transform: rotate(180deg)">
+  <img src="assets/images/auth-card-bg.svg" class="auth-card-bg-img" alt="auth-card-bg" />
+</div>
+<div class="auth-box overflow-hidden align-items-center d-flex">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xxl-5 col-md-6 col-sm-8">
+        <div class="card p-4">
+          <div class="auth-brand text-center mb-2">
+            <a routerLink="/" class="logo-dark">
+              <img src="assets/images/logo-black.png" alt="dark logo" height="28" />
+            </a>
+            <a routerLink="/" class="logo-light">
+              <img src="assets/images/logo.png" alt="logo" height="28" />
+            </a>
+          </div>
+
+          <div class="p-2 text-center">
+            <div class="error-text-alt fs-72">400</div>
+            <h3 class="fw-bold text-uppercase">Oops! Invalid Request</h3>
+            <p class="text-muted">The request couldn’t be processed. Please check the URL or try again.</p>
+
+            <div class="d-flex justify-content-center gap-2 mt-4">
+              <button class="btn btn-outline-secondary">Go Back</button>
+
+              <button class="btn btn-primary" routerLink="/">Back to Dashboard</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-center text-muted mt-4 mb-0">
+          © {{ currentYear }} {{ name }} — by
+          <span class="fw-semibold">{{ author }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

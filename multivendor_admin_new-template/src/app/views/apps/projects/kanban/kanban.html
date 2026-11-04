@@ -1,0 +1,207 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Kanban Board" subTitle="Apps" />
+
+  <div class="outlook-box kanban-app">
+    <div class="card h-100 mb-0 flex-grow-1">
+      <div class="card-header border-light align-items-center gap-2">
+        <!-- Search Bar -->
+        <div class="app-search">
+          <input type="search" class="form-control" placeholder="Search by task name, assignee..." />
+          <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <!-- Team Filter -->
+          <div class="app-search">
+            <select class="form-select form-control">
+              <option selected>Team</option>
+              <option value="Product">Product</option>
+              <option value="Engineering">Engineering</option>
+              <option value="UX Design">UX Design</option>
+              <option value="Customer Success">Customer Success</option>
+              <option value="Support">Support</option>
+            </select>
+            <app-icon icon="users" class="app-search-icon text-muted"></app-icon>
+          </div>
+
+          <!-- Priority Filter -->
+          <div class="app-search">
+            <select class="form-select form-control">
+              <option selected>Priority</option>
+              <option value="normal">Normal</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+            <app-icon icon="flag" class="app-search-icon text-muted"></app-icon>
+          </div>
+
+          <!-- Status Filter -->
+          <div class="app-search">
+            <select class="form-select form-control">
+              <option selected>Status</option>
+              <option value="todo">To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="in-review">Review</option>
+              <option value="completed">Completed</option>
+            </select>
+            <app-icon icon="circle-check" class="app-search-icon text-muted"></app-icon>
+          </div>
+        </div>
+
+        <!-- Add New Card Button -->
+        <button type="button" class="btn btn-primary ms-lg-auto" (click)="openModal(content)">
+          <app-icon icon="plus" class="me-1"></app-icon>
+          Add New Task
+        </button>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="kanban-content bg-light bg-opacity-40" cdkDropListGroup>
+          <!-- TODO Data-->
+          <div class="kanban-board">
+            <div class="kanban-item py-2 px-3 d-flex align-items-center">
+              <h5 class="m-0">To Do ({{ todoTasks.length }})</h5>
+              <a [routerLink]="[]" class="ms-auto btn btn-sm btn-icon rounded-circle btn-primary">
+                <app-icon icon="plus"></app-icon>
+              </a>
+            </div>
+            <ngx-simplebar data-simplebar-md class="kanban-board-group px-2" (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListData]="todoTasks">
+              <ul data-plugins="sortable">
+                @for (task of todoTasks; track $index) {
+                <li class="kanban-item">
+                  <app-task-item [task]="task" cdkDrag />
+                </li>
+                }
+              </ul>
+            </ngx-simplebar>
+          </div>
+          <!-- end TODO Data-->
+
+          <!-- IN Progress Data-->
+          <div class="kanban-board">
+            <div class="py-2 px-3 d-flex align-items-center">
+              <h5 class="m-0">In Progress ({{ inprogressTasks.length }})</h5>
+              <a [routerLink]="[]" class="ms-auto btn btn-sm btn-icon rounded-circle btn-primary">
+                <app-icon icon="plus"></app-icon>
+              </a>
+            </div>
+            <ngx-simplebar data-simplebar-md class="kanban-board-group px-2" (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListData]="inprogressTasks">
+              <ul data-plugins="sortable">
+                @for (task of inprogressTasks; track $index) {
+                <li class="kanban-item">
+                  <app-task-item [task]="task" cdkDrag />
+                </li>
+                }
+              </ul>
+            </ngx-simplebar>
+          </div>
+          <!-- end IN Progress Data-->
+
+          <!-- In Review Data-->
+          <div class="kanban-board">
+            <div class="kanban-item py-2 px-3 d-flex align-items-center">
+              <h5 class="m-0">In Review ({{ inreviewTasks.length }})</h5>
+              <a [routerLink]="[]" class="ms-auto btn btn-sm btn-icon rounded-circle btn-primary">
+                <app-icon icon="plus"></app-icon>
+              </a>
+            </div>
+            <ngx-simplebar data-simplebar-md class="kanban-board-group px-2" (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListData]="inreviewTasks">
+              <ul data-plugins="sortable">
+                @for (task of inreviewTasks; track $index) {
+                <li class="kanban-item">
+                  <app-task-item [task]="task" cdkDrag />
+                </li>
+                }
+              </ul>
+            </ngx-simplebar>
+          </div>
+          <!-- end In Review Data-->
+
+          <!-- Done Data-->
+          <div class="kanban-board">
+            <div class="py-2 px-3 d-flex align-items-center">
+              <h5 class="m-0">Done ({{ completedTasks.length }})</h5>
+              <a [routerLink]="[]" class="ms-auto btn btn-sm btn-icon rounded-circle btn-primary">
+                <app-icon icon="plus"></app-icon>
+              </a>
+            </div>
+            <ngx-simplebar data-simplebar-md class="kanban-board-group px-2" (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListData]="completedTasks">
+              <ul data-plugins="sortable">
+                @for (task of completedTasks; track $index) {
+                <li class="kanban-item">
+                  <app-task-item [task]="task" cdkDrag />
+                </li>
+                }
+              </ul>
+            </ngx-simplebar>
+          </div>
+        </div>
+      </div>
+      <!-- end card-body-->
+    </div>
+    <!-- end card-->
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title fw-semibold" id="addTaskModalLabel">Add New Task</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <form id="taskForm">
+      <!-- Task Title -->
+      <div class="mb-3">
+        <label class="form-label">Task Title</label>
+        <input type="text" class="form-control" placeholder="Enter task name..." required />
+      </div>
+
+      <!-- Assignee -->
+      <div class="mb-3">
+        <label class="form-label">Assign To</label>
+        <select class="form-select">
+          <option selected disabled>Select user</option>
+          <option value="Liam Carter">Liam Carter</option>
+          <option value="Ava Mitchell">Ava Mitchell</option>
+          <option value="Noah Parker">Noah Parker</option>
+          <option value="Emma Scott">Emma Scott</option>
+          <option value="Logan Brooks">Logan Brooks</option>
+        </select>
+      </div>
+
+      <!-- Priority -->
+      <div class="mb-3">
+        <label class="form-label">Priority</label>
+        <select class="form-select">
+          <option value="normal" selected>Normal</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="urgent">Urgent</option>
+        </select>
+      </div>
+
+      <!-- Due Date -->
+      <div class="mb-3">
+        <label class="form-label">Due Date</label>
+        <input type="date" class="form-control" mwlFlatpickr [options]="flatPickrOptions" />
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" rows="3" placeholder="Brief details..."></textarea>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-primary">
+      <app-icon icon="check" class="me-1"></app-icon>
+      Save Task
+    </button>
+  </div>
+</ng-template>

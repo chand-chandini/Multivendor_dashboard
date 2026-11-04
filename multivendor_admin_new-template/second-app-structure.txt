@@ -1,0 +1,3076 @@
+Folder PATH listing for volume TherDose
+Volume serial number is 0000003A F0FA:5814
+D:\REACT\MULTIVENDOR_ADMIN_NEW-TEMPLATE\SRC\APP
+|   app.config.ts
+|   app.html
+|   app.routes.ts
+|   app.spec.ts
+|   app.ts
+|   
++---components
+|   +---apexchart
+|   |       apexchart.html
+|   |       apexchart.spec.ts
+|   |       apexchart.ts
+|   |       
+|   +---card-with-action
+|   |       card-with-action.html
+|   |       card-with-action.spec.ts
+|   |       card-with-action.ts
+|   |       
+|   +---chartjs
+|   |       chartjs.html
+|   |       chartjs.spec.ts
+|   |       chartjs.ts
+|   |       
+|   +---custom-pagination
+|   |       custom-pagination.html
+|   |       custom-pagination.spec.ts
+|   |       custom-pagination.ts
+|   |       
+|   +---data-table
+|   |       data-table.html
+|   |       data-table.ts
+|   |       
+|   +---echart
+|   |       echart.html
+|   |       echart.spec.ts
+|   |       echart.ts
+|   |       
+|   +---file-uploader
+|   |       file-uploader.html
+|   |       file-uploader.spec.ts
+|   |       file-uploader.ts
+|   |       
+|   +---icon
+|   |       icon.html
+|   |       icon.spec.ts
+|   |       icon.ts
+|   |       
+|   +---layout-info
+|   |       layout-info.html
+|   |       layout-info.spec.ts
+|   |       layout-info.ts
+|   |       
+|   +---page-breadcrumb
+|   |       page-breadcrumb.html
+|   |       page-breadcrumb.spec.ts
+|   |       page-breadcrumb.ts
+|   |       
+|   +---password-strength-bar
+|   |       password-strength-bar.html
+|   |       password-strength-bar.spec.ts
+|   |       password-strength-bar.ts
+|   |       
+|   +---rating
+|   |       rating.html
+|   |       rating.spec.ts
+|   |       rating.ts
+|   |       
+|   \---vector-map
+|           vector-map.html
+|           vector-map.spec.ts
+|           vector-map.ts
+|           
++---config
+|       api.config.ts
+|       echart-config.ts
+|       
++---constants
+|       index.ts
+|       
++---core
+|   +---directive
+|   |       choices-select.directive.ts
+|   |       counter.directive.ts
+|   |       glightbox.directive.ts
+|   |       has-permission.directive.ts
+|   |       sortable.directive.ts
+|   |       
+|   +---interceptors
+|   |       auth.interceptor.ts
+|   |       
+|   +---models
+|   |       multivendor.model.ts
+|   |       
+|   \---services
+|           auth.guard.ts
+|           auth.service.ts
+|           branding.service.ts
+|           layout.service.ts
+|           multivendor.service.ts
+|           notify.service.ts
+|           permission.guard.ts
+|           permission.service.ts
+|           table.service.ts
+|           
++---layouts
+|   |   horizontal-layout.ts
+|   |   main-layout.ts
+|   |   vertical-layout.ts
+|   |   
+|   \---components
+|       |   data.ts
+|       |   
+|       +---customizer
+|       |   |   customizer.ts
+|       |   |   
+|       |   \---components
+|       |           dir.ts
+|       |           orientation.ts
+|       |           position.ts
+|       |           sidenav-color.ts
+|       |           sidenav-size.ts
+|       |           sidenav-user.ts
+|       |           skin.ts
+|       |           theme.ts
+|       |           topbar-color.ts
+|       |           width.ts
+|       |           
+|       +---footer
+|       |       footer.ts
+|       |       
+|       +---navbar
+|       |   |   navbar.ts
+|       |   |   
+|       |   \---components
+|       |           app-menu.ts
+|       |           
+|       +---sidenav
+|       |   |   sidenav.ts
+|       |   |   
+|       |   \---components
+|       |           app-logo.ts
+|       |           app-menu.ts
+|       |           offcanvas-toggler.ts
+|       |           on-hover-toggler.ts
+|       |           user-profile-settings.ts
+|       |           
+|       \---topbar
+|           |   topbar.ts
+|           |   
+|           \---components
+|                   apps-dropdown-grid.ts
+|                   customizer-toggler.ts
+|                   fullscreen-toggler.ts
+|                   language-selector-rounded.ts
+|                   megamenu-apps.ts
+|                   megamenu-columns.ts
+|                   menu-toggler.ts
+|                   monochrome-toggler.ts
+|                   notification-dropdown-people.ts
+|                   search-box-rounded.ts
+|                   theme-dropdown.ts
+|                   user-dropdown-detailed.ts
+|                   
++---types
+|       index.ts
+|       
++---utils
+|       layout.ts
+|       quill-icons-init.ts
+|       string.ts
+|       
+\---views
+    +---apps
+    |   +---api-keys
+    |   |       api-keys.html
+    |   |       api-keys.spec.ts
+    |   |       api-keys.ts
+    |   |       data.ts
+    |   |       
+    |   +---blog
+    |   |   +---add
+    |   |   |       add.html
+    |   |   |       add.spec.ts
+    |   |   |       add.ts
+    |   |   |       
+    |   |   +---article
+    |   |   |   |   article.html
+    |   |   |   |   article.spec.ts
+    |   |   |   |   article.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---article-sidebar
+    |   |   |       |       article-sidebar.html
+    |   |   |       |       article-sidebar.spec.ts
+    |   |   |       |       article-sidebar.ts
+    |   |   |       |       
+    |   |   |       \---social-share
+    |   |   |               social-share.html
+    |   |   |               social-share.spec.ts
+    |   |   |               social-share.ts
+    |   |   |               
+    |   |   +---grid
+    |   |   |   |   data.ts
+    |   |   |   |   grid.html
+    |   |   |   |   grid.spec.ts
+    |   |   |   |   grid.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       \---blog-card
+    |   |   |               blog-card.html
+    |   |   |               blog-card.spec.ts
+    |   |   |               blog-card.ts
+    |   |   |               
+    |   |   \---list
+    |   |       |   list.html
+    |   |       |   list.spec.ts
+    |   |       |   list.ts
+    |   |       |   
+    |   |       \---components
+    |   |           +---list-card
+    |   |           |       list-card.html
+    |   |           |       list-card.spec.ts
+    |   |           |       list-card.ts
+    |   |           |       
+    |   |           \---list-sidebar
+    |   |                   list-sidebar.html
+    |   |                   list-sidebar.spec.ts
+    |   |                   list-sidebar.ts
+    |   |                   
+    |   +---calendar
+    |   |       calendar.html
+    |   |       calendar.spec.ts
+    |   |       calendar.ts
+    |   |       data.ts
+    |   |       
+    |   +---chat
+    |   |   |   chat.html
+    |   |   |   chat.spec.ts
+    |   |   |   chat.ts
+    |   |   |   data.ts
+    |   |   |   
+    |   |   \---components
+    |   |       \---chat-sidebar
+    |   |               chat-sidebar.html
+    |   |               chat-sidebar.spec.ts
+    |   |               chat-sidebar.ts
+    |   |               
+    |   +---clients
+    |   |       clients.html
+    |   |       clients.spec.ts
+    |   |       clients.ts
+    |   |       data.ts
+    |   |       
+    |   +---companies
+    |   |   |   companies.html
+    |   |   |   companies.spec.ts
+    |   |   |   companies.ts
+    |   |   |   data.ts
+    |   |   |   
+    |   |   \---components
+    |   |       \---company-card
+    |   |               company-card.html
+    |   |               company-card.spec.ts
+    |   |               company-card.ts
+    |   |               
+    |   +---crm
+    |   |   +---activities
+    |   |   |       activities.html
+    |   |   |       activities.spec.ts
+    |   |   |       activities.ts
+    |   |   |       
+    |   |   +---campaign
+    |   |   |   |   campaign.html
+    |   |   |   |   campaign.spec.ts
+    |   |   |   |   campaign.ts
+    |   |   |   |   data.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---campaign-table
+    |   |   |       |       campaign-table.html
+    |   |   |       |       campaign-table.spec.ts
+    |   |   |       |       campaign-table.ts
+    |   |   |       |       
+    |   |   |       \---campaign-widget
+    |   |   |               campaign-widget.html
+    |   |   |               campaign-widget.spec.ts
+    |   |   |               campaign-widget.ts
+    |   |   |               
+    |   |   +---contacts
+    |   |   |   |   contacts.html
+    |   |   |   |   contacts.spec.ts
+    |   |   |   |   contacts.ts
+    |   |   |   |   data.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       \---contact-card
+    |   |   |               contact-card.html
+    |   |   |               contact-card.spec.ts
+    |   |   |               contact-card.ts
+    |   |   |               
+    |   |   +---customers
+    |   |   |       customers.html
+    |   |   |       customers.spec.ts
+    |   |   |       customers.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---deals
+    |   |   |   |   data.ts
+    |   |   |   |   deals.html
+    |   |   |   |   deals.spec.ts
+    |   |   |   |   deals.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---deals-table
+    |   |   |       |       deals-table.html
+    |   |   |       |       deals-table.spec.ts
+    |   |   |       |       deals-table.ts
+    |   |   |       |       
+    |   |   |       \---deals-widget
+    |   |   |               deals-widget.html
+    |   |   |               deals-widget.spec.ts
+    |   |   |               deals-widget.ts
+    |   |   |               
+    |   |   +---estimations
+    |   |   |   |   data.ts
+    |   |   |   |   estimations.html
+    |   |   |   |   estimations.spec.ts
+    |   |   |   |   estimations.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---estimations-table
+    |   |   |       |       estimations-table.html
+    |   |   |       |       estimations-table.spec.ts
+    |   |   |       |       estimations-table.ts
+    |   |   |       |       
+    |   |   |       \---estimations-widget
+    |   |   |               estimations-widget.html
+    |   |   |               estimations-widget.spec.ts
+    |   |   |               estimations-widget.ts
+    |   |   |               
+    |   |   +---leads
+    |   |   |   |   data.ts
+    |   |   |   |   leads.html
+    |   |   |   |   leads.spec.ts
+    |   |   |   |   leads.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---leads-table
+    |   |   |       |       leads-table.html
+    |   |   |       |       leads-table.spec.ts
+    |   |   |       |       leads-table.ts
+    |   |   |       |       
+    |   |   |       \---leads-widget
+    |   |   |               leads-widget.html
+    |   |   |               leads-widget.spec.ts
+    |   |   |               leads-widget.ts
+    |   |   |               
+    |   |   +---opportunities
+    |   |   |       data.ts
+    |   |   |       opportunities.html
+    |   |   |       opportunities.spec.ts
+    |   |   |       opportunities.ts
+    |   |   |       
+    |   |   +---pipeline
+    |   |   |   |   data.ts
+    |   |   |   |   pipeline.html
+    |   |   |   |   pipeline.spec.ts
+    |   |   |   |   pipeline.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       \---task-item
+    |   |   |               task-item.html
+    |   |   |               task-item.spec.ts
+    |   |   |               task-item.ts
+    |   |   |               
+    |   |   \---proposals
+    |   |       |   data.ts
+    |   |       |   proposals.html
+    |   |       |   proposals.spec.ts
+    |   |       |   proposals.ts
+    |   |       |   
+    |   |       \---components
+    |   |           +---proposals-table
+    |   |           |       proposals-table.html
+    |   |           |       proposals-table.spec.ts
+    |   |           |       proposals-table.ts
+    |   |           |       
+    |   |           \---proposals-widget
+    |   |                   proposals-widget.html
+    |   |                   proposals-widget.spec.ts
+    |   |                   proposals-widget.ts
+    |   |                   
+    |   +---ecommerce
+    |   |   +---attributes
+    |   |   |       attributes.html
+    |   |   |       attributes.spec.ts
+    |   |   |       attributes.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---cart
+    |   |   |       cart.html
+    |   |   |       cart.spec.ts
+    |   |   |       cart.ts
+    |   |   |       
+    |   |   +---categories
+    |   |   |       categories.html
+    |   |   |       categories.spec.ts
+    |   |   |       categories.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---checkout
+    |   |   |   |   checkout.html
+    |   |   |   |   checkout.spec.ts
+    |   |   |   |   checkout.ts
+    |   |   |   |   data.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---billing-info
+    |   |   |       |       billing-info.html
+    |   |   |       |       billing-info.spec.ts
+    |   |   |       |       billing-info.ts
+    |   |   |       |       
+    |   |   |       +---invoice-detail
+    |   |   |       |       invoice-detail.html
+    |   |   |       |       invoice-detail.spec.ts
+    |   |   |       |       invoice-detail.ts
+    |   |   |       |       
+    |   |   |       +---order-summary
+    |   |   |       |       order-summary.html
+    |   |   |       |       order-summary.spec.ts
+    |   |   |       |       order-summary.ts
+    |   |   |       |       
+    |   |   |       +---payment-info
+    |   |   |       |       payment-info.html
+    |   |   |       |       payment-info.spec.ts
+    |   |   |       |       payment-info.ts
+    |   |   |       |       
+    |   |   |       \---shipping-info
+    |   |   |               shipping-info.html
+    |   |   |               shipping-info.spec.ts
+    |   |   |               shipping-info.ts
+    |   |   |               
+    |   |   +---customers
+    |   |   |       customers.html
+    |   |   |       customers.spec.ts
+    |   |   |       customers.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---order-add
+    |   |   |       order-add.html
+    |   |   |       order-add.spec.ts
+    |   |   |       order-add.ts
+    |   |   |       
+    |   |   +---order-details
+    |   |   |   |   order-details.html
+    |   |   |   |   order-details.spec.ts
+    |   |   |   |   order-details.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---billing-details
+    |   |   |       |       billing-details.html
+    |   |   |       |       billing-details.spec.ts
+    |   |   |       |       billing-details.ts
+    |   |   |       |       
+    |   |   |       +---customer-detail
+    |   |   |       |       customer-detail.html
+    |   |   |       |       customer-detail.spec.ts
+    |   |   |       |       customer-detail.ts
+    |   |   |       |       
+    |   |   |       +---order-summary
+    |   |   |       |       order-summary.html
+    |   |   |       |       order-summary.spec.ts
+    |   |   |       |       order-summary.ts
+    |   |   |       |       
+    |   |   |       +---shipping-activity
+    |   |   |       |       shipping-activity.html
+    |   |   |       |       shipping-activity.spec.ts
+    |   |   |       |       shipping-activity.ts
+    |   |   |       |       
+    |   |   |       \---shipping-address
+    |   |   |               shipping-address.html
+    |   |   |               shipping-address.spec.ts
+    |   |   |               shipping-address.ts
+    |   |   |               
+    |   |   +---orders
+    |   |   |   |   data.ts
+    |   |   |   |   orders.html
+    |   |   |   |   orders.spec.ts
+    |   |   |   |   orders.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---orders-table
+    |   |   |       |       orders-table.html
+    |   |   |       |       orders-table.spec.ts
+    |   |   |       |       orders-table.ts
+    |   |   |       |       
+    |   |   |       \---orders-widget
+    |   |   |               orders-widget.html
+    |   |   |               orders-widget.spec.ts
+    |   |   |               orders-widget.ts
+    |   |   |               
+    |   |   +---product-add
+    |   |   |       product-add.html
+    |   |   |       product-add.spec.ts
+    |   |   |       product-add.ts
+    |   |   |       
+    |   |   +---product-details
+    |   |   |   |   data.ts
+    |   |   |   |   product-details.html
+    |   |   |   |   product-details.spec.ts
+    |   |   |   |   product-details.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       \---product-reviews
+    |   |   |               product-reviews.html
+    |   |   |               product-reviews.spec.ts
+    |   |   |               product-reviews.ts
+    |   |   |               
+    |   |   +---product-stocks
+    |   |   |       data.ts
+    |   |   |       product-stocks.html
+    |   |   |       product-stocks.spec.ts
+    |   |   |       product-stocks.ts
+    |   |   |       
+    |   |   +---product-views
+    |   |   |       data.ts
+    |   |   |       product-views.html
+    |   |   |       product-views.spec.ts
+    |   |   |       product-views.ts
+    |   |   |       
+    |   |   +---products
+    |   |   |   |   data.ts
+    |   |   |   |   products.html
+    |   |   |   |   products.spec.ts
+    |   |   |   |   products.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---products-table
+    |   |   |       |       products-table.html
+    |   |   |       |       products-table.spec.ts
+    |   |   |       |       products-table.ts
+    |   |   |       |       
+    |   |   |       \---products-widget
+    |   |   |               products-widget.html
+    |   |   |               products-widget.spec.ts
+    |   |   |               products-widget.ts
+    |   |   |               
+    |   |   +---products-grid
+    |   |   |   |   data.ts
+    |   |   |   |   products-grid.html
+    |   |   |   |   products-grid.spec.ts
+    |   |   |   |   products-grid.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---product-card
+    |   |   |       |       product-card.html
+    |   |   |       |       product-card.spec.ts
+    |   |   |       |       product-card.ts
+    |   |   |       |       
+    |   |   |       \---product-filter-sidebar
+    |   |   |               product-filter-sidebar.html
+    |   |   |               product-filter-sidebar.spec.ts
+    |   |   |               product-filter-sidebar.ts
+    |   |   |               
+    |   |   +---purchased-orders
+    |   |   |       data.ts
+    |   |   |       purchased-orders.html
+    |   |   |       purchased-orders.spec.ts
+    |   |   |       purchased-orders.ts
+    |   |   |       
+    |   |   +---refunds
+    |   |   |   |   data.ts
+    |   |   |   |   refunds.html
+    |   |   |   |   refunds.spec.ts
+    |   |   |   |   refunds.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---refunds-table
+    |   |   |       |       refunds-table.html
+    |   |   |       |       refunds-table.spec.ts
+    |   |   |       |       refunds-table.ts
+    |   |   |       |       
+    |   |   |       \---refunds-widget
+    |   |   |               refunds-widget.html
+    |   |   |               refunds-widget.spec.ts
+    |   |   |               refunds-widget.ts
+    |   |   |               
+    |   |   +---reviews
+    |   |   |       data.ts
+    |   |   |       reviews.html
+    |   |   |       reviews.spec.ts
+    |   |   |       reviews.ts
+    |   |   |       
+    |   |   +---sales
+    |   |   |       data.ts
+    |   |   |       sales.html
+    |   |   |       sales.spec.ts
+    |   |   |       sales.ts
+    |   |   |       
+    |   |   +---seller-details
+    |   |   |   |   data.ts
+    |   |   |   |   seller-details.html
+    |   |   |   |   seller-details.spec.ts
+    |   |   |   |   seller-details.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---seller-contacts
+    |   |   |       |       seller-contacts.html
+    |   |   |       |       seller-contacts.spec.ts
+    |   |   |       |       seller-contacts.ts
+    |   |   |       |       
+    |   |   |       +---seller-overview
+    |   |   |       |       seller-overview.html
+    |   |   |       |       seller-overview.spec.ts
+    |   |   |       |       seller-overview.ts
+    |   |   |       |       
+    |   |   |       +---seller-table
+    |   |   |       |       seller-table.html
+    |   |   |       |       seller-table.spec.ts
+    |   |   |       |       seller-table.ts
+    |   |   |       |       
+    |   |   |       \---seller-widget
+    |   |   |               seller-widget.html
+    |   |   |               seller-widget.spec.ts
+    |   |   |               seller-widget.ts
+    |   |   |               
+    |   |   +---sellers
+    |   |   |       data.ts
+    |   |   |       sellers.html
+    |   |   |       sellers.spec.ts
+    |   |   |       sellers.ts
+    |   |   |       
+    |   |   +---settings
+    |   |   |   |   data.ts
+    |   |   |   |   settings.html
+    |   |   |   |   settings.spec.ts
+    |   |   |   |   settings.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---advanced
+    |   |   |       |       advanced.html
+    |   |   |       |       advanced.spec.ts
+    |   |   |       |       advanced.ts
+    |   |   |       |       
+    |   |   |       +---backup-restore
+    |   |   |       |       backup-restore.html
+    |   |   |       |       backup-restore.spec.ts
+    |   |   |       |       backup-restore.ts
+    |   |   |       |       
+    |   |   |       +---branding
+    |   |   |       |       branding.html
+    |   |   |       |       branding.spec.ts
+    |   |   |       |       branding.ts
+    |   |   |       |       
+    |   |   |       +---currency-tax
+    |   |   |       |       currency-tax.html
+    |   |   |       |       currency-tax.spec.ts
+    |   |   |       |       currency-tax.ts
+    |   |   |       |       
+    |   |   |       +---general-info
+    |   |   |       |       general-info.html
+    |   |   |       |       general-info.spec.ts
+    |   |   |       |       general-info.ts
+    |   |   |       |       
+    |   |   |       +---integrations
+    |   |   |       |       integrations.html
+    |   |   |       |       integrations.spec.ts
+    |   |   |       |       integrations.ts
+    |   |   |       |       
+    |   |   |       +---invoices
+    |   |   |       |       invoices.html
+    |   |   |       |       invoices.spec.ts
+    |   |   |       |       invoices.ts
+    |   |   |       |       
+    |   |   |       +---notifications
+    |   |   |       |       notifications.html
+    |   |   |       |       notifications.spec.ts
+    |   |   |       |       notifications.ts
+    |   |   |       |       
+    |   |   |       +---payments
+    |   |   |       |       payments.html
+    |   |   |       |       payments.spec.ts
+    |   |   |       |       payments.ts
+    |   |   |       |       
+    |   |   |       +---seo-legal
+    |   |   |       |       seo-legal.html
+    |   |   |       |       seo-legal.spec.ts
+    |   |   |       |       seo-legal.ts
+    |   |   |       |       
+    |   |   |       +---shipping
+    |   |   |       |       shipping.html
+    |   |   |       |       shipping.spec.ts
+    |   |   |       |       shipping.ts
+    |   |   |       |       
+    |   |   |       \---store-details
+    |   |   |               store-details.html
+    |   |   |               store-details.spec.ts
+    |   |   |               store-details.ts
+    |   |   |               
+    |   |   \---warehouse
+    |   |           data.ts
+    |   |           warehouse.html
+    |   |           warehouse.spec.ts
+    |   |           warehouse.ts
+    |   |           
+    |   +---email
+    |   |   +---components
+    |   |   |   \---email-sidebar
+    |   |   |           email-sidebar.html
+    |   |   |           email-sidebar.spec.ts
+    |   |   |           email-sidebar.ts
+    |   |   |           
+    |   |   +---compose
+    |   |   |       compose.html
+    |   |   |       compose.spec.ts
+    |   |   |       compose.ts
+    |   |   |       
+    |   |   +---details
+    |   |   |       data.ts
+    |   |   |       details.html
+    |   |   |       details.spec.ts
+    |   |   |       details.ts
+    |   |   |       
+    |   |   \---inbox
+    |   |           data.ts
+    |   |           inbox.html
+    |   |           inbox.spec.ts
+    |   |           inbox.ts
+    |   |           
+    |   +---file-manager
+    |   |   |   data.ts
+    |   |   |   file-manager.html
+    |   |   |   file-manager.spec.ts
+    |   |   |   file-manager.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---file-sidebar
+    |   |       |       file-sidebar.html
+    |   |       |       file-sidebar.spec.ts
+    |   |       |       file-sidebar.ts
+    |   |       |       
+    |   |       \---folder-card
+    |   |               folder-card.html
+    |   |               folder-card.spec.ts
+    |   |               folder-card.ts
+    |   |               
+    |   +---finance
+    |   |   +---banks-cards
+    |   |   |   |   banks-cards.html
+    |   |   |   |   banks-cards.spec.ts
+    |   |   |   |   banks-cards.ts
+    |   |   |   |   data.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---bank-account
+    |   |   |       |       bank-account.html
+    |   |   |       |       bank-account.spec.ts
+    |   |   |       |       bank-account.ts
+    |   |   |       |       
+    |   |   |       \---bank-card
+    |   |   |               bank-card.html
+    |   |   |               bank-card.spec.ts
+    |   |   |               bank-card.ts
+    |   |   |               
+    |   |   +---expense-category
+    |   |   |       data.ts
+    |   |   |       expense-category.html
+    |   |   |       expense-category.spec.ts
+    |   |   |       expense-category.ts
+    |   |   |       
+    |   |   +---expenses
+    |   |   |   |   data.ts
+    |   |   |   |   expenses.html
+    |   |   |   |   expenses.spec.ts
+    |   |   |   |   expenses.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---expenses-table
+    |   |   |       |       expenses-table.html
+    |   |   |       |       expenses-table.spec.ts
+    |   |   |       |       expenses-table.ts
+    |   |   |       |       
+    |   |   |       \---expenses-widget
+    |   |   |               expenses-widget.html
+    |   |   |               expenses-widget.spec.ts
+    |   |   |               expenses-widget.ts
+    |   |   |               
+    |   |   +---income
+    |   |   |   |   data.ts
+    |   |   |   |   income.html
+    |   |   |   |   income.spec.ts
+    |   |   |   |   income.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---income-table
+    |   |   |       |       income-table.html
+    |   |   |       |       income-table.spec.ts
+    |   |   |       |       income-table.ts
+    |   |   |       |       
+    |   |   |       \---income-widget
+    |   |   |               income-widget.html
+    |   |   |               income-widget.spec.ts
+    |   |   |               income-widget.ts
+    |   |   |               
+    |   |   \---transactions
+    |   |       |   data.ts
+    |   |       |   transactions.html
+    |   |       |   transactions.spec.ts
+    |   |       |   transactions.ts
+    |   |       |   
+    |   |       \---components
+    |   |           +---transactions-table
+    |   |           |       transactions-table.html
+    |   |           |       transactions-table.spec.ts
+    |   |           |       transactions-table.ts
+    |   |           |       
+    |   |           \---transactions-widget
+    |   |                   transactions-widget.html
+    |   |                   transactions-widget.spec.ts
+    |   |                   transactions-widget.ts
+    |   |                   
+    |   +---forum
+    |   |   +---components
+    |   |   |   \---forum-sidebar
+    |   |   |           forum-sidebar.html
+    |   |   |           forum-sidebar.spec.ts
+    |   |   |           forum-sidebar.ts
+    |   |   |           
+    |   |   +---post
+    |   |   |   |   post.html
+    |   |   |   |   post.spec.ts
+    |   |   |   |   post.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       \---post-details
+    |   |   |               post-details.html
+    |   |   |               post-details.spec.ts
+    |   |   |               post-details.ts
+    |   |   |               
+    |   |   \---view
+    |   |       |   data.ts
+    |   |       |   view.html
+    |   |       |   view.spec.ts
+    |   |       |   view.ts
+    |   |       |   
+    |   |       \---components
+    |   |           \---forum-post-card
+    |   |                   forum-post-card.html
+    |   |                   forum-post-card.spec.ts
+    |   |                   forum-post-card.ts
+    |   |                   
+    |   +---hrm
+    |   |   +---attendance
+    |   |   |   |   attendance.html
+    |   |   |   |   attendance.spec.ts
+    |   |   |   |   attendance.ts
+    |   |   |   |   data.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---attendance-table
+    |   |   |       |       attendance-table.html
+    |   |   |       |       attendance-table.spec.ts
+    |   |   |       |       attendance-table.ts
+    |   |   |       |       
+    |   |   |       \---attendance-widget
+    |   |   |               attendance-widget.html
+    |   |   |               attendance-widget.spec.ts
+    |   |   |               attendance-widget.ts
+    |   |   |               
+    |   |   +---create-salary-slip
+    |   |   |       create-salary-slip.html
+    |   |   |       create-salary-slip.spec.ts
+    |   |   |       create-salary-slip.ts
+    |   |   |       
+    |   |   +---departments
+    |   |   |       data.ts
+    |   |   |       departments.html
+    |   |   |       departments.spec.ts
+    |   |   |       departments.ts
+    |   |   |       
+    |   |   +---holidays
+    |   |   |   |   data.ts
+    |   |   |   |   holidays.html
+    |   |   |   |   holidays.spec.ts
+    |   |   |   |   holidays.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---holiday-table
+    |   |   |       |       holiday-table.html
+    |   |   |       |       holiday-table.spec.ts
+    |   |   |       |       holiday-table.ts
+    |   |   |       |       
+    |   |   |       \---holiday-widget
+    |   |   |               holiday-widget.html
+    |   |   |               holiday-widget.spec.ts
+    |   |   |               holiday-widget.ts
+    |   |   |               
+    |   |   +---leave-add
+    |   |   |       leave-add.html
+    |   |   |       leave-add.spec.ts
+    |   |   |       leave-add.ts
+    |   |   |       
+    |   |   +---leaves
+    |   |   |   |   data.ts
+    |   |   |   |   leaves.html
+    |   |   |   |   leaves.spec.ts
+    |   |   |   |   leaves.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---leaves-table
+    |   |   |       |       leaves-table.html
+    |   |   |       |       leaves-table.spec.ts
+    |   |   |       |       leaves-table.ts
+    |   |   |       |       
+    |   |   |       \---leaves-widget
+    |   |   |               leaves-widget.html
+    |   |   |               leaves-widget.spec.ts
+    |   |   |               leaves-widget.ts
+    |   |   |               
+    |   |   +---payroll
+    |   |   |       data.ts
+    |   |   |       payroll.html
+    |   |   |       payroll.spec.ts
+    |   |   |       payroll.ts
+    |   |   |       
+    |   |   +---staff-add
+    |   |   |       staff-add.html
+    |   |   |       staff-add.spec.ts
+    |   |   |       staff-add.ts
+    |   |   |       
+    |   |   +---staff-profile
+    |   |   |       staff-profile.html
+    |   |   |       staff-profile.spec.ts
+    |   |   |       staff-profile.ts
+    |   |   |       
+    |   |   \---staffs
+    |   |           data.ts
+    |   |           staffs.html
+    |   |           staffs.spec.ts
+    |   |           staffs.ts
+    |   |           
+    |   +---invoice
+    |   |   +---create
+    |   |   |       create.html
+    |   |   |       create.spec.ts
+    |   |   |       create.ts
+    |   |   |       
+    |   |   +---details
+    |   |   |       details.html
+    |   |   |       details.spec.ts
+    |   |   |       details.ts
+    |   |   |       
+    |   |   \---list
+    |   |           data.ts
+    |   |           list.html
+    |   |           list.spec.ts
+    |   |           list.ts
+    |   |           
+    |   +---issue-tracker
+    |   |       data.ts
+    |   |       issue-tracker.html
+    |   |       issue-tracker.spec.ts
+    |   |       issue-tracker.ts
+    |   |       
+    |   +---manage
+    |   |   |   data.ts
+    |   |   |   manage.html
+    |   |   |   manage.spec.ts
+    |   |   |   manage.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---integration-cards
+    |   |       |       integration-cards.html
+    |   |       |       integration-cards.spec.ts
+    |   |       |       integration-cards.ts
+    |   |       |       
+    |   |       \---integration-explore-card
+    |   |               integration-explore-card.html
+    |   |               integration-explore-card.spec.ts
+    |   |               integration-explore-card.ts
+    |   |               
+    |   +---outlook
+    |   |   |   data.ts
+    |   |   |   outlook.html
+    |   |   |   outlook.spec.ts
+    |   |   |   outlook.ts
+    |   |   |   
+    |   |   \---components
+    |   |       \---outlook-nav
+    |   |               outlook-nav.html
+    |   |               outlook-nav.spec.ts
+    |   |               outlook-nav.ts
+    |   |               
+    |   +---pin-board
+    |   |       data.ts
+    |   |       pin-board.html
+    |   |       pin-board.spec.ts
+    |   |       pin-board.ts
+    |   |       
+    |   +---pro-ai
+    |   |   |   pro-ai.html
+    |   |   |   pro-ai.spec.ts
+    |   |   |   pro-ai.ts
+    |   |   |   
+    |   |   \---components
+    |   |       \---pro-ai-sidebar
+    |   |               pro-ai-sidebar.html
+    |   |               pro-ai-sidebar.spec.ts
+    |   |               pro-ai-sidebar.ts
+    |   |               
+    |   +---projects
+    |   |   +---activity
+    |   |   |   |   activity.html
+    |   |   |   |   activity.spec.ts
+    |   |   |   |   activity.ts
+    |   |   |   |   data.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---basic-activity
+    |   |   |       |       basic-activity.html
+    |   |   |       |       basic-activity.spec.ts
+    |   |   |       |       basic-activity.ts
+    |   |   |       |       
+    |   |   |       \---expanded-activity
+    |   |   |               expanded-activity.html
+    |   |   |               expanded-activity.spec.ts
+    |   |   |               expanded-activity.ts
+    |   |   |               
+    |   |   +---details
+    |   |   |   |   data.ts
+    |   |   |   |   details.html
+    |   |   |   |   details.spec.ts
+    |   |   |   |   details.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---activity
+    |   |   |       |       activity.html
+    |   |   |       |       activity.spec.ts
+    |   |   |       |       activity.ts
+    |   |   |       |       
+    |   |   |       +---comments
+    |   |   |       |       comments.html
+    |   |   |       |       comments.spec.ts
+    |   |   |       |       comments.ts
+    |   |   |       |       
+    |   |   |       +---task-list
+    |   |   |       |       task-list.html
+    |   |   |       |       task-list.spec.ts
+    |   |   |       |       task-list.ts
+    |   |   |       |       
+    |   |   |       \---team-sidebar
+    |   |   |               team-sidebar.html
+    |   |   |               team-sidebar.spec.ts
+    |   |   |               team-sidebar.ts
+    |   |   |               
+    |   |   +---grid
+    |   |   |       data.ts
+    |   |   |       grid.html
+    |   |   |       grid.spec.ts
+    |   |   |       grid.ts
+    |   |   |       
+    |   |   +---kanban
+    |   |   |   |   data.ts
+    |   |   |   |   kanban.html
+    |   |   |   |   kanban.spec.ts
+    |   |   |   |   kanban.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       \---task-item
+    |   |   |               task-item.html
+    |   |   |               task-item.spec.ts
+    |   |   |               task-item.ts
+    |   |   |               
+    |   |   +---list
+    |   |   |       data.ts
+    |   |   |       list.html
+    |   |   |       list.spec.ts
+    |   |   |       list.ts
+    |   |   |       
+    |   |   \---team-board
+    |   |       |   data.ts
+    |   |       |   team-board.html
+    |   |       |   team-board.spec.ts
+    |   |       |   team-board.ts
+    |   |       |   
+    |   |       \---components
+    |   |           \---team-board-card
+    |   |                   team-board-card.html
+    |   |                   team-board-card.spec.ts
+    |   |                   team-board-card.ts
+    |   |                   
+    |   +---promo
+    |   |   +---coupons
+    |   |   |   |   coupons.html
+    |   |   |   |   coupons.spec.ts
+    |   |   |   |   coupons.ts
+    |   |   |   |   data.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---coupons-table
+    |   |   |       |       coupons-table.html
+    |   |   |       |       coupons-table.spec.ts
+    |   |   |       |       coupons-table.ts
+    |   |   |       |       
+    |   |   |       \---coupons-widget
+    |   |   |               coupons-widget.html
+    |   |   |               coupons-widget.spec.ts
+    |   |   |               coupons-widget.ts
+    |   |   |               
+    |   |   +---discounts
+    |   |   |       data.ts
+    |   |   |       discounts.html
+    |   |   |       discounts.spec.ts
+    |   |   |       discounts.ts
+    |   |   |       
+    |   |   \---gift-cards
+    |   |           data.ts
+    |   |           gift-cards.html
+    |   |           gift-cards.spec.ts
+    |   |           gift-cards.ts
+    |   |           
+    |   +---social-feed
+    |   |   |   data.ts
+    |   |   |   social-feed.html
+    |   |   |   social-feed.spec.ts
+    |   |   |   social-feed.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---activity
+    |   |       |       activity.html
+    |   |       |       activity.spec.ts
+    |   |       |       activity.ts
+    |   |       |       
+    |   |       +---featured-video
+    |   |       |       featured-video.html
+    |   |       |       featured-video.spec.ts
+    |   |       |       featured-video.ts
+    |   |       |       
+    |   |       +---feed-card
+    |   |       |       feed-card.html
+    |   |       |       feed-card.spec.ts
+    |   |       |       feed-card.ts
+    |   |       |       
+    |   |       +---feeds
+    |   |       |       feeds.html
+    |   |       |       feeds.spec.ts
+    |   |       |       feeds.ts
+    |   |       |       
+    |   |       +---requests
+    |   |       |       requests.html
+    |   |       |       requests.spec.ts
+    |   |       |       requests.ts
+    |   |       |       
+    |   |       +---social-sidebar
+    |   |       |       social-sidebar.html
+    |   |       |       social-sidebar.spec.ts
+    |   |       |       social-sidebar.ts
+    |   |       |       
+    |   |       \---trending
+    |   |               trending.html
+    |   |               trending.spec.ts
+    |   |               trending.ts
+    |   |               
+    |   +---task
+    |   |   +---create
+    |   |   |       create.html
+    |   |   |       create.spec.ts
+    |   |   |       create.ts
+    |   |   |       
+    |   |   +---details
+    |   |   |   |   data.ts
+    |   |   |   |   details.html
+    |   |   |   |   details.spec.ts
+    |   |   |   |   details.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---activity
+    |   |   |       |       activity.html
+    |   |   |       |       activity.spec.ts
+    |   |   |       |       activity.ts
+    |   |   |       |       
+    |   |   |       +---comments
+    |   |   |       |       comments.html
+    |   |   |       |       comments.spec.ts
+    |   |   |       |       comments.ts
+    |   |   |       |       
+    |   |   |       +---project-tabs
+    |   |   |       |       project-tabs.html
+    |   |   |       |       project-tabs.spec.ts
+    |   |   |       |       project-tabs.ts
+    |   |   |       |       
+    |   |   |       \---task-sidebar
+    |   |   |               task-sidebar.html
+    |   |   |               task-sidebar.spec.ts
+    |   |   |               task-sidebar.ts
+    |   |   |               
+    |   |   \---list
+    |   |           data.ts
+    |   |           list.html
+    |   |           list.spec.ts
+    |   |           list.ts
+    |   |           
+    |   +---ticket
+    |   |   +---create
+    |   |   |       create.html
+    |   |   |       create.spec.ts
+    |   |   |       create.ts
+    |   |   |       
+    |   |   +---details
+    |   |   |   |   details.html
+    |   |   |   |   details.spec.ts
+    |   |   |   |   details.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---chat
+    |   |   |       |       chat.html
+    |   |   |       |       chat.spec.ts
+    |   |   |       |       chat.ts
+    |   |   |       |       
+    |   |   |       \---detail
+    |   |   |               detail.html
+    |   |   |               detail.spec.ts
+    |   |   |               detail.ts
+    |   |   |               
+    |   |   \---list
+    |   |       |   data.ts
+    |   |       |   list.html
+    |   |       |   list.spec.ts
+    |   |       |   list.ts
+    |   |       |   
+    |   |       \---components
+    |   |           +---ticket-table
+    |   |           |       ticket-table.html
+    |   |           |       ticket-table.spec.ts
+    |   |           |       ticket-table.ts
+    |   |           |       
+    |   |           \---ticket-widget
+    |   |                   ticket-widget.html
+    |   |                   ticket-widget.spec.ts
+    |   |                   ticket-widget.ts
+    |   |                   
+    |   +---todo
+    |   |   |   data.ts
+    |   |   |   todo.html
+    |   |   |   todo.spec.ts
+    |   |   |   todo.ts
+    |   |   |   
+    |   |   \---components
+    |   |       \---todo-sidebar
+    |   |               todo-sidebar.html
+    |   |               todo-sidebar.spec.ts
+    |   |               todo-sidebar.ts
+    |   |               
+    |   +---users
+    |   |   +---account-settings
+    |   |   |       account-settings.html
+    |   |   |       account-settings.spec.ts
+    |   |   |       account-settings.ts
+    |   |   |       
+    |   |   +---contacts
+    |   |   |   |   contacts.html
+    |   |   |   |   contacts.spec.ts
+    |   |   |   |   contacts.ts
+    |   |   |   |   data.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       \---contact-card
+    |   |   |               contact-card.html
+    |   |   |               contact-card.spec.ts
+    |   |   |               contact-card.ts
+    |   |   |               
+    |   |   +---permissions
+    |   |   |       data.ts
+    |   |   |       permissions.html
+    |   |   |       permissions.spec.ts
+    |   |   |       permissions.ts
+    |   |   |       
+    |   |   +---profile
+    |   |   |   |   data.ts
+    |   |   |   |   profile.html
+    |   |   |   |   profile.spec.ts
+    |   |   |   |   profile.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---about
+    |   |   |       |       about.html
+    |   |   |       |       about.spec.ts
+    |   |   |       |       about.ts
+    |   |   |       |       
+    |   |   |       +---account
+    |   |   |       |       account.html
+    |   |   |       |       account.spec.ts
+    |   |   |       |       account.ts
+    |   |   |       |       
+    |   |   |       +---settings
+    |   |   |       |       settings.html
+    |   |   |       |       settings.spec.ts
+    |   |   |       |       settings.ts
+    |   |   |       |       
+    |   |   |       +---sidebar
+    |   |   |       |       sidebar.html
+    |   |   |       |       sidebar.spec.ts
+    |   |   |       |       sidebar.ts
+    |   |   |       |       
+    |   |   |       +---social-icons
+    |   |   |       |       social-icons.html
+    |   |   |       |       social-icons.spec.ts
+    |   |   |       |       social-icons.ts
+    |   |   |       |       
+    |   |   |       +---task-overview
+    |   |   |       |       task-overview.html
+    |   |   |       |       task-overview.spec.ts
+    |   |   |       |       task-overview.ts
+    |   |   |       |       
+    |   |   |       \---timeline
+    |   |   |               timeline.html
+    |   |   |               timeline.spec.ts
+    |   |   |               timeline.ts
+    |   |   |               
+    |   |   +---role-details
+    |   |   |   |   data.ts
+    |   |   |   |   role-details.html
+    |   |   |   |   role-details.spec.ts
+    |   |   |   |   role-details.ts
+    |   |   |   |   
+    |   |   |   \---components
+    |   |   |       +---user-role-details-card
+    |   |   |       |       user-role-details-card.html
+    |   |   |       |       user-role-details-card.spec.ts
+    |   |   |       |       user-role-details-card.ts
+    |   |   |       |       
+    |   |   |       \---user-role-details-table
+    |   |   |               user-role-details-table.html
+    |   |   |               user-role-details-table.spec.ts
+    |   |   |               user-role-details-table.ts
+    |   |   |               
+    |   |   \---roles
+    |   |       |   data.ts
+    |   |       |   roles.html
+    |   |       |   roles.spec.ts
+    |   |       |   roles.ts
+    |   |       |   
+    |   |       \---components
+    |   |           +---user-role-card
+    |   |           |       user-role-card.html
+    |   |           |       user-role-card.spec.ts
+    |   |           |       user-role-card.ts
+    |   |           |       
+    |   |           \---user-table
+    |   |                   user-table.html
+    |   |                   user-table.spec.ts
+    |   |                   user-table.ts
+    |   |                   
+    |   \---vote-list
+    |           data.ts
+    |           vote-list.html
+    |           vote-list.spec.ts
+    |           vote-list.ts
+    |           
+    +---auth
+    |   +---card
+    |   |   +---delete-account
+    |   |   |       delete-account.html
+    |   |   |       delete-account.spec.ts
+    |   |   |       delete-account.ts
+    |   |   |       
+    |   |   +---lock-screen
+    |   |   |       lock-screen.html
+    |   |   |       lock-screen.spec.ts
+    |   |   |       lock-screen.ts
+    |   |   |       
+    |   |   +---login-pin
+    |   |   |       login-pin.html
+    |   |   |       login-pin.spec.ts
+    |   |   |       login-pin.ts
+    |   |   |       
+    |   |   +---new-pass
+    |   |   |       new-pass.html
+    |   |   |       new-pass.spec.ts
+    |   |   |       new-pass.ts
+    |   |   |       
+    |   |   +---reset-pass
+    |   |   |       reset-pass.html
+    |   |   |       reset-pass.spec.ts
+    |   |   |       reset-pass.ts
+    |   |   |       
+    |   |   +---sign-in
+    |   |   |       sign-in.html
+    |   |   |       sign-in.spec.ts
+    |   |   |       sign-in.ts
+    |   |   |       
+    |   |   +---sign-up
+    |   |   |       sign-up.html
+    |   |   |       sign-up.spec.ts
+    |   |   |       sign-up.ts
+    |   |   |       
+    |   |   +---success-mail
+    |   |   |       success-mail.html
+    |   |   |       success-mail.spec.ts
+    |   |   |       success-mail.ts
+    |   |   |       
+    |   |   \---two-factor
+    |   |           two-factor.html
+    |   |           two-factor.spec.ts
+    |   |           two-factor.ts
+    |   |           
+    |   +---delete-account
+    |   |       delete-account.html
+    |   |       delete-account.spec.ts
+    |   |       delete-account.ts
+    |   |       
+    |   +---lock-screen
+    |   |       lock-screen.html
+    |   |       lock-screen.spec.ts
+    |   |       lock-screen.ts
+    |   |       
+    |   +---login-pin
+    |   |       login-pin.html
+    |   |       login-pin.spec.ts
+    |   |       login-pin.ts
+    |   |       
+    |   +---new-pass
+    |   |       new-pass.html
+    |   |       new-pass.spec.ts
+    |   |       new-pass.ts
+    |   |       
+    |   +---reset-pass
+    |   |       reset-pass.html
+    |   |       reset-pass.spec.ts
+    |   |       reset-pass.ts
+    |   |       
+    |   +---sign-in
+    |   |       sign-in.html
+    |   |       sign-in.spec.ts
+    |   |       sign-in.ts
+    |   |       
+    |   +---sign-up
+    |   |       sign-up.html
+    |   |       sign-up.spec.ts
+    |   |       sign-up.ts
+    |   |       
+    |   +---split
+    |   |   +---delete-account
+    |   |   |       delete-account.html
+    |   |   |       delete-account.spec.ts
+    |   |   |       delete-account.ts
+    |   |   |       
+    |   |   +---lock-screen
+    |   |   |       lock-screen.html
+    |   |   |       lock-screen.spec.ts
+    |   |   |       lock-screen.ts
+    |   |   |       
+    |   |   +---login-pin
+    |   |   |       login-pin.html
+    |   |   |       login-pin.spec.ts
+    |   |   |       login-pin.ts
+    |   |   |       
+    |   |   +---new-pass
+    |   |   |       new-pass.html
+    |   |   |       new-pass.spec.ts
+    |   |   |       new-pass.ts
+    |   |   |       
+    |   |   +---reset-pass
+    |   |   |       reset-pass.html
+    |   |   |       reset-pass.spec.ts
+    |   |   |       reset-pass.ts
+    |   |   |       
+    |   |   +---sign-in
+    |   |   |       sign-in.html
+    |   |   |       sign-in.spec.ts
+    |   |   |       sign-in.ts
+    |   |   |       
+    |   |   +---sign-up
+    |   |   |       sign-up.html
+    |   |   |       sign-up.spec.ts
+    |   |   |       sign-up.ts
+    |   |   |       
+    |   |   +---success-mail
+    |   |   |       success-mail.html
+    |   |   |       success-mail.spec.ts
+    |   |   |       success-mail.ts
+    |   |   |       
+    |   |   \---two-factor
+    |   |           two-factor.html
+    |   |           two-factor.spec.ts
+    |   |           two-factor.ts
+    |   |           
+    |   +---success-mail
+    |   |       success-mail.html
+    |   |       success-mail.spec.ts
+    |   |       success-mail.ts
+    |   |       
+    |   \---two-factor
+    |           two-factor.html
+    |           two-factor.spec.ts
+    |           two-factor.ts
+    |           
+    +---charts
+    |   +---apex
+    |   |   +---area
+    |   |   |       area.html
+    |   |   |       area.spec.ts
+    |   |   |       area.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---bar
+    |   |   |       bar.html
+    |   |   |       bar.spec.ts
+    |   |   |       bar.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---boxplot
+    |   |   |       boxplot.html
+    |   |   |       boxplot.spec.ts
+    |   |   |       boxplot.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---bubble
+    |   |   |       bubble.html
+    |   |   |       bubble.spec.ts
+    |   |   |       bubble.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---candlestick
+    |   |   |       candlestick.html
+    |   |   |       candlestick.spec.ts
+    |   |   |       candlestick.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---column
+    |   |   |       column.html
+    |   |   |       column.spec.ts
+    |   |   |       column.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---funnel
+    |   |   |       data.ts
+    |   |   |       funnel.html
+    |   |   |       funnel.spec.ts
+    |   |   |       funnel.ts
+    |   |   |       
+    |   |   +---heatmap
+    |   |   |       data.ts
+    |   |   |       heatmap.html
+    |   |   |       heatmap.spec.ts
+    |   |   |       heatmap.ts
+    |   |   |       
+    |   |   +---line
+    |   |   |       data.ts
+    |   |   |       line.html
+    |   |   |       line.spec.ts
+    |   |   |       line.ts
+    |   |   |       
+    |   |   +---mixed
+    |   |   |       data.ts
+    |   |   |       mixed.html
+    |   |   |       mixed.spec.ts
+    |   |   |       mixed.ts
+    |   |   |       
+    |   |   +---pie
+    |   |   |       data.ts
+    |   |   |       pie.html
+    |   |   |       pie.spec.ts
+    |   |   |       pie.ts
+    |   |   |       
+    |   |   +---polar-area
+    |   |   |       data.ts
+    |   |   |       polar-area.html
+    |   |   |       polar-area.spec.ts
+    |   |   |       polar-area.ts
+    |   |   |       
+    |   |   +---radar
+    |   |   |       data.ts
+    |   |   |       radar.html
+    |   |   |       radar.spec.ts
+    |   |   |       radar.ts
+    |   |   |       
+    |   |   +---radialbar
+    |   |   |       data.ts
+    |   |   |       radialbar.html
+    |   |   |       radialbar.spec.ts
+    |   |   |       radialbar.ts
+    |   |   |       
+    |   |   +---range
+    |   |   |       data.ts
+    |   |   |       range.html
+    |   |   |       range.spec.ts
+    |   |   |       range.ts
+    |   |   |       
+    |   |   +---scatter
+    |   |   |       data.ts
+    |   |   |       scatter.html
+    |   |   |       scatter.spec.ts
+    |   |   |       scatter.ts
+    |   |   |       
+    |   |   +---slope
+    |   |   |       data.ts
+    |   |   |       slope.html
+    |   |   |       slope.spec.ts
+    |   |   |       slope.ts
+    |   |   |       
+    |   |   +---sparklines
+    |   |   |       data.ts
+    |   |   |       sparklines.html
+    |   |   |       sparklines.spec.ts
+    |   |   |       sparklines.ts
+    |   |   |       
+    |   |   +---timeline
+    |   |   |       data.ts
+    |   |   |       timeline.html
+    |   |   |       timeline.spec.ts
+    |   |   |       timeline.ts
+    |   |   |       
+    |   |   \---treemap
+    |   |           data.ts
+    |   |           treemap.html
+    |   |           treemap.spec.ts
+    |   |           treemap.ts
+    |   |           
+    |   +---chartjs
+    |   |   +---area
+    |   |   |       area.html
+    |   |   |       area.spec.ts
+    |   |   |       area.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---bar
+    |   |   |       bar.html
+    |   |   |       bar.spec.ts
+    |   |   |       bar.ts
+    |   |   |       data.ts
+    |   |   |       
+    |   |   +---line
+    |   |   |       data.ts
+    |   |   |       line.html
+    |   |   |       line.spec.ts
+    |   |   |       line.ts
+    |   |   |       
+    |   |   \---other
+    |   |           data.ts
+    |   |           other.html
+    |   |           other.spec.ts
+    |   |           other.ts
+    |   |           
+    |   \---echart
+    |       +---area
+    |       |       area.html
+    |       |       area.spec.ts
+    |       |       area.ts
+    |       |       data.ts
+    |       |       
+    |       +---bar
+    |       |       bar.html
+    |       |       bar.spec.ts
+    |       |       bar.ts
+    |       |       data.ts
+    |       |       
+    |       +---candlestick
+    |       |       candlestick.html
+    |       |       candlestick.spec.ts
+    |       |       candlestick.ts
+    |       |       data.ts
+    |       |       
+    |       +---gauge
+    |       |       data.ts
+    |       |       gauge.html
+    |       |       gauge.spec.ts
+    |       |       gauge.ts
+    |       |       
+    |       +---geo-map
+    |       |   |   geo-map.html
+    |       |   |   geo-map.spec.ts
+    |       |   |   geo-map.ts
+    |       |   |   
+    |       |   \---components
+    |       |       +---morphing-map-bar
+    |       |       |       morphing-map-bar.html
+    |       |       |       morphing-map-bar.spec.ts
+    |       |       |       morphing-map-bar.ts
+    |       |       |       
+    |       |       +---pie-chart-with-map
+    |       |       |       pie-chart-with-map.html
+    |       |       |       pie-chart-with-map.spec.ts
+    |       |       |       pie-chart-with-map.ts
+    |       |       |       
+    |       |       +---svg-scatter-map
+    |       |       |       svg-scatter-map.html
+    |       |       |       svg-scatter-map.spec.ts
+    |       |       |       svg-scatter-map.ts
+    |       |       |       
+    |       |       +---usa-map
+    |       |       |       usa-map.html
+    |       |       |       usa-map.spec.ts
+    |       |       |       usa-map.ts
+    |       |       |       
+    |       |       \---world-map
+    |       |               world-map.html
+    |       |               world-map.spec.ts
+    |       |               world-map.ts
+    |       |               
+    |       +---heatmap
+    |       |       data.ts
+    |       |       heatmap.html
+    |       |       heatmap.spec.ts
+    |       |       heatmap.ts
+    |       |       
+    |       +---line
+    |       |       data.ts
+    |       |       line.html
+    |       |       line.spec.ts
+    |       |       line.ts
+    |       |       
+    |       +---other
+    |       |       data.ts
+    |       |       other.html
+    |       |       other.spec.ts
+    |       |       other.ts
+    |       |       
+    |       +---pie
+    |       |       data.ts
+    |       |       pie.html
+    |       |       pie.spec.ts
+    |       |       pie.ts
+    |       |       
+    |       +---radar
+    |       |       data.ts
+    |       |       radar.html
+    |       |       radar.spec.ts
+    |       |       radar.ts
+    |       |       
+    |       \---scatter
+    |               data.ts
+    |               scatter.html
+    |               scatter.spec.ts
+    |               scatter.ts
+    |               
+    +---dashboard
+    |   +---analytics
+    |   |   |   analytics.html
+    |   |   |   analytics.spec.ts
+    |   |   |   analytics.ts
+    |   |   |   data.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---analytics-overview
+    |   |       |       analytics-overview.html
+    |   |       |       analytics-overview.spec.ts
+    |   |       |       analytics-overview.ts
+    |   |       |       
+    |   |       +---audience-insights
+    |   |       |       audience-insights.html
+    |   |       |       audience-insights.spec.ts
+    |   |       |       audience-insights.ts
+    |   |       |       
+    |   |       +---browser-session
+    |   |       |       browser-session.html
+    |   |       |       browser-session.spec.ts
+    |   |       |       browser-session.ts
+    |   |       |       
+    |   |       +---sessions-overview
+    |   |       |       sessions-overview.html
+    |   |       |       sessions-overview.spec.ts
+    |   |       |       sessions-overview.ts
+    |   |       |       
+    |   |       +---total-order
+    |   |       |       data.ts
+    |   |       |       total-order.html
+    |   |       |       total-order.spec.ts
+    |   |       |       total-order.ts
+    |   |       |       
+    |   |       +---total-subscribers
+    |   |       |       total-subscribers.html
+    |   |       |       total-subscribers.spec.ts
+    |   |       |       total-subscribers.ts
+    |   |       |       
+    |   |       +---total-visitors
+    |   |       |       total-visitors.html
+    |   |       |       total-visitors.spec.ts
+    |   |       |       total-visitors.ts
+    |   |       |       
+    |   |       +---traffic-sources
+    |   |       |       traffic-sources.html
+    |   |       |       traffic-sources.spec.ts
+    |   |       |       traffic-sources.ts
+    |   |       |       
+    |   |       \---user-geography
+    |   |               user-geography.html
+    |   |               user-geography.spec.ts
+    |   |               user-geography.ts
+    |   |               
+    |   +---crm
+    |   |   |   crm.html
+    |   |   |   crm.spec.ts
+    |   |   |   crm.ts
+    |   |   |   data.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---crm-stat
+    |   |       |       crm-stat.html
+    |   |       |       crm-stat.spec.ts
+    |   |       |       crm-stat.ts
+    |   |       |       
+    |   |       +---deal-status
+    |   |       |       deal-status.html
+    |   |       |       deal-status.spec.ts
+    |   |       |       deal-status.ts
+    |   |       |       
+    |   |       +---lead-source
+    |   |       |       lead-source.html
+    |   |       |       lead-source.spec.ts
+    |   |       |       lead-source.ts
+    |   |       |       
+    |   |       +---location-session
+    |   |       |       location-session.html
+    |   |       |       location-session.spec.ts
+    |   |       |       location-session.ts
+    |   |       |       
+    |   |       +---overview
+    |   |       |       overview.html
+    |   |       |       overview.spec.ts
+    |   |       |       overview.ts
+    |   |       |       
+    |   |       +---recent-activity
+    |   |       |       recent-activity.html
+    |   |       |       recent-activity.spec.ts
+    |   |       |       recent-activity.ts
+    |   |       |       
+    |   |       \---top-performing
+    |   |               top-performing.html
+    |   |               top-performing.spec.ts
+    |   |               top-performing.ts
+    |   |               
+    |   +---ecommerce
+    |   |   |   data.ts
+    |   |   |   ecommerce.html
+    |   |   |   ecommerce.spec.ts
+    |   |   |   ecommerce.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---ecommerce-stat
+    |   |       |       ecommerce-stat.html
+    |   |       |       ecommerce-stat.spec.ts
+    |   |       |       ecommerce-stat.ts
+    |   |       |       
+    |   |       +---locations
+    |   |       |       locations.html
+    |   |       |       locations.spec.ts
+    |   |       |       locations.ts
+    |   |       |       
+    |   |       +---recent-activity
+    |   |       |       recent-activity.html
+    |   |       |       recent-activity.spec.ts
+    |   |       |       recent-activity.ts
+    |   |       |       
+    |   |       +---recent-orders
+    |   |       |       recent-orders.html
+    |   |       |       recent-orders.spec.ts
+    |   |       |       recent-orders.ts
+    |   |       |       
+    |   |       +---sales-report
+    |   |       |       sales-report.html
+    |   |       |       sales-report.spec.ts
+    |   |       |       sales-report.ts
+    |   |       |       
+    |   |       +---store-performance
+    |   |       |       store-performance.html
+    |   |       |       store-performance.spec.ts
+    |   |       |       store-performance.ts
+    |   |       |       
+    |   |       +---top-selling-products
+    |   |       |       top-selling-products.html
+    |   |       |       top-selling-products.spec.ts
+    |   |       |       top-selling-products.ts
+    |   |       |       
+    |   |       \---weekly-performance
+    |   |               weekly-performance.html
+    |   |               weekly-performance.spec.ts
+    |   |               weekly-performance.ts
+    |   |               
+    |   +---finance
+    |   |   |   data.ts
+    |   |   |   finance.html
+    |   |   |   finance.spec.ts
+    |   |   |   finance.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---balance-info
+    |   |       |       balance-info.html
+    |   |       |       balance-info.spec.ts
+    |   |       |       balance-info.ts
+    |   |       |       
+    |   |       +---finance-stat
+    |   |       |       finance-stat.html
+    |   |       |       finance-stat.spec.ts
+    |   |       |       finance-stat.ts
+    |   |       |       
+    |   |       +---financial-overview
+    |   |       |       financial-overview.html
+    |   |       |       financial-overview.spec.ts
+    |   |       |       financial-overview.ts
+    |   |       |       
+    |   |       +---financial-statistics
+    |   |       |       financial-statistics.html
+    |   |       |       financial-statistics.spec.ts
+    |   |       |       financial-statistics.ts
+    |   |       |       
+    |   |       +---recent-transactions
+    |   |       |       recent-transactions.html
+    |   |       |       recent-transactions.spec.ts
+    |   |       |       recent-transactions.ts
+    |   |       |       
+    |   |       \---target-stat
+    |   |               target-stat.html
+    |   |               target-stat.spec.ts
+    |   |               target-stat.ts
+    |   |               
+    |   \---projects
+    |       |   data.ts
+    |       |   projects.html
+    |       |   projects.spec.ts
+    |       |   projects.ts
+    |       |   
+    |       \---components
+    |           +---ongoing-project
+    |           |       ongoing-project.html
+    |           |       ongoing-project.spec.ts
+    |           |       ongoing-project.ts
+    |           |       
+    |           +---project-performance
+    |           |       project-performance.html
+    |           |       project-performance.spec.ts
+    |           |       project-performance.ts
+    |           |       
+    |           +---project-stat
+    |           |       project-stat.html
+    |           |       project-stat.spec.ts
+    |           |       project-stat.ts
+    |           |       
+    |           +---project-status
+    |           |       project-status.html
+    |           |       project-status.spec.ts
+    |           |       project-status.ts
+    |           |       
+    |           +---schedule
+    |           |       schedule.html
+    |           |       schedule.spec.ts
+    |           |       schedule.ts
+    |           |       
+    |           \---task
+    |                   task.html
+    |                   task.spec.ts
+    |                   task.ts
+    |                   
+    +---error
+    |   +---error-400
+    |   |       error-400.html
+    |   |       error-400.spec.ts
+    |   |       error-400.ts
+    |   |       
+    |   +---error-401
+    |   |       error-401.html
+    |   |       error-401.spec.ts
+    |   |       error-401.ts
+    |   |       
+    |   +---error-403
+    |   |       error-403.html
+    |   |       error-403.spec.ts
+    |   |       error-403.ts
+    |   |       
+    |   +---error-404
+    |   |       error-404.html
+    |   |       error-404.spec.ts
+    |   |       error-404.ts
+    |   |       
+    |   +---error-408
+    |   |       error-408.html
+    |   |       error-408.spec.ts
+    |   |       error-408.ts
+    |   |       
+    |   +---error-500
+    |   |       error-500.html
+    |   |       error-500.spec.ts
+    |   |       error-500.ts
+    |   |       
+    |   \---maintenance
+    |           maintenance.html
+    |           maintenance.spec.ts
+    |           maintenance.ts
+    |           
+    +---form
+    |   +---elements
+    |   |       elements.html
+    |   |       elements.spec.ts
+    |   |       elements.ts
+    |   |       
+    |   +---fileuploads
+    |   |       fileuploads.html
+    |   |       fileuploads.spec.ts
+    |   |       fileuploads.ts
+    |   |       
+    |   +---layout
+    |   |       layout.html
+    |   |       layout.spec.ts
+    |   |       layout.ts
+    |   |       
+    |   +---other-plugin
+    |   |       data.ts
+    |   |       other-plugin.html
+    |   |       other-plugin.spec.ts
+    |   |       other-plugin.ts
+    |   |       
+    |   +---pickers
+    |   |       pickers.html
+    |   |       pickers.spec.ts
+    |   |       pickers.ts
+    |   |       
+    |   +---range-slider
+    |   |       range-slider.html
+    |   |       range-slider.spec.ts
+    |   |       range-slider.ts
+    |   |       
+    |   +---select
+    |   |       select.html
+    |   |       select.spec.ts
+    |   |       select.ts
+    |   |       
+    |   +---text-editors
+    |   |       text-editors.html
+    |   |       text-editors.spec.ts
+    |   |       text-editors.ts
+    |   |       
+    |   +---validation
+    |   |       validation.html
+    |   |       validation.spec.ts
+    |   |       validation.ts
+    |   |       
+    |   \---wizard
+    |       |   data.ts
+    |       |   wizard.html
+    |       |   wizard.spec.ts
+    |       |   wizard.ts
+    |       |   
+    |       \---components
+    |           +---address-info
+    |           |       address-info.html
+    |           |       address-info.spec.ts
+    |           |       address-info.ts
+    |           |       
+    |           +---basic-wizard
+    |           |       basic-wizard.html
+    |           |       basic-wizard.spec.ts
+    |           |       basic-wizard.ts
+    |           |       
+    |           +---course-info
+    |           |       course-info.html
+    |           |       course-info.spec.ts
+    |           |       course-info.ts
+    |           |       
+    |           +---documents
+    |           |       documents.html
+    |           |       documents.spec.ts
+    |           |       documents.ts
+    |           |       
+    |           +---parent-info
+    |           |       parent-info.html
+    |           |       parent-info.spec.ts
+    |           |       parent-info.ts
+    |           |       
+    |           +---student-info
+    |           |       student-info.html
+    |           |       student-info.spec.ts
+    |           |       student-info.ts
+    |           |       
+    |           +---vertical-wizard
+    |           |       vertical-wizard.html
+    |           |       vertical-wizard.spec.ts
+    |           |       vertical-wizard.ts
+    |           |       
+    |           \---wizard-with-progressbar
+    |                   wizard-with-progressbar.html
+    |                   wizard-with-progressbar.spec.ts
+    |                   wizard-with-progressbar.ts
+    |                   
+    +---icons
+    |   +---boxicons
+    |   |       boxicons.html
+    |   |       boxicons.spec.ts
+    |   |       boxicons.ts
+    |   |       data.ts
+    |   |       
+    |   +---flags
+    |   |       data.ts
+    |   |       flags.html
+    |   |       flags.spec.ts
+    |   |       flags.ts
+    |   |       
+    |   +---lucide
+    |   |       data.ts
+    |   |       lucide.html
+    |   |       lucide.spec.ts
+    |   |       lucide.ts
+    |   |       
+    |   +---remix
+    |   |       data.ts
+    |   |       remix.html
+    |   |       remix.spec.ts
+    |   |       remix.ts
+    |   |       
+    |   +---solar-broken
+    |   |       data.ts
+    |   |       solar-broken.html
+    |   |       solar-broken.spec.ts
+    |   |       solar-broken.ts
+    |   |       
+    |   +---solar-duotone
+    |   |       data.ts
+    |   |       solar-duotone.html
+    |   |       solar-duotone.spec.ts
+    |   |       solar-duotone.ts
+    |   |       
+    |   \---tabler
+    |           data.ts
+    |           tabler.html
+    |           tabler.spec.ts
+    |           tabler.ts
+    |           
+    +---layouts
+    |   +---boxed
+    |   |       boxed.html
+    |   |       boxed.spec.ts
+    |   |       boxed.ts
+    |   |       
+    |   +---compact
+    |   |       compact.html
+    |   |       compact.spec.ts
+    |   |       compact.ts
+    |   |       
+    |   +---horizontal
+    |   |       horizontal.html
+    |   |       horizontal.spec.ts
+    |   |       horizontal.ts
+    |   |       
+    |   +---preloader
+    |   |       preloader.html
+    |   |       preloader.spec.ts
+    |   |       preloader.ts
+    |   |       
+    |   +---scrollable
+    |   |       scrollable.html
+    |   |       scrollable.spec.ts
+    |   |       scrollable.ts
+    |   |       
+    |   +---sidebar-compact
+    |   |       sidebar-compact.html
+    |   |       sidebar-compact.spec.ts
+    |   |       sidebar-compact.ts
+    |   |       
+    |   +---sidebar-gradient
+    |   |       sidebar-gradient.html
+    |   |       sidebar-gradient.spec.ts
+    |   |       sidebar-gradient.ts
+    |   |       
+    |   +---sidebar-gray
+    |   |       sidebar-gray.html
+    |   |       sidebar-gray.spec.ts
+    |   |       sidebar-gray.ts
+    |   |       
+    |   +---sidebar-image
+    |   |       sidebar-image.html
+    |   |       sidebar-image.spec.ts
+    |   |       sidebar-image.ts
+    |   |       
+    |   +---sidebar-light
+    |   |       sidebar-light.html
+    |   |       sidebar-light.spec.ts
+    |   |       sidebar-light.ts
+    |   |       
+    |   +---sidebar-no-icons
+    |   |       sidebar-no-icons.html
+    |   |       sidebar-no-icons.spec.ts
+    |   |       sidebar-no-icons.ts
+    |   |       
+    |   +---sidebar-offcanvas
+    |   |       sidebar-offcanvas.html
+    |   |       sidebar-offcanvas.spec.ts
+    |   |       sidebar-offcanvas.ts
+    |   |       
+    |   +---sidebar-on-hover
+    |   |       sidebar-on-hover.html
+    |   |       sidebar-on-hover.spec.ts
+    |   |       sidebar-on-hover.ts
+    |   |       
+    |   +---sidebar-with-lines
+    |   |       sidebar-with-lines.html
+    |   |       sidebar-with-lines.spec.ts
+    |   |       sidebar-with-lines.ts
+    |   |       
+    |   +---topbar-dark
+    |   |       topbar-dark.html
+    |   |       topbar-dark.spec.ts
+    |   |       topbar-dark.ts
+    |   |       
+    |   +---topbar-gradient
+    |   |       topbar-gradient.html
+    |   |       topbar-gradient.spec.ts
+    |   |       topbar-gradient.ts
+    |   |       
+    |   \---topbar-gray
+    |           topbar-gray.html
+    |           topbar-gray.spec.ts
+    |           topbar-gray.ts
+    |           
+    +---maps
+    |   +---google
+    |   |       google.html
+    |   |       google.spec.ts
+    |   |       google.ts
+    |   |       
+    |   +---leaflet
+    |   |       data.ts
+    |   |       leaflet.html
+    |   |       leaflet.spec.ts
+    |   |       leaflet.ts
+    |   |       
+    |   \---vector
+    |           vector.html
+    |           vector.spec.ts
+    |           vector.ts
+    |           
+    +---multivendor
+    |   +---banners
+    |   |       banners.html
+    |   |       banners.ts
+    |   |       
+    |   +---categories
+    |   |       categories.html
+    |   |       categories.ts
+    |   |       
+    |   +---coupons
+    |   |       coupons.html
+    |   |       coupons.ts
+    |   |       
+    |   +---customers
+    |   |       customers.html
+    |   |       customers.ts
+    |   |       
+    |   +---dashboard
+    |   |       dashboard.html
+    |   |       dashboard.ts
+    |   |       
+    |   +---delivery-partners
+    |   |       delivery-partners.html
+    |   |       delivery-partners.ts
+    |   |       
+    |   |       
+    |   +---dev-support
+    |   |       dev-support.html
+    |   |       dev-support.ts
+    |   |       
+    |   +---locations
+    |   |       locations.html
+    |   |       locations.ts
+    |   |       
+    |   +---my-profile
+    |   |       my-profile.html
+    |   |       my-profile.ts
+    |   |       
+    |   +---notifications
+    |   |       notifications.html
+    |   |       notifications.ts
+    |   |       
+    |   +---orders
+    |   |       orders.html
+    |   |       orders.ts
+    |   |       
+    |   +---permissions
+    |   |       permissions.html
+    |   |       permissions.ts
+    |   |       
+    |   +---products
+    |   |       products.html
+    |   |       products.ts
+    |   |       
+    |   +---settings
+    |   |       settings.html
+    |   |       settings.ts
+    |   |       
+    |   +---settlements
+    |   |       settlements.html
+    |   |       settlements.ts
+    |   |       
+    |   \---vendors
+    |           vendors.html
+    |           vendors.ts
+    |           
+    +---pages
+    |   +---about-us
+    |   |   |   about-us.html
+    |   |   |   about-us.spec.ts
+    |   |   |   about-us.ts
+    |   |   |   data.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---branch
+    |   |       |       branch.html
+    |   |       |       branch.spec.ts
+    |   |       |       branch.ts
+    |   |       |       
+    |   |       +---service
+    |   |       |       service.html
+    |   |       |       service.spec.ts
+    |   |       |       service.ts
+    |   |       |       
+    |   |       \---team
+    |   |               team.html
+    |   |               team.spec.ts
+    |   |               team.ts
+    |   |               
+    |   +---coming-soon
+    |   |       coming-soon.html
+    |   |       coming-soon.spec.ts
+    |   |       coming-soon.ts
+    |   |       
+    |   +---contact-us
+    |   |       contact-us.html
+    |   |       contact-us.spec.ts
+    |   |       contact-us.ts
+    |   |       
+    |   +---empty
+    |   |       empty.html
+    |   |       empty.spec.ts
+    |   |       empty.ts
+    |   |       
+    |   +---faq
+    |   |   |   faq.html
+    |   |   |   faq.spec.ts
+    |   |   |   faq.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---customization
+    |   |       |       customization.html
+    |   |       |       customization.spec.ts
+    |   |       |       customization.ts
+    |   |       |       
+    |   |       +---general
+    |   |       |       general.html
+    |   |       |       general.spec.ts
+    |   |       |       general.ts
+    |   |       |       
+    |   |       +---payments
+    |   |       |       payments.html
+    |   |       |       payments.spec.ts
+    |   |       |       payments.ts
+    |   |       |       
+    |   |       \---refunds
+    |   |               refunds.html
+    |   |               refunds.spec.ts
+    |   |               refunds.ts
+    |   |               
+    |   +---gallery
+    |   |       gallery.html
+    |   |       gallery.spec.ts
+    |   |       gallery.ts
+    |   |       
+    |   +---pricing
+    |   |   |   data.ts
+    |   |   |   pricing.html
+    |   |   |   pricing.spec.ts
+    |   |   |   pricing.ts
+    |   |   |   
+    |   |   \---components
+    |   |       \---pricing-card
+    |   |               pricing-card.html
+    |   |               pricing-card.spec.ts
+    |   |               pricing-card.ts
+    |   |               
+    |   +---privacy-policy
+    |   |       privacy-policy.html
+    |   |       privacy-policy.spec.ts
+    |   |       privacy-policy.ts
+    |   |       
+    |   +---search-results
+    |   |       search-results.html
+    |   |       search-results.spec.ts
+    |   |       search-results.ts
+    |   |       
+    |   +---sitemap
+    |   |       data.ts
+    |   |       sitemap.html
+    |   |       sitemap.spec.ts
+    |   |       sitemap.ts
+    |   |       
+    |   +---terms-conditions
+    |   |       terms-conditions.html
+    |   |       terms-conditions.spec.ts
+    |   |       terms-conditions.ts
+    |   |       
+    |   \---timeline
+    |       |   data.ts
+    |       |   timeline.html
+    |       |   timeline.spec.ts
+    |       |   timeline.ts
+    |       |   
+    |       \---components
+    |           +---basic-timeline
+    |           |       basic-timeline.html
+    |           |       basic-timeline.spec.ts
+    |           |       basic-timeline.ts
+    |           |       
+    |           +---border-timeline
+    |           |       border-timeline.html
+    |           |       border-timeline.spec.ts
+    |           |       border-timeline.ts
+    |           |       
+    |           +---icon-timeline
+    |           |       icon-timeline.html
+    |           |       icon-timeline.spec.ts
+    |           |       icon-timeline.ts
+    |           |       
+    |           \---user-timeline
+    |                   user-timeline.html
+    |                   user-timeline.spec.ts
+    |                   user-timeline.ts
+    |                   
+    +---plugins
+    |   +---animation
+    |   |       animation.html
+    |   |       animation.spec.ts
+    |   |       animation.ts
+    |   |       
+    |   +---clipboard
+    |   |       clipboard.html
+    |   |       clipboard.service.ts
+    |   |       clipboard.spec.ts
+    |   |       clipboard.ts
+    |   |       
+    |   +---masonry
+    |   |       data.ts
+    |   |       masonry.html
+    |   |       masonry.spec.ts
+    |   |       masonry.ts
+    |   |       
+    |   +---pass-meter
+    |   |       pass-meter.html
+    |   |       pass-meter.spec.ts
+    |   |       pass-meter.ts
+    |   |       
+    |   +---pdf-viewer
+    |   |       pdf-viewer.html
+    |   |       pdf-viewer.spec.ts
+    |   |       pdf-viewer.ts
+    |   |       
+    |   +---sortable
+    |   |   |   data.ts
+    |   |   |   sortable.html
+    |   |   |   sortable.spec.ts
+    |   |   |   sortable.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---sortable-icons
+    |   |       |       sortable-icons.html
+    |   |       |       sortable-icons.spec.ts
+    |   |       |       sortable-icons.ts
+    |   |       |       
+    |   |       +---sortable-icons-label
+    |   |       |       sortable-icons-label.html
+    |   |       |       sortable-icons-label.spec.ts
+    |   |       |       sortable-icons-label.ts
+    |   |       |       
+    |   |       +---sortable-list
+    |   |       |       sortable-list.html
+    |   |       |       sortable-list.spec.ts
+    |   |       |       sortable-list.ts
+    |   |       |       
+    |   |       \---sortable-list-handle
+    |   |               sortable-list-handle.html
+    |   |               sortable-list-handle.spec.ts
+    |   |               sortable-list-handle.ts
+    |   |               
+    |   +---sweet-alerts
+    |   |       sweet-alerts.html
+    |   |       sweet-alerts.spec.ts
+    |   |       sweet-alerts.ts
+    |   |       
+    |   +---tour
+    |   |       data.ts
+    |   |       tour.html
+    |   |       tour.spec.ts
+    |   |       tour.ts
+    |   |       
+    |   \---video-player
+    |           video-player.html
+    |           video-player.spec.ts
+    |           video-player.ts
+    |           
+    +---tables
+    |   +---custom
+    |   |   |   custom.html
+    |   |   |   custom.spec.ts
+    |   |   |   custom.ts
+    |   |   |   data.ts
+    |   |   |   
+    |   |   \---components
+    |   |       +---complete-table
+    |   |       |       complete-table.html
+    |   |       |       complete-table.spec.ts
+    |   |       |       complete-table.ts
+    |   |       |       
+    |   |       +---table-with-checkbox
+    |   |       |       table-with-checkbox.html
+    |   |       |       table-with-checkbox.spec.ts
+    |   |       |       table-with-checkbox.ts
+    |   |       |       
+    |   |       +---table-with-delete-button
+    |   |       |       table-with-delete-button.html
+    |   |       |       table-with-delete-button.spec.ts
+    |   |       |       table-with-delete-button.ts
+    |   |       |       
+    |   |       +---table-with-filters
+    |   |       |       table-with-filters.html
+    |   |       |       table-with-filters.spec.ts
+    |   |       |       table-with-filters.ts
+    |   |       |       
+    |   |       +---table-with-pagination
+    |   |       |       table-with-pagination.html
+    |   |       |       table-with-pagination.spec.ts
+    |   |       |       table-with-pagination.ts
+    |   |       |       
+    |   |       +---table-with-pagination-info
+    |   |       |       table-with-pagination-info.html
+    |   |       |       table-with-pagination-info.spec.ts
+    |   |       |       table-with-pagination-info.ts
+    |   |       |       
+    |   |       +---table-with-search
+    |   |       |       table-with-search.html
+    |   |       |       table-with-search.spec.ts
+    |   |       |       table-with-search.ts
+    |   |       |       
+    |   |       \---table-with-sort
+    |   |               table-with-sort.html
+    |   |               table-with-sort.spec.ts
+    |   |               table-with-sort.ts
+    |   |               
+    |   +---datatables
+    |   |   |   data.ts
+    |   |   |   
+    |   |   +---ajax
+    |   |   |       ajax.html
+    |   |   |       ajax.spec.ts
+    |   |   |       ajax.ts
+    |   |   |       
+    |   |   +---basic
+    |   |   |       basic.html
+    |   |   |       basic.spec.ts
+    |   |   |       basic.ts
+    |   |   |       
+    |   |   +---checkbox-select
+    |   |   |       checkbox-select.html
+    |   |   |       checkbox-select.spec.ts
+    |   |   |       checkbox-select.ts
+    |   |   |       
+    |   |   +---child-rows
+    |   |   |       child-rows.html
+    |   |   |       child-rows.spec.ts
+    |   |   |       child-rows.ts
+    |   |   |       
+    |   |   +---column-searching
+    |   |   |       column-searching.html
+    |   |   |       column-searching.spec.ts
+    |   |   |       column-searching.ts
+    |   |   |       
+    |   |   +---columns
+    |   |   |       columns.html
+    |   |   |       columns.spec.ts
+    |   |   |       columns.ts
+    |   |   |       
+    |   |   +---export-data
+    |   |   |       export-data.html
+    |   |   |       export-data.spec.ts
+    |   |   |       export-data.ts
+    |   |   |       
+    |   |   +---fixed-columns
+    |   |   |       data.ts
+    |   |   |       fixed-columns.html
+    |   |   |       fixed-columns.spec.ts
+    |   |   |       fixed-columns.ts
+    |   |   |       
+    |   |   +---fixed-header
+    |   |   |       fixed-header.html
+    |   |   |       fixed-header.spec.ts
+    |   |   |       fixed-header.ts
+    |   |   |       
+    |   |   +---javascript
+    |   |   |       data.ts
+    |   |   |       javascript.html
+    |   |   |       javascript.spec.ts
+    |   |   |       javascript.ts
+    |   |   |       
+    |   |   +---range-search
+    |   |   |       range-search.html
+    |   |   |       range-search.spec.ts
+    |   |   |       range-search.ts
+    |   |   |       
+    |   |   +---rendering
+    |   |   |       rendering.html
+    |   |   |       rendering.spec.ts
+    |   |   |       rendering.ts
+    |   |   |       
+    |   |   +---rows-add
+    |   |   |       rows-add.html
+    |   |   |       rows-add.spec.ts
+    |   |   |       rows-add.ts
+    |   |   |       
+    |   |   +---scroll
+    |   |   |       scroll.html
+    |   |   |       scroll.spec.ts
+    |   |   |       scroll.ts
+    |   |   |       
+    |   |   \---select
+    |   |           select.html
+    |   |           select.spec.ts
+    |   |           select.ts
+    |   |           
+    |   \---static
+    |           static.html
+    |           static.spec.ts
+    |           static.ts
+    |           
+    +---ui
+    |   +---accordions
+    |   |       accordions.html
+    |   |       accordions.spec.ts
+    |   |       accordions.ts
+    |   |       
+    |   +---alerts
+    |   |       alerts.html
+    |   |       alerts.spec.ts
+    |   |       alerts.ts
+    |   |       
+    |   +---badges
+    |   |       badges.html
+    |   |       badges.spec.ts
+    |   |       badges.ts
+    |   |       
+    |   +---breadcrumb
+    |   |       breadcrumb.html
+    |   |       breadcrumb.spec.ts
+    |   |       breadcrumb.ts
+    |   |       
+    |   +---buttons
+    |   |       buttons.html
+    |   |       buttons.spec.ts
+    |   |       buttons.ts
+    |   |       
+    |   +---cards
+    |   |       cards.html
+    |   |       cards.spec.ts
+    |   |       cards.ts
+    |   |       
+    |   +---carousel
+    |   |       carousel.html
+    |   |       carousel.spec.ts
+    |   |       carousel.ts
+    |   |       
+    |   +---collapse
+    |   |       collapse.html
+    |   |       collapse.spec.ts
+    |   |       collapse.ts
+    |   |       
+    |   +---colors
+    |   |       colors.html
+    |   |       colors.spec.ts
+    |   |       colors.ts
+    |   |       
+    |   +---dropdowns
+    |   |       dropdowns.html
+    |   |       dropdowns.spec.ts
+    |   |       dropdowns.ts
+    |   |       
+    |   +---grid
+    |   |       grid.html
+    |   |       grid.spec.ts
+    |   |       grid.ts
+    |   |       
+    |   +---images
+    |   |       images.html
+    |   |       images.spec.ts
+    |   |       images.ts
+    |   |       
+    |   +---links
+    |   |       links.html
+    |   |       links.spec.ts
+    |   |       links.ts
+    |   |       
+    |   +---list-group
+    |   |       list-group.html
+    |   |       list-group.spec.ts
+    |   |       list-group.ts
+    |   |       
+    |   +---modals
+    |   |       modals.html
+    |   |       modals.spec.ts
+    |   |       modals.ts
+    |   |       
+    |   +---notifications
+    |   |       notifications.html
+    |   |       notifications.spec.ts
+    |   |       notifications.ts
+    |   |       
+    |   +---offcanvas
+    |   |       offcanvas.html
+    |   |       offcanvas.spec.ts
+    |   |       offcanvas.ts
+    |   |       
+    |   +---pagination
+    |   |       pagination.html
+    |   |       pagination.spec.ts
+    |   |       pagination.ts
+    |   |       
+    |   +---placeholders
+    |   |       placeholders.html
+    |   |       placeholders.spec.ts
+    |   |       placeholders.ts
+    |   |       
+    |   +---popovers
+    |   |       popovers.html
+    |   |       popovers.spec.ts
+    |   |       popovers.ts
+    |   |       
+    |   +---progress
+    |   |       progress.html
+    |   |       progress.spec.ts
+    |   |       progress.ts
+    |   |       
+    |   +---scrollspy
+    |   |       scrollspy.html
+    |   |       scrollspy.spec.ts
+    |   |       scrollspy.ts
+    |   |       
+    |   +---spinners
+    |   |       spinners.html
+    |   |       spinners.spec.ts
+    |   |       spinners.ts
+    |   |       
+    |   +---tabs
+    |   |       tabs.html
+    |   |       tabs.spec.ts
+    |   |       tabs.ts
+    |   |       
+    |   +---tooltips
+    |   |       tooltips.html
+    |   |       tooltips.spec.ts
+    |   |       tooltips.ts
+    |   |       
+    |   +---typography
+    |   |       typography.html
+    |   |       typography.spec.ts
+    |   |       typography.ts
+    |   |       
+    |   +---utilities
+    |   |       utilities.html
+    |   |       utilities.spec.ts
+    |   |       utilities.ts
+    |   |       
+    |   \---videos
+    |           videos.html
+    |           videos.spec.ts
+    |           videos.ts
+    |           
+    \---widgets
+        +---charts
+        |   |   charts.html
+        |   |   charts.spec.ts
+        |   |   charts.ts
+        |   |   data.ts
+        |   |   
+        |   \---components
+        |       +---financial-overview
+        |       |       financial-overview.html
+        |       |       financial-overview.spec.ts
+        |       |       financial-overview.ts
+        |       |       
+        |       +---project-status
+        |       |       project-status.html
+        |       |       project-status.spec.ts
+        |       |       project-status.ts
+        |       |       
+        |       +---projects-performance
+        |       |       projects-performance.html
+        |       |       projects-performance.spec.ts
+        |       |       projects-performance.ts
+        |       |       
+        |       +---sales-report
+        |       |       sales-report.html
+        |       |       sales-report.spec.ts
+        |       |       sales-report.ts
+        |       |       
+        |       +---statistic-card1
+        |       |       statistic-card1.html
+        |       |       statistic-card1.spec.ts
+        |       |       statistic-card1.ts
+        |       |       
+        |       +---statistic-widget-chart-left
+        |       |       statistic-widget-chart-left.html
+        |       |       statistic-widget-chart-left.spec.ts
+        |       |       statistic-widget-chart-left.ts
+        |       |       
+        |       +---statistic-widget-chart-right
+        |       |       statistic-widget-chart-right.html
+        |       |       statistic-widget-chart-right.spec.ts
+        |       |       statistic-widget-chart-right.ts
+        |       |       
+        |       \---store-performance
+        |               store-performance.html
+        |               store-performance.spec.ts
+        |               store-performance.ts
+        |               
+        +---mixed
+        |   |   data.ts
+        |   |   mixed.html
+        |   |   mixed.spec.ts
+        |   |   mixed.ts
+        |   |   
+        |   \---components
+        |       +---channels
+        |       |       channels.html
+        |       |       channels.spec.ts
+        |       |       channels.ts
+        |       |       
+        |       +---chat
+        |       |       chat.html
+        |       |       chat.spec.ts
+        |       |       chat.ts
+        |       |       
+        |       +---project-card
+        |       |       project-card.html
+        |       |       project-card.spec.ts
+        |       |       project-card.ts
+        |       |       
+        |       +---search
+        |       |       search.html
+        |       |       search.spec.ts
+        |       |       search.ts
+        |       |       
+        |       +---statistic-card1
+        |       |       statistic-card1.html
+        |       |       statistic-card1.spec.ts
+        |       |       statistic-card1.ts
+        |       |       
+        |       +---statistic-card2
+        |       |       statistic-card2.html
+        |       |       statistic-card2.spec.ts
+        |       |       statistic-card2.ts
+        |       |       
+        |       +---subscribers
+        |       |       subscribers.html
+        |       |       subscribers.spec.ts
+        |       |       subscribers.ts
+        |       |       
+        |       +---top-countries
+        |       |       top-countries.html
+        |       |       top-countries.spec.ts
+        |       |       top-countries.ts
+        |       |       
+        |       +---top-traffic-sources
+        |       |       top-traffic-sources.html
+        |       |       top-traffic-sources.spec.ts
+        |       |       top-traffic-sources.ts
+        |       |       
+        |       +---traffic-sources
+        |       |       traffic-sources.html
+        |       |       traffic-sources.spec.ts
+        |       |       traffic-sources.ts
+        |       |       
+        |       +---user-card
+        |       |       user-card.html
+        |       |       user-card.spec.ts
+        |       |       user-card.ts
+        |       |       
+        |       \---visitors
+        |               visitors.html
+        |               visitors.spec.ts
+        |               visitors.ts
+        |               
+        +---social
+        |   |   social.html
+        |   |   social.spec.ts
+        |   |   social.ts
+        |   |   
+        |   \---components
+        |       +---achievement-unlocked
+        |       |       achievement-unlocked.html
+        |       |       achievement-unlocked.spec.ts
+        |       |       achievement-unlocked.ts
+        |       |       
+        |       +---congratulations
+        |       |       congratulations.html
+        |       |       congratulations.spec.ts
+        |       |       congratulations.ts
+        |       |       
+        |       +---create-post1
+        |       |       create-post1.html
+        |       |       create-post1.spec.ts
+        |       |       create-post1.ts
+        |       |       
+        |       +---create-post2
+        |       |       create-post2.html
+        |       |       create-post2.spec.ts
+        |       |       create-post2.ts
+        |       |       
+        |       +---post-activity
+        |       |       post-activity.html
+        |       |       post-activity.spec.ts
+        |       |       post-activity.ts
+        |       |       
+        |       +---post-media
+        |       |       post-media.html
+        |       |       post-media.spec.ts
+        |       |       post-media.ts
+        |       |       
+        |       +---post-multi-video
+        |       |       post-multi-video.html
+        |       |       post-multi-video.spec.ts
+        |       |       post-multi-video.ts
+        |       |       
+        |       +---post-options
+        |       |       post-options.html
+        |       |       post-options.spec.ts
+        |       |       post-options.ts
+        |       |       
+        |       +---post-tweet1
+        |       |       post-tweet1.html
+        |       |       post-tweet1.spec.ts
+        |       |       post-tweet1.ts
+        |       |       
+        |       +---post-tweet2
+        |       |       post-tweet2.html
+        |       |       post-tweet2.spec.ts
+        |       |       post-tweet2.ts
+        |       |       
+        |       +---post-tweet3
+        |       |       post-tweet3.html
+        |       |       post-tweet3.spec.ts
+        |       |       post-tweet3.ts
+        |       |       
+        |       +---post-tweet4
+        |       |       post-tweet4.html
+        |       |       post-tweet4.spec.ts
+        |       |       post-tweet4.ts
+        |       |       
+        |       +---post-tweet5
+        |       |       post-tweet5.html
+        |       |       post-tweet5.spec.ts
+        |       |       post-tweet5.ts
+        |       |       
+        |       +---post-video
+        |       |       post-video.html
+        |       |       post-video.spec.ts
+        |       |       post-video.ts
+        |       |       
+        |       +---post-weather
+        |       |       post-weather.html
+        |       |       post-weather.spec.ts
+        |       |       post-weather.ts
+        |       |       
+        |       +---post-with-comments1
+        |       |       post-with-comments1.html
+        |       |       post-with-comments1.spec.ts
+        |       |       post-with-comments1.ts
+        |       |       
+        |       +---post-with-comments2
+        |       |       post-with-comments2.html
+        |       |       post-with-comments2.spec.ts
+        |       |       post-with-comments2.ts
+        |       |       
+        |       +---post-with-feed-quote
+        |       |       post-with-feed-quote.html
+        |       |       post-with-feed-quote.spec.ts
+        |       |       post-with-feed-quote.ts
+        |       |       
+        |       +---post-with-images1
+        |       |       post-with-images1.html
+        |       |       post-with-images1.spec.ts
+        |       |       post-with-images1.ts
+        |       |       
+        |       \---post-with-images2
+        |               post-with-images2.html
+        |               post-with-images2.spec.ts
+        |               post-with-images2.ts
+        |               
+        +---statistics
+        |   |   data.ts
+        |   |   statistics.html
+        |   |   statistics.spec.ts
+        |   |   statistics.ts
+        |   |   
+        |   \---components
+        |       +---statistic-card1
+        |       |       statistic-card1.html
+        |       |       statistic-card1.spec.ts
+        |       |       statistic-card1.ts
+        |       |       
+        |       +---statistic-card2
+        |       |       statistic-card2.html
+        |       |       statistic-card2.spec.ts
+        |       |       statistic-card2.ts
+        |       |       
+        |       +---statistic-card3
+        |       |       statistic-card3.html
+        |       |       statistic-card3.spec.ts
+        |       |       statistic-card3.ts
+        |       |       
+        |       +---statistic-card4
+        |       |       statistic-card4.html
+        |       |       statistic-card4.spec.ts
+        |       |       statistic-card4.ts
+        |       |       
+        |       +---statistic-card5
+        |       |       statistic-card5.html
+        |       |       statistic-card5.spec.ts
+        |       |       statistic-card5.ts
+        |       |       
+        |       +---statistic-card6
+        |       |       statistic-card6.html
+        |       |       statistic-card6.spec.ts
+        |       |       statistic-card6.ts
+        |       |       
+        |       +---statistic-card7
+        |       |       statistic-card7.html
+        |       |       statistic-card7.spec.ts
+        |       |       statistic-card7.ts
+        |       |       
+        |       \---statistic-card8
+        |               statistic-card8.html
+        |               statistic-card8.spec.ts
+        |               statistic-card8.ts
+        |               
+        \---weather
+            |   data.ts
+            |   weather.html
+            |   weather.spec.ts
+            |   weather.ts
+            |   
+            \---components
+                +---statistic-card1
+                |       statistic-card1.html
+                |       statistic-card1.spec.ts
+                |       statistic-card1.ts
+                |       
+                +---statistic-card2
+                |       statistic-card2.html
+                |       statistic-card2.spec.ts
+                |       statistic-card2.ts
+                |       
+                +---statistic-card3
+                |       statistic-card3.html
+                |       statistic-card3.spec.ts
+                |       statistic-card3.ts
+                |       
+                +---statistic-card4
+                |       statistic-card4.html
+                |       statistic-card4.spec.ts
+                |       statistic-card4.ts
+                |       
+                +---top-cities-weather
+                |       top-cities-weather.html
+                |       top-cities-weather.spec.ts
+                |       top-cities-weather.ts
+                |       
+                \---weather-by-country
+                        weather-by-country.html
+                        weather-by-country.spec.ts
+                        weather-by-country.ts
+                        

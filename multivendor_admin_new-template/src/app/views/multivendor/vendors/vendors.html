@@ -1,0 +1,545 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Vendors" subTitle="Masters" />
+
+  <!-- STATUS CELLS -->
+  <ng-template #activeCell let-row>
+    <div class="form-check form-switch d-inline-block">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        [checked]="row.active_status === 1"
+        [disabled]="!permissions.canEdit()"
+        (change)="toggleActive(row, $any($event.target).checked)"
+        [attr.aria-label]="'Toggle active status for ' + row.vendor_name"
+      />
+    </div>
+  </ng-template>
+
+  <ng-template #loginCell let-row>
+    <div class="form-check form-switch d-inline-block">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        [checked]="row.login_status === 1"
+        [disabled]="!permissions.canEdit()"
+        (change)="toggleLogin(row, $any($event.target).checked)"
+        [attr.aria-label]="'Toggle login access for ' + row.vendor_name"
+      />
+    </div>
+  </ng-template>
+
+  <!-- VENDORS TABLE -->
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Vendors"
+        searchPlaceholder="Search vendors..."
+        itemsName="vendors"
+        addLabel="Add Vendor"
+        emptyMessage="No vendors registered yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        [cellTemplates]="cellTemplates()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- VIEW MODAL (Quick Glance / Read-Only)      -->
+  <!-- ========================================== -->
+  <ng-template #viewModal let-modal>
+    <!-- HIGHLIGHTED TOP BAR -->
+    <div class="modal-header border-0 pb-3" style="background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 0.5rem 0.5rem 0 0;">
+      <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+        <i class="bi bi-shop text-primary"></i> View Vendor Details
+      </h5>
+      <button type="button" class="btn-close shadow-none" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <div class="modal-body p-4">
+      <div class="row g-4">
+        
+        <!-- LEFT COLUMN: Basic Info -->
+        <div class="col-md-6">
+          <h6 class="text-uppercase text-primary fw-bold mb-3 fs-xs border-bottom border-primary-subtle pb-2">Vendor Information</h6>
+          
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Name:</span>
+            <span class="fw-semibold text-dark w-50">{{ form.controls.vendor_name.value }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Mobile:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.vendor_mobile_number.value }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Alt Mobile:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.vendor_mobile_number2.value }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Email:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.vendor_email.value }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Code:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.vendor_unique_code.value }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Category:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.store_category.value || '-' }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Subcategory:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.subcategory.value || '-' }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Filter:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.filter.value || '-' }}</span>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Shop & Financials -->
+        <div class="col-md-6">
+          <h6 class="text-uppercase text-primary fw-bold mb-3 fs-xs border-bottom border-primary-subtle pb-2">Shop Details</h6>
+          
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Offer:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.special_offer.value || '-' }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Time:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.opening_time.value }} - {{ form.controls.closing_time.value }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Commission:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.commission_percentage.value }}%</span>
+          </div>
+          <div class="d-flex mb-3 align-items-center">
+            <span class="text-muted w-50">KYC Status:</span>
+            <span class="w-50">
+              <span class="badge" [ngClass]="form.controls.kyc_status.value === 1 ? 'bg-success-subtle text-success border border-success' : 'bg-warning-subtle text-warning border border-warning'">
+                {{ form.controls.kyc_status.value === 1 ? 'Verified' : 'Pending' }}
+              </span>
+            </span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Location ID:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.location_id.value || '-' }}</span>
+          </div>
+          <div class="d-flex mb-3">
+            <span class="text-muted w-50">Coordinates:</span>
+            <span class="fw-medium text-dark w-50">{{ form.controls.latitude.value }}, {{ form.controls.longitude.value }}</span>
+          </div>
+        </div>
+
+        <!-- BOTTOM ROW: Images Preview -->
+        <div class="col-12 mt-4">
+          <h6 class="text-uppercase text-primary fw-bold mb-3 fs-xs border-bottom border-primary-subtle pb-2">Shop Images</h6>
+          <div class="d-flex gap-4">
+            <div class="text-center">
+              <small class="d-block text-muted mb-1">Shop</small>
+              @if (imagePreviews()['shop_image']) {
+                <img [src]="imagePreviews()['shop_image']" class="rounded border shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+              } @else { <span class="text-muted fs-xs">No image</span> }
+            </div>
+            <div class="text-center">
+              <small class="d-block text-muted mb-1">Interior 1</small>
+              @if (imagePreviews()['shop_interior_image1']) {
+                <img [src]="imagePreviews()['shop_interior_image1']" class="rounded border shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+              } @else { <span class="text-muted fs-xs">No image</span> }
+            </div>
+            <div class="text-center">
+              <small class="d-block text-muted mb-1">Interior 2</small>
+              @if (imagePreviews()['shop_interior_image2']) {
+                <img [src]="imagePreviews()['shop_interior_image2']" class="rounded border shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+              } @else { <span class="text-muted fs-xs">No image</span> }
+            </div>
+            <div class="text-center">
+              <small class="d-block text-muted mb-1">Interior 3</small>
+              @if (imagePreviews()['shop_interior_image3']) {
+                <img [src]="imagePreviews()['shop_interior_image3']" class="rounded border shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+              } @else { <span class="text-muted fs-xs">No image</span> }
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM ROW: Compliance & Bank -->
+        <div class="col-md-6 mt-4">
+          <h6 class="text-uppercase text-primary fw-bold mb-3 fs-xs border-bottom border-primary-subtle pb-2">Compliance</h6>
+          <div class="d-flex mb-2"><span class="text-muted w-50">FSSAI:</span> <span class="fw-medium text-dark w-50">{{ form.controls.fssai_license_number.value }}</span></div>
+          <div class="d-flex mb-2"><span class="text-muted w-50">GST:</span> <span class="fw-medium text-dark w-50">{{ form.controls.gst_number.value }}</span></div>
+          <div class="d-flex mb-2"><span class="text-muted w-50">PAN:</span> <span class="fw-medium text-dark w-50">{{ form.controls.pan_number.value }}</span></div>
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <h6 class="text-uppercase text-primary fw-bold mb-3 fs-xs border-bottom border-primary-subtle pb-2">Bank Details</h6>
+          <div class="d-flex mb-2"><span class="text-muted w-50">Account Holder:</span> <span class="fw-medium text-dark w-50">{{ form.controls.bank_account_holder.value }}</span></div>
+          <div class="d-flex mb-2"><span class="text-muted w-50">Account No:</span> <span class="fw-medium text-dark w-50">{{ form.controls.bank_account_number.value }}</span></div>
+          <div class="d-flex mb-2"><span class="text-muted w-50">IFSC:</span> <span class="fw-medium text-dark w-50">{{ form.controls.bank_ifsc_code.value }}</span></div>
+          <div class="d-flex mb-2"><span class="text-muted w-50">Bank/UPI:</span> <span class="fw-medium text-dark w-50">{{ form.controls.bank_name.value }} / {{ form.controls.upi_id.value }}</span></div>
+        </div>
+
+        <!-- ADDRESS -->
+        <div class="col-12 mt-4">
+          <h6 class="text-uppercase text-primary fw-bold mb-3 fs-xs border-bottom border-primary-subtle pb-2">Full Address</h6>
+          <p class="text-dark mb-0">{{ form.controls.vendor_address.value }}</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal-footer bg-light border-top">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">
+        Close
+      </button>
+      <!-- ADDED: Download Button -->
+      <button type="button" class="btn btn-primary" (click)="downloadVendorDetails()">
+        <i class="bi bi-download me-1"></i> Download Profile
+      </button>
+    </div>
+  </ng-template>
+
+
+  <!-- ========================================== -->
+  <!-- ADD / EDIT MODAL (Original Form)           -->
+  <!-- ========================================== -->
+  <ng-template #formModal let-modal>
+    <div class="modal-header border-bottom">
+      <h5 class="modal-title fw-semibold">
+        {{ editingId() ? 'Update Vendor' : 'Add Vendor' }}
+      </h5>
+
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body p-4">
+
+        <!-- VENDOR DETAILS -->
+        <div class="border rounded-3 mb-4 overflow-hidden">
+          <div class="px-3 py-2 bg-light border-bottom">
+            <h6 class="mb-0 fw-semibold">Vendor Details</h6>
+            <small class="text-muted">Basic vendor and shop information</small>
+          </div>
+
+          <div class="p-3">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="vendorName" class="form-label">Vendor Name <span class="text-danger">*</span></label>
+                <input type="text" id="vendorName" formControlName="vendor_name" class="form-control" />
+                @if (form.controls.vendor_name.touched && form.controls.vendor_name.invalid) {
+                  <div class="text-danger fs-xs mt-1">Vendor name is required.</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label for="vendorMobile" class="form-label">Mobile Number <span class="text-danger">*</span></label>
+                <input type="tel" id="vendorMobile" formControlName="vendor_mobile_number" class="form-control" maxlength="10" inputmode="numeric" />
+                @if (form.controls.vendor_mobile_number.touched && form.controls.vendor_mobile_number.invalid) {
+                  <div class="text-danger fs-xs mt-1">
+                    {{ form.controls.vendor_mobile_number.hasError('required') ? 'Mobile number is required.' : 'Enter a valid 10-digit mobile number.' }}
+                  </div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label for="vendorMobile2" class="form-label">Alternative Contact Number <span class="text-danger">*</span></label>
+                <input type="tel" id="vendorMobile2" formControlName="vendor_mobile_number2" class="form-control" maxlength="10" inputmode="numeric" placeholder="Enter alternative contact number" />
+                @if (fieldError('vendor_mobile_number2', 'Alternative Contact Number')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError('vendor_mobile_number2', 'Alternative Contact Number') }}</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label for="vendorEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" id="vendorEmail" formControlName="vendor_email" class="form-control" />
+                @if (form.controls.vendor_email.touched && form.controls.vendor_email.invalid) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError('vendor_email', 'Email') }}</div>
+                }
+              </div>
+
+              @if (!editingId()) {
+                <div class="col-md-6">
+                  <label for="vendorPwd" class="form-label">Password <span class="text-danger">*</span></label>
+                  <input type="text" id="vendorPwd" formControlName="pwd" class="form-control" placeholder="Initial login password" />
+                  @if (form.controls.pwd.touched && form.controls.pwd.invalid) {
+                    <div class="text-danger fs-xs mt-1">Password is required.</div>
+                  }
+                </div>
+              }
+
+              <div class="col-md-6">
+                <label for="vendorStoreType" class="form-label">Category</label>
+                <select id="vendorStoreType" formControlName="store_category" class="form-select">
+                  <option value="">Select a Category </option>
+                  @for (type of storeTypes(); track type.value) {
+                    <option [value]="type.value">{{ type.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="vendorLocation" class="form-label">Location <span class="text-danger">*</span></label>
+                <select id="vendorLocation" formControlName="location_id" class="form-select">
+                  <option [ngValue]="null">Select a location</option>
+                  @for (location of locations(); track location.id) {
+                    <option [ngValue]="location.id">{{ location.city }} - {{ location.area }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="vendorSubcategory" class="form-label">Subcategory <span class="text-danger">*</span></label>
+                <select id="vendorSubcategory" formControlName="subcategory" class="form-select">
+                  <option value="">Select a subcategory</option>
+                  @for (subcategory of subcategories(); track subcategory.id) {
+                    <option [value]="subcategory.category_name">{{ subcategory.category_name }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="vendorCode" class="form-label">Vendor Code <span class="text-danger">*</span></label>
+                <input type="text" id="vendorCode" formControlName="vendor_unique_code" class="form-control" />
+              </div>
+
+              <div class="col-md-6">
+                <label for="vendorFilter" class="form-label">Filter <span class="text-danger">*</span></label>
+                <select id="vendorFilter" formControlName="filter" class="form-select">
+                  <option value="">Select a filter</option>
+                  <option value="All">All</option>
+                  <option value="Veg">Veg</option>
+                  <option value="Non-Veg">Non-Veg</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label for="vendorAddress" class="form-label">Address <span class="text-danger">*</span></label>
+                <textarea id="vendorAddress" formControlName="vendor_address" class="form-control" rows="2"></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label for="specialOffer" class="form-label">Special Offer <span class="text-danger">*</span></label>
+                <input type="text" id="specialOffer" formControlName="special_offer" class="form-control" placeholder="Example: 10% OFF" />
+              </div>
+
+              <div class="col-md-3">
+                <label for="openingTime" class="form-label">Opening Time <span class="text-danger">*</span></label>
+                <input type="time" id="openingTime" formControlName="opening_time" class="form-control" />
+              </div>
+
+              <div class="col-md-3">
+                <label for="closingTime" class="form-label">Closing Time <span class="text-danger">*</span></label>
+                <input type="time" id="closingTime" formControlName="closing_time" class="form-control" />
+              </div>
+
+              <div class="col-md-6">
+                <label for="commission" class="form-label">Commission (%) <span class="text-danger">*</span></label>
+                <input type="number" id="commission" formControlName="commission_percentage" class="form-control" min="0" max="100" step="0.01" />
+              </div>
+
+              <div class="col-md-6">
+                <label for="kycStatus" class="form-label">KYC Status <span class="text-danger">*</span></label>
+                <select id="kycStatus" formControlName="kyc_status" class="form-select">
+                  <option [ngValue]="0">Pending</option>
+                  <option [ngValue]="1">Verified</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SHOP IMAGES -->
+        <div class="border rounded-3 mb-4 overflow-hidden">
+          <div class="px-3 py-2 bg-light border-bottom">
+            <h6 class="mb-0 fw-semibold">Shop Images</h6>
+            <small class="text-muted">Upload the shop image and Interior Images 1 and 2</small>
+          </div>
+          <div class="p-3">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label for="shopImage" class="form-label">Shop Image <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center gap-2">
+                  <label for="shopImage" class="btn btn-outline-primary mb-0 flex-shrink-0">Choose File</label>
+                  <input type="text" class="form-control" [value]="imageNames()['shop_image']" placeholder="No file selected" readonly />
+                  @if (imagePreviews()['shop_image']) {
+                    <img [src]="imagePreviews()['shop_image']" style="width: 45px; height: 45px; object-fit: cover; border-radius: 6px;" />
+                  }
+                </div>
+                <input type="file" id="shopImage" accept="image/*" hidden (change)="onShopImageSelected($event)" />
+              </div>
+
+              <div class="col-md-6">
+                <label for="interiorImage1" class="form-label">Interior Image 1 <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center gap-2">
+                  <label for="interiorImage1" class="btn btn-outline-primary mb-0 flex-shrink-0">Choose File</label>
+                  <input type="text" class="form-control" [value]="imageNames()['shop_interior_image1']" placeholder="No file selected" readonly />
+                  @if (imagePreviews()['shop_interior_image1']) {
+                    <img [src]="imagePreviews()['shop_interior_image1']" style="width: 45px; height: 45px; object-fit: cover; border-radius: 6px;" />
+                  }
+                </div>
+                <input type="file" id="interiorImage1" accept="image/*" hidden (change)="onInteriorImageSelected($event, 'shop_interior_image1')" />
+              </div>
+
+              <div class="col-md-6">
+                <label for="interiorImage2" class="form-label">Interior Image 2 <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center gap-2">
+                  <label for="interiorImage2" class="btn btn-outline-primary mb-0 flex-shrink-0">Choose File</label>
+                  <input type="text" class="form-control" [value]="imageNames()['shop_interior_image2']" placeholder="No file selected" readonly />
+                  @if (imagePreviews()['shop_interior_image2']) {
+                    <img [src]="imagePreviews()['shop_interior_image2']" style="width: 45px; height: 45px; object-fit: cover; border-radius: 6px;" />
+                  }
+                </div>
+                <input type="file" id="interiorImage2" accept="image/*" hidden (change)="onInteriorImageSelected($event, 'shop_interior_image2')" />
+              </div>
+
+              <div class="col-md-6">
+                <label for="interiorImage3" class="form-label">Interior Image 3</label>
+                <div class="d-flex align-items-center gap-2">
+                  <label for="interiorImage3" class="btn btn-outline-primary mb-0 flex-shrink-0 disabled">Choose File</label>
+                  <input type="text" class="form-control" [value]="imageNames()['shop_interior_image3']" placeholder="No file selected" readonly />
+                  @if (imagePreviews()['shop_interior_image3']) {
+                    <img [src]="imagePreviews()['shop_interior_image3']" style="width: 45px; height: 45px; object-fit: cover; border-radius: 6px;" />
+                  }
+                </div>
+                <small class="text-muted">New uploads unavailable.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENT / DELIVERY DETAILS -->
+        <div class="border rounded-3 mb-4 overflow-hidden">
+          <div class="px-3 py-2 bg-light border-bottom">
+            <h6 class="mb-0 fw-semibold">Payment &amp; Delivery Details</h6>
+          </div>
+          <div class="p-3">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label">Admin Service Fee (%) *</label>
+                <input type="number" formControlName="admin_service" class="form-control" min="0" step="0.01" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Packing Charges *</label>
+                <input type="number" formControlName="packing_charges" class="form-control" min="0" step="0.01" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Max Free Delivery Cost *</label>
+                <input type="number" formControlName="max_free_delivery_cost" class="form-control" min="0" step="0.01" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Minimum Order Amount *</label>
+                <input type="number" formControlName="minimum_order_amount" class="form-control" min="0" step="0.01" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Minimum KM *</label>
+                <input type="number" formControlName="minimum_km" class="form-control" min="0" step="0.01" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Minimum Delivery Charge *</label>
+                <input type="number" formControlName="minimum_delivery_charge" class="form-control" min="0" step="0.01" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Per KM Charges *</label>
+                <input type="number" formControlName="per_km_charges" class="form-control" min="0" step="0.01" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Maximum Delivery Charges *</label>
+                <input type="number" formControlName="maximum_delivery_km" class="form-control" min="0" step="0.01" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPLIANCE -->
+        <div class="border rounded-3 mb-4 overflow-hidden">
+          <div class="px-3 py-2 bg-light border-bottom">
+            <h6 class="mb-0 fw-semibold">Compliance</h6>
+          </div>
+          <div class="p-3">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label">FSSAI License Number *</label>
+                <input type="text" formControlName="fssai_license_number" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">GST Number *</label>
+                <input type="text" formControlName="gst_number" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">PAN Card Number *</label>
+                <input type="text" formControlName="pan_number" (blur)="normalizeIdentityDetails()" class="form-control" maxlength="10" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCATION DETAILS -->
+        <div class="border rounded-3 mb-4 overflow-hidden">
+          <div class="px-3 py-2 bg-light border-bottom">
+            <h6 class="mb-0 fw-semibold">Location Details</h6>
+          </div>
+          <div class="p-3">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Latitude *</label>
+                <input type="text" formControlName="latitude" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Longitude *</label>
+                <input type="text" formControlName="longitude" class="form-control" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYOUT / BANK DETAILS -->
+        <div class="border rounded-3 overflow-hidden">
+          <div class="px-3 py-2 bg-light border-bottom">
+            <h6 class="mb-0 fw-semibold">Payout Details</h6>
+          </div>
+          <div class="p-3">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Account Holder *</label>
+                <input type="text" formControlName="bank_account_holder" (blur)="normalizeIdentityDetails()" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Account Number *</label>
+                <input type="text" formControlName="bank_account_number" (blur)="normalizeIdentityDetails()" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">IFSC Code *</label>
+                <input type="text" formControlName="bank_ifsc_code" (blur)="normalizeIdentityDetails()" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Bank Name *</label>
+                <input type="text" formControlName="bank_name" (blur)="normalizeIdentityDetails()" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">UPI ID *</label>
+                <input type="text" formControlName="upi_id" class="form-control" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer border-top">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          }
+          {{ editingId() ? 'Update Vendor' : 'Add Vendor' }}
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

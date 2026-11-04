@@ -1,0 +1,226 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Charges" subTitle="Masters" />
+
+  <div class="row">
+    <div class="col-12">
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="activeTab"
+        class="nav-tabs nav-bordered mb-3"
+      >
+        <li ngbNavItem="charges">
+          <a ngbNavLink>Charges</a>
+
+          <ng-template ngbNavContent>
+            <app-data-table
+              title="Charges"
+              searchPlaceholder="Search charges..."
+              itemsName="charges"
+              addLabel="Add Charge"
+              emptyMessage="No charges configured yet."
+              [rows]="charges()"
+              [columns]="chargesColumns"
+              [actions]="actions"
+              [loading]="loading()"
+              (add)="openAdd(false)"
+              (action)="onAction($event, false)"
+            />
+          </ng-template>
+        </li>
+
+        <li ngbNavItem="surge">
+          <a ngbNavLink>Surge</a>
+
+          <ng-template ngbNavContent>
+            <app-data-table
+              title="Rain Surge"
+              searchPlaceholder="Search surge charges..."
+              itemsName="surge charges"
+              addLabel="Add Surge Charge"
+              emptyMessage="No surge charges configured yet."
+              [rows]="charges()"
+              [columns]="surgeColumns"
+              [actions]="actions"
+              [loading]="loading()"
+              (add)="openAdd(true)"
+              (action)="onAction($event, true)"
+            />
+          </ng-template>
+        </li>
+      </ul>
+
+      <div [ngbNavOutlet]="nav"></div>
+    </div>
+  </div>
+
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ editingId() ? 'Update' : 'Add' }}
+        {{ editingSurge() ? 'Surge Charge' : 'Charge' }}
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body">
+        <div class="row g-3">
+
+          @if (editingSurge()) {
+
+            <div class="col-md-6">
+              <label
+                for="rainSurgeCharge"
+                class="form-label"
+              >
+                Rain Surge Charge
+                <span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="number"
+                id="rainSurgeCharge"
+                formControlName="rain_surge_charge"
+                class="form-control"
+                min="0"
+                step="0.01"
+              />
+                @if (fieldError(form, 'rain_surge_charge', 'Rain Surge Charge')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'rain_surge_charge', 'Rain Surge Charge') }}</div>
+                }
+
+
+            </div>
+
+            <div class="col-md-6">
+              <label
+                for="rainSurgeActive"
+                class="form-label"
+              >
+                Rain Surge Active
+               <span class="text-danger">*</span></label>
+
+              <select
+                id="rainSurgeActive"
+                formControlName="rain_surge_active"
+                class="form-select"
+              >
+                <option [ngValue]="1">Active</option>
+                <option [ngValue]="0">Inactive</option>
+              </select>
+                @if (fieldError(form, 'rain_surge_active', 'Rain Surge Active')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'rain_surge_active', 'Rain Surge Active') }}</div>
+                }
+            </div>
+
+          } @else {
+
+            <div class="col-md-4">
+              <label
+                for="handlingCharge"
+                class="form-label"
+              >
+                Handling Charge
+                <span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="number"
+                id="handlingCharge"
+                formControlName="handling_charge"
+                class="form-control"
+                min="0"
+                step="0.01"
+              />
+                @if (fieldError(form, 'handling_charge', 'Handling Charge')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'handling_charge', 'Handling Charge') }}</div>
+                }
+
+
+            </div>
+
+            <div class="col-md-4">
+              <label
+                for="packingCharge"
+                class="form-label"
+              >
+                Packing Charge
+                <span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="number"
+                id="packingCharge"
+                formControlName="packing_charge"
+                class="form-control"
+                min="0"
+                step="0.01"
+              />
+                @if (fieldError(form, 'packing_charge', 'Packing Charge')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'packing_charge', 'Packing Charge') }}</div>
+                }
+
+
+            </div>
+
+            <div class="col-md-4">
+              <label
+                for="donationCharge"
+                class="form-label"
+              >
+                Donation Charge
+                <span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="number"
+                id="donationCharge"
+                formControlName="donation_charge"
+                class="form-control"
+                min="0"
+                step="0.01"
+              />
+                @if (fieldError(form, 'donation_charge', 'Donation Charge')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'donation_charge', 'Donation Charge') }}</div>
+                }
+
+
+            </div>
+
+          }
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+            ></span>
+          }
+
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

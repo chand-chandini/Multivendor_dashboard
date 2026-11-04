@@ -1,0 +1,61 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Revenue By Locations</h4>
+    <div ngbDropdown class="dropdown ms-auto">
+      <a [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none" ngbDropdownToggle>
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="map" class="me-2"></app-icon> View Full Map </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Export Revenue Data </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="filter-2" class="me-2"></app-icon> Filter By Region </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="trash" class="me-2"></app-icon> Remove Widget </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body pt-1">
+    <app-vector-map [options]="getRevenueLocationOptions()" height="206px" />
+    <div class="mt-3">
+      <div class="p-2 mb-3 border-dashed border rounded">
+        <div class="d-flex align-items-center">
+          <div class="avatar-lg flex-shrink-0 me-2">
+            <span class="avatar-title bg-warning-subtle rounded-circle fs-1">
+              <app-icon icon="medal" class="text-warning"></app-icon>
+            </span>
+          </div>
+          <div class="flex-gow-1">
+            <h5 class="mb-0 fw-semibold">Congratulations !...</h5>
+            <p class="mb-0 text-muted">You've just hit a new record..</p>
+          </div>
+          <div class="ms-auto">
+            <h4 class="fs-16 mt-1 mb-0">25.9k</h4>
+            <span class="text-muted fw-semibold fs-12">ORDERS</span>
+          </div>
+        </div>
+      </div>
+
+      @for(item of countryData; track $index; let last = $last){
+      <div class="d-flex align-items-center gap-2 {{ !last ? 'mb-2' : '' }}">
+        <app-icon icon="circle" class="fs-md" [ngClass]="item.className"></app-icon>
+        <div>{{ item.name }}</div>
+        <p class="mb-0 ms-auto">
+          <span class="fw-semibold">{{ item.prefix }}{{ item.revenue }}{{ item.suffix }}</span>
+          <span class="text-muted"> Revenue</span>
+        </p>
+      </div>
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Weekly Performance Insights</h4>
+    <div ngbDropdown class="ms-auto">
+      <a [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none" ngbDropdownToggle>
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="refresh" class="me-2"></app-icon> Refresh Data </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Download Report </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="share" class="me-2"></app-icon> Share Insights </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="archive" class="me-2"></app-icon> Archive Widget </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div dir="ltr">
+      <app-apexchart class="apex-charts" [getOptions]="weeklyPerformanceChart" />
+    </div>
+  </div>
+</div>

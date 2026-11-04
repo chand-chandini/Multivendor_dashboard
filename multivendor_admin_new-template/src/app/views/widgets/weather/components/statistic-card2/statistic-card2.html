@@ -1,0 +1,30 @@
+<div class="card border-0" [class]="item.className">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col-md-4">
+        <div class="d-flex justify-content-center align-items-center gap-3">
+          <div>
+            <iconify-icon [icon]="item.current.icon" class="fs-48"></iconify-icon>
+            <h2 class="mb-0">{{ item.current.temperature }}</h2>
+          </div>
+          <div>
+            <p class="mb-0">{{ item.current.status }}</p>
+            <small> {{ item.current.wind }} - {{ item.current.humidity }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8 mt-4 mt-md-0 text-center">
+        <div class="row">
+          @for (forecast of item.forecast; track $index) {
+          <div class="col">
+            <h6 class="text-white-50 mb-1">{{ forecast.day }}</h6>
+            <iconify-icon [icon]="forecast.icon" class="fs-32"></iconify-icon>
+            <p class="mt-1 mb-0">{{ forecast.temperature }}</p>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="card mb-2">
+  <div class="card-body">
+    <div class="d-flex gap-3">
+      <div class="avatar-lg rounded-circle text-bg-light d-flex align-items-center justify-content-center">
+        <app-icon [icon]="attendance.icon" class="fs-xxl"></app-icon>
+      </div>
+      <div class="flex-grow-1">
+        <div class="mb-2 d-flex justify-content-between align-items-center">
+          <h5 class="fs-xl mb-0">
+            {{ attendance.value }} @if(attendance.unit){
+            <small class="fs-6">{{ attendance.unit }}</small>
+            }
+          </h5>
+          @if (attendance.change !== undefined) {
+          <span>
+            {{ attendance.change > 0 ? '+' : attendance.change < 0 ? '' : '' }}{{ attendance.change }}% @if(attendance.change> 0){
+            <app-icon icon="arrow-up" class="text-success"></app-icon>
+            } @if(attendance.change < 0){ <app-icon icon="arrow-down" class="text-danger"></app-icon>
+            }
+          </span>
+          }
+        </div>
+        <p class="text-muted mb-0">{{ attendance.title }}</p>
+      </div>
+    </div>
+  </div>
+</div>

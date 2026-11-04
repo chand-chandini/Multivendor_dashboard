@@ -1,0 +1,124 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="My Profile" subTitle="Account" />
+
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <img [src]="profile()?.['profile_image'] || 'assets/images/users/user-1.jpg'" alt="Profile picture" class="rounded-circle avatar-xl mb-3" />
+          <h5 class="mb-1">{{ auth.userName() }}</h5>
+          <p class="text-muted mb-3">{{ auth.adminType() }}</p>
+
+          <dl class="row text-start mb-0 fs-sm">
+            <dt class="col-5 fw-normal text-muted">Mobile</dt>
+            <dd class="col-7">{{ profile()?.['mobile_number'] || auth.user()?.mobile_number || '-' }}</dd>
+            <dt class="col-5 fw-normal text-muted">Email</dt>
+            <dd class="col-7 text-break">{{ profile()?.['email'] || auth.user()?.email || '-' }}</dd>
+            <dt class="col-5 fw-normal text-muted">Organisation</dt>
+            <dd class="col-7">{{ auth.tenant()?.name || '-' }}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header border-light">
+          <h5 class="card-title mb-0">Change Password</h5>
+        </div>
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">New Password <span class="text-danger">*</span></label>
+              <input type="password" id="newPassword" formControlName="new_password" class="form-control" autocomplete="new-password" />
+                @if (fieldError(passwordForm, 'new_password', 'New Password')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(passwordForm, 'new_password', 'New Password') }}</div>
+                }
+
+            </div>
+
+            <div class="mb-0">
+              <label for="confirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+              <input type="password" id="confirmPassword" formControlName="confirm_password" class="form-control" autocomplete="new-password" />
+                @if (fieldError(passwordForm, 'confirm_password', 'Confirm Password')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(passwordForm, 'confirm_password', 'Confirm Password') }}</div>
+                }
+
+            </div>
+          </div>
+          <div class="card-footer border-0 text-end">
+            <button type="submit" class="btn btn-primary" [disabled]="saving()">
+              @if (saving()) {
+                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+              }
+              Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="card">
+        <div class="card-header border-light">
+          <h5 class="card-title mb-0">My Access</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-custom table-centered mb-0">
+            <thead class="bg-light bg-opacity-25 thead-sm">
+              <tr class="text-uppercase fs-xxs">
+                <th>Module</th>
+                <th class="text-center">View</th>
+                <th class="text-center">Add</th>
+                <th class="text-center">Edit</th>
+                <th class="text-center">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (permission of modulePermissions; track permission.module_id + '-' + permission.sub_module_id) {
+                <tr>
+                  <td>
+                    <span class="fw-semibold">{{ permission.module_name }}</span>
+                    @if (permission.sub_module_name) {
+                      <span class="text-muted"> · {{ permission.sub_module_name }}</span>
+                    }
+                  </td>
+                  <td class="text-center">
+                    @if (permission.can_view === 1) {
+                      <app-icon icon="circle-check-filled" class="text-success fs-lg"></app-icon>
+                    } @else {
+                      <app-icon icon="circle-x" class="text-muted fs-lg"></app-icon>
+                    }
+                  </td>
+                  <td class="text-center">
+                    @if (permission.can_add === 1) {
+                      <app-icon icon="circle-check-filled" class="text-success fs-lg"></app-icon>
+                    } @else {
+                      <app-icon icon="circle-x" class="text-muted fs-lg"></app-icon>
+                    }
+                  </td>
+                  <td class="text-center">
+                    @if (permission.can_edit === 1) {
+                      <app-icon icon="circle-check-filled" class="text-success fs-lg"></app-icon>
+                    } @else {
+                      <app-icon icon="circle-x" class="text-muted fs-lg"></app-icon>
+                    }
+                  </td>
+                  <td class="text-center">
+                    @if (permission.can_delete === 1) {
+                      <app-icon icon="circle-check-filled" class="text-success fs-lg"></app-icon>
+                    } @else {
+                      <app-icon icon="circle-x" class="text-muted fs-lg"></app-icon>
+                    }
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-4">No module permissions assigned.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

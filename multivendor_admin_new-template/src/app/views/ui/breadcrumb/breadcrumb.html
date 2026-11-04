@@ -1,0 +1,87 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Breadcrumb" subTitle="UI" />
+
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="flex-grow-1">
+            <h4 class="card-title">Basic</h4>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 py-2">
+              <li class="breadcrumb-item active" aria-current="page">Home</li>
+            </ol>
+          </nav>
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 py-2">
+              <li class="breadcrumb-item"><a [routerLink]="[]">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Library</li>
+            </ol>
+          </nav>
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 py-2">
+              <li class="breadcrumb-item"><a [routerLink]="[]">Home</a></li>
+              <li class="breadcrumb-item"><a [routerLink]="[]">Library</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Data</li>
+            </ol>
+          </nav>
+        </div>
+        <!-- end code body-->
+      </div>
+      <!-- end card-->
+    </div>
+    <!-- end col -->
+
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="flex-grow-1">
+            <h4 class="card-title">With Icons</h4>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-2">
+              <li class="breadcrumb-item active" aria-current="page">
+                <app-icon icon="smart-home" class="me-1"></app-icon>
+                Home
+              </li>
+            </ol>
+          </nav>
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-2">
+              <li class="breadcrumb-item">
+                <a [routerLink]="[]">
+                  <app-icon icon="smart-home"></app-icon>
+                  Home
+                </a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Library</li>
+            </ol>
+          </nav>
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-0">
+              <li class="breadcrumb-item">
+                <a [routerLink]="[]">
+                  <app-icon icon="smart-home"></app-icon>
+                  Home
+                </a>
+              </li>
+              <li class="breadcrumb-item"><a [routerLink]="[]">Library</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Data</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

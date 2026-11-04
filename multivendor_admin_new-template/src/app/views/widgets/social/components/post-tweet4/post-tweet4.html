@@ -1,0 +1,66 @@
+<div class="card">
+  <!-- Header -->
+  <div class="card-body pb-0 d-flex align-items-center">
+    <img src="assets/images/users/user-3.jpg" class="avatar-md rounded-circle me-2" />
+    <div class="flex-grow-1">
+      <h5 class="fw-semibold mb-0"><a [routerLink]="[]" class="link-reset">Daniel Carter</a></h5>
+      <small class="text-muted">6 hours ago</small>
+    </div>
+    <div ngbDropdown placement="bottom-end">
+      <a ngbDropdownToggle [routerLink]="[]" class="text-muted drop-arrow-none">
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="edit" class="me-2"></app-icon>Edit</a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="trash" class="me-2"></app-icon>Delete</a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="flag" class="me-2"></app-icon>Report</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Shared Link -->
+  <div class="p-3 pb-1">
+    <p class="text-muted mb-2">Found this helpful tool for UI designers — bookmarking it for future projects!</p>
+
+    <a [routerLink]="[]" class="d-block border border-light rounded-4 text-reset overflow-hidden shadow-sm">
+      <div class="d-flex">
+        <img src="assets/images/gallery/7.jpg" class="img-fluid" style="width: 140px; object-fit: cover" />
+        <div class="p-3">
+          <h6 class="fw-bold mb-1">UI Component Library Explorer</h6>
+          <p class="small text-muted mb-0">Browse, compare and preview hundreds of UI components for modern frameworks.</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <div class="card-footer border-0 pt-3 d-flex gap-2">
+    <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+      <app-icon icon="corner-up-left" class="me-1"></app-icon>
+      Reply
+    </a>
+    <span class="btn btn-sm fs-sm btn-link text-muted" (click)="toggleLike()">
+      @if (liked) {
+      <span class="align-middle">
+        <app-icon icon="heart-filled" class="text-danger"></app-icon>
+        Liked!
+      </span>
+      } @else {
+      <span class="d-none align-middle">
+        <app-icon icon="heart" class="text-muted"></app-icon>
+        Like
+      </span>
+      }
+    </span>
+    <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+      <app-icon icon="share" class="me-1"></app-icon>
+      Share
+    </a>
+  </div>
+</div>

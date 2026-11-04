@@ -1,0 +1,89 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <h4 class="card-title">Ongoing Projects</h4>
+
+    <div class="d-flex align-items-center gap-2">
+      <!-- Search -->
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="text" class="form-control" placeholder="Search project..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="50">50</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="bg-light bg-opacity-25 p-2 text-center border-bottom border-dashed">
+    <p class="m-0"><b>31</b> Active projects out of <span class="fw-medium">958</span></p>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-custom table-nowrap table-centered table-hover w-100 mb-0">
+      <tbody>
+        @if ((total$ | async)! > 0) { @for(item of (projectData$ | async); track $index){
+        <tr>
+          <td>
+            <span class="text-muted fs-12">{{ item.company }}</span>
+            <h5 class="fs-base mb-0">
+              <a [routerLink]="[]" class="text-body">{{ item.name }}</a>
+            </h5>
+          </td>
+          <td>
+            <span class="text-muted fs-12">Deadline</span> <br />
+            <h5 class="fs-base mb-0 fw-normal">{{ item.deadline }}</h5>
+          </td>
+          <td>
+            <span class="text-muted fs-12">Budget</span>
+            <h5 class="fs-base mb-0 fw-normal">{{ item.budget }}</h5>
+          </td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img [src]="item.user.image" alt="" class="avatar-sm rounded-circle me-2" />
+              <div>
+                <span class="text-muted fs-12">{{ item.user.role }}</span>
+                <h5 class="fs-base mb-0 fw-normal">{{ item.user.name }}</h5>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="text-muted fs-12">Status</span>
+            <h5 class="fs-base mb-0 fw-normal">
+              <app-icon icon="circle" class="fs-12" [ngClass]="item.status.className"></app-icon>
+              {{ item.status.label }}
+            </h5>
+          </td>
+          <td style="width: 30px">
+            <div ngbDropdown>
+              <a [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none" ngbDropdownToggle>
+                <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+              </a>
+              <div ngbDropdownMenu class="dropdown-menu-end">
+                <a [routerLink]="[]" ngbDropdownItem>View Project</a>
+                <a [routerLink]="[]" ngbDropdownItem>Edit Project</a>
+                <a [routerLink]="[]" ngbDropdownItem>Archive Project</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        } } @else {
+        <tr class="no-results">
+          <td colspan="8" class="text-center text-muted py-3">Nothing found.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="projects" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

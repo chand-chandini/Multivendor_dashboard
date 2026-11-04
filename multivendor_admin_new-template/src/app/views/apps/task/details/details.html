@@ -1,0 +1,60 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Task Details" subTitle="Tasks"></app-page-breadcrumb>
+  <div class="row">
+    <div class="col-xxl-12">
+      <div class="row g-0">
+        <!-- Project Main Details -->
+        <div class="col-xl-9">
+          <div class="card card-h-100 rounded-0 rounded-start border-end border-dashed">
+            <div class="card-header align-items-start p-4">
+              <div>
+                <h3 class="mb-1 d-flex fs-xl align-items-center">Complete Presentation Slides for Meeting</h3>
+                <p class="text-muted mb-2 fs-xxs">Updated 10 minutes ago</p>
+                <span class="badge badge-soft-warning fs-xxs badge-label">New</span>
+              </div>
+              <div class="ms-auto">
+                <a [routerLink]="[]" class="btn btn-light">
+                  <app-icon icon="pencil" class="me-1"></app-icon>
+                  Edit Task
+                </a>
+              </div>
+            </div>
+            <div class="card-body px-4">
+              <div class="mb-4">
+                <h5 class="fs-base mb-2">Task Description:</h5>
+                <p class="text-muted">Prepare and finalize the presentation slides for the upcoming business strategy meeting. Include sections for overview, KPIs, and next quarter goals to ensure clarity and alignment.</p>
+                <p class="text-muted mb-0">The task requires coordination with the marketing and finance teams for data verification. Final review and approval must be completed before the meeting date.</p>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-4 col-xl-3">
+                  <h6 class="mb-1 text-muted text-uppercase">Created Date:</h6>
+                  <p class="fw-medium mb-0">May 9, 2025</p>
+                </div>
+                <div class="col-md-4 col-xl-3">
+                  <h6 class="mb-1 text-muted text-uppercase">Due Date:</h6>
+                  <p class="fw-medium mb-0 text-danger">Today</p>
+                </div>
+                <div class="col-md-4 col-xl-3">
+                  <h6 class="mb-1 text-muted text-uppercase">Assigned To:</h6>
+                  <p class="fw-medium mb-0">Cruise +2 Members</p>
+                </div>
+                <div class="col-md-4 col-xl-3">
+                  <h6 class="mb-1 text-muted text-uppercase">Priority:</h6>
+                  <p class="fw-medium mb-0 text-danger">High</p>
+                </div>
+              </div>
+
+              <!-- Tabs -->
+              <app-project-tabs />
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Sidebar -->
+        <div class="col-xl-3">
+          <app-task-sidebar />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,376 @@
+<div class="container-fluid">
+
+  <app-page-breadcrumb
+    title="Master Data"
+    subTitle="Products" />
+
+  <div class="row">
+    <div class="col-12">
+
+      <app-data-table
+        title="Master Data"
+        searchPlaceholder="Search products..."
+        itemsName="products"
+        addLabel="Add Product"
+        emptyMessage="No products added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+
+    </div>
+  </div>
+
+  <!-- Add / Edit Product Modal -->
+  <ng-template #formModal let-modal>
+
+    <div class="modal-header">
+
+      <h5 class="modal-title">
+        {{ editingId() ? 'Update Product' : 'Add Product' }}
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()">
+      </button>
+
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()">
+
+      <div
+        class="modal-body"
+        style="max-height: 70vh; overflow-y: auto;">
+
+        <div class="row g-3">
+
+          <!-- Vendor -->
+          <div class="col-md-6">
+
+            <label
+              for="mdVendor"
+              class="form-label">
+              Vendor
+              <span class="text-danger">*</span>
+            </label>
+
+            <select
+              id="mdVendor"
+              formControlName="vendor_id"
+              class="form-select">
+
+              <option [ngValue]="null">
+                Select Vendor
+              </option>
+
+              @for (vendor of vendors(); track vendor.id) {
+
+                <option [ngValue]="vendor.id">
+                  {{ vendor.vendor_name }}
+                </option>
+
+              }
+
+            </select>
+                @if (fieldError(form, 'vendor_id', 'Vendor')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'vendor_id', 'Vendor') }}</div>
+                }
+
+
+
+          </div>
+
+          <!-- Category -->
+          <div class="col-md-6">
+
+            <label
+              for="mdCategory"
+              class="form-label">
+              Category
+              <span class="text-danger">*</span>
+            </label>
+
+            <select
+              id="mdCategory"
+              formControlName="category_id"
+              class="form-select">
+
+              <option [ngValue]="null">
+                Select Category
+              </option>
+
+              @for (category of categories(); track category.id) {
+
+                <option [ngValue]="category.id">
+                  {{ category.category_name }}
+                </option>
+
+              }
+
+            </select>
+                @if (fieldError(form, 'category_id', 'Category')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'category_id', 'Category') }}</div>
+                }
+
+
+
+          </div>
+
+          <!-- Product Name -->
+          <div class="col-md-6">
+
+            <label
+              for="mdProductName"
+              class="form-label">
+              Product Name
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="mdProductName"
+              formControlName="product_name"
+              class="form-control"
+              placeholder="Enter product name" />
+                @if (fieldError(form, 'product_name', 'Product Name')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'product_name', 'Product Name') }}</div>
+                }
+
+
+
+          </div>
+
+          <!-- Product Code -->
+          <div class="col-md-6">
+
+            <label
+              for="mdProductCode"
+              class="form-label">
+              Product Code
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="text"
+              id="mdProductCode"
+              formControlName="product_code"
+              class="form-control"
+              placeholder="Enter product code" />
+                @if (fieldError(form, 'product_code', 'Product Code')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'product_code', 'Product Code') }}</div>
+                }
+
+          </div>
+
+          <!-- Description -->
+          <div class="col-12">
+
+            <label
+              for="mdDescription"
+              class="form-label">
+              Description
+             <span class="text-danger">*</span></label>
+
+            <textarea
+              id="mdDescription"
+              formControlName="description"
+              class="form-control"
+              rows="3"
+              placeholder="Enter product description">
+            </textarea>
+                @if (fieldError(form, 'description', 'Description')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'description', 'Description') }}</div>
+                }
+
+          </div>
+
+          <!-- Base Price -->
+          <div class="col-md-4">
+
+            <label
+              for="mdBasePrice"
+              class="form-label">
+              Base Price
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="number"
+              id="mdBasePrice"
+              formControlName="base_price"
+              class="form-control"
+              min="0"
+              step="0.01"
+              placeholder="0.00" />
+                @if (fieldError(form, 'base_price', 'Base Price')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'base_price', 'Base Price') }}</div>
+                }
+
+
+
+          </div>
+
+          <!-- Discount Price -->
+          <div class="col-md-4">
+
+            <label
+              for="mdDiscountPrice"
+              class="form-label">
+              Offer Price
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="number"
+              id="mdDiscountPrice"
+              formControlName="discount_price"
+              class="form-control"
+              min="0"
+              step="0.01"
+              placeholder="0.00" />
+                @if (fieldError(form, 'discount_price', 'Offer Price')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'discount_price', 'Offer Price') }}</div>
+                }
+
+          </div>
+
+          <!-- Stock Quantity -->
+          <div class="col-md-4">
+
+            <label
+              for="mdStockQuantity"
+              class="form-label">
+              Stock Quantity
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="number"
+              id="mdStockQuantity"
+              formControlName="stock_quantity"
+              class="form-control"
+              min="0"
+              placeholder="0" />
+                @if (fieldError(form, 'stock_quantity', 'Stock Quantity')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'stock_quantity', 'Stock Quantity') }}</div>
+                }
+
+          </div>
+
+          <!-- Product Options -->
+          <div class="col-12">
+
+            <label class="form-label">
+              Product Options
+            </label>
+
+            <div class="d-flex flex-wrap gap-4">
+
+              <!-- Vegetarian -->
+              <div class="form-check">
+
+                <input
+                  type="checkbox"
+                  id="mdIsVeg"
+                  formControlName="is_veg"
+                  class="form-check-input" />
+                @if (fieldError(form, 'is_veg', 'Is veg')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'is_veg', 'Is veg') }}</div>
+                }
+
+                <label
+                  for="mdIsVeg"
+                  class="form-check-label">
+                  Vegetarian
+                </label>
+
+              </div>
+
+              <!-- Returnable -->
+              <div class="form-check">
+
+                <input
+                  type="checkbox"
+                  id="mdIsReturnable"
+                  formControlName="is_returnable"
+                  class="form-check-input" />
+                @if (fieldError(form, 'is_returnable', 'Is returnable')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'is_returnable', 'Is returnable') }}</div>
+                }
+
+                <label
+                  for="mdIsReturnable"
+                  class="form-check-label">
+                  Returnable
+                </label>
+
+              </div>
+
+              <!-- Featured -->
+              <div class="form-check">
+
+                <input
+                  type="checkbox"
+                  id="mdIsFeatured"
+                  formControlName="is_featured"
+                  class="form-check-input" />
+                @if (fieldError(form, 'is_featured', 'Is featured')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'is_featured', 'Is featured') }}</div>
+                }
+
+                <label
+                  for="mdIsFeatured"
+                  class="form-check-label">
+                  Featured
+                </label>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving()">
+
+          @if (saving()) {
+
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status">
+            </span>
+
+          }
+
+          {{ editingId() ? 'Update' : 'Save' }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </ng-template>
+
+</div>

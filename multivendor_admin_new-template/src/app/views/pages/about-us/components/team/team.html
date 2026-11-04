@@ -1,0 +1,30 @@
+<section class="border-top border-dashed py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h3 class="fw-bold mb-5">
+          Meet Our
+          <mark class="text-warning">Dedicated</mark>
+          Team
+        </h3>
+      </div>
+    </div>
+
+    <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 justify-content-center">
+      @for (member of teamMemberData; track $index) {
+      <div class="col">
+        <div class="card border-light">
+          <div class="card-body border-0 pb-0 text-center">
+            <div class="mx-auto mb-3">
+              <img [src]="member.image" [alt]="member.name" class="img-fluid rounded" />
+            </div>
+
+            <h4 class="mb-1 fs-md">{{ member.name }}</h4>
+            <p class="text-muted mb-3 fst-italic fs-sm">{{ member.role }}</p>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>

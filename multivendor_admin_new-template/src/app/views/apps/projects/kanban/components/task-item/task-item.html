@@ -1,0 +1,58 @@
+<div class="card mb-2 border border-light">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-2">
+      <span
+        class="badge badge-label"
+        [ngClass]="
+          task.priority === 'high'
+            ? 'bg-danger-subtle text-danger'
+            : task.priority === 'normal' || task.priority === 'completed'
+            ? 'bg-success-subtle text-success'
+            : task.priority === 'medium'
+            ? 'bg-warning-subtle text-warning'
+            : 'bg-danger text-white'
+        "
+      >
+        {{ toPascalCase(task.priority) }}
+      </span>
+
+      <div class="ms-auto mt-n2">
+        <div ngbDropdown class="dropdown">
+          <a [routerLink]="[]" class="btn btn-icon btn-sm btn-ghost-light text-muted drop-arrow-none" ngbDropdownToggle>
+            <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+          </a>
+          <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" [routerLink]="[]"><app-icon icon="share" class="me-2"></app-icon>Share</a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="[]"><app-icon icon="edit" class="me-2"></app-icon>Edit</a>
+            </li>
+            <li>
+              <a class="dropdown-item text-danger" [routerLink]="[]"><app-icon icon="trash" class="me-2"></app-icon>Delete</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Title -->
+    <h5 class="mb-2">
+      <a [routerLink]="[]" class="link-reset">{{ task.title }}</a>
+    </h5>
+
+    <!-- Assignee -->
+    <div class="d-flex align-items-center mb-2">
+      <img [src]="task.assignee.image" width="28" height="28" class="rounded-circle me-2" />
+      <span class="text-muted fw-medium">{{ task.assignee.name }}</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="d-flex justify-content-between align-items-center mb-n1 text-muted">
+      <span>{{ task.stats.time }}</span>
+      <span><app-icon icon="list-check"></app-icon> {{ task.stats.task }}</span>
+      <span><app-icon icon="link"></app-icon> {{ task.stats.link }}</span>
+      <span><app-icon icon="messages"></app-icon> {{ task.stats.messages }}</span>
+    </div>
+  </div>
+</div>

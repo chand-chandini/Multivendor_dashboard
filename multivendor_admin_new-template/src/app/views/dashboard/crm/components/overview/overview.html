@@ -1,0 +1,68 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Overview <span class="text-muted fw-normal fs-base">(Current Year)</span></h4>
+    <div>
+      <button type="button" class="btn btn-light btn-sm me-1">All</button>
+      <button type="button" class="btn btn-light btn-sm me-1">1M</button>
+      <button type="button" class="btn btn-light btn-sm me-1">6M</button>
+      <button type="button" class="btn btn-light active btn-sm">1Y</button>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-xl-4">
+        <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+          <app-icon icon="database" class="fs-28 me-2"></app-icon>
+          <div>
+            We regret to inform you that our server is down.
+            <strong><a [routerLink]="[]" class="alert-link">Refresh</a></strong>
+          </div>
+        </div>
+
+        @for (chunk of overviewChunks; track $index) {
+        <div class="row">
+          @for (item of overviewData; track $index) {
+          <div class="col-sm-6">
+            <p class="text-muted mb-1 {{ $index === 2 || $index === 3 ? 'mt-3' : '' }}">{{ item.title }}</p>
+            <h4 class="mb-2">
+              <app-icon [icon]="item.icon" [ngClass]="item.className" class="me-2"></app-icon>
+              <span
+                ><span
+                  [countUp]="item.value"
+                  [countUpOptions]="{
+                        prefix: item.prefix || '',
+                        suffix: item.suffix || '',
+                        decimalPlaces: Number.isInteger(item.value) ? 0 : 2,
+                      }"
+                ></span
+              ></span>
+            </h4>
+            @if (item.change > 0) {
+            <span class="badge fs-12 badge-soft-success"><app-icon icon="chevron-up"></app-icon> {{ item.change }}%</span>
+            } @else if (item.change < 0) {
+            <span class="badge fs-12 badge-soft-danger"><app-icon icon="chevron-down"></app-icon> {{ item.change }}%</span>
+            } @else {
+            <span class="badge fs-12 text-bg-light">{{ item.change }}%</span>
+            }
+          </div>
+          }
+        </div>
+        }
+
+        <button type="button" class="btn btn-primary btn-sm mt-3" (click)="reload()" [disabled]="isReloading"><app-icon icon="refresh" class="me-1" [class.spin]="isReloading"></app-icon> Refresh Data</button>
+      </div>
+      <!-- end col -->
+      <div class="col-xl-8">
+        <div dir="ltr">
+          <app-apexchart class="apex-charts" [getOptions]="dashRevenueChart" />
+        </div>
+      </div>
+    </div>
+    @if (isReloading) {
+    <div class="card-overlay d-flex">
+      <div class="spinner-border text-primary"></div>
+    </div>
+    }
+  </div>
+</div>

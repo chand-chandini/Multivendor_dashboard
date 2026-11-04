@@ -1,0 +1,107 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <h4 class="card-title">Tasks</h4>
+
+    <div class="d-flex align-items-center gap-2">
+      <!-- Search -->
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="text" class="form-control" placeholder="Search task..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="50">50</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="bg-light bg-opacity-25 p-2 text-center border-bottom border-dashed">
+    <p class="m-0"><b>107</b> Tasks completed out of <span class="fw-medium">195</span></p>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-custom table-nowrap table-centered table-hover w-100 mb-0">
+      <tbody>
+        @if ((total$ | async)! > 0) { @for(item of (taskData$ | async); track $index){
+        <tr>
+          <td>
+            <span class="text-muted fs-12">{{ item.dueInfo }}</span>
+            <h5 class="fs-base mb-0">
+              <a [routerLink]="[]" class="text-body">{{ item.title }}</a>
+            </h5>
+          </td>
+
+          <td>
+            <span class="text-muted fs-12">Due Date</span><br />
+            <h5 class="fs-base mb-0 fw-normal">{{ item.dueDate }}</h5>
+          </td>
+
+          <td>
+            <div class="d-flex align-items-center">
+              <img [src]="item.assignedTo.image" class="avatar-sm rounded-circle me-2" />
+              <div>
+                <span class="text-muted fs-12">Assigned To</span>
+                <h5 class="fs-base mb-0 fw-normal">{{ item.assignedTo.name }}</h5>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <span class="text-muted fs-12">Status</span>
+            <h5 class="fs-base mb-0 fw-normal">
+              <span
+                class="badge"
+                [class]="
+                  item.status === 'in-progress'
+                    ? 'badge-soft-info'
+                    : item.status === 'completed'
+                    ? 'badge-soft-success'
+                    : item.status === 'pending'
+                    ? 'badge-soft-warning'
+                    : item.status === 'blocked'
+                    ? 'badge-soft-danger'
+                    : 'badge-soft-primary'
+                "
+                >{{ toPascalCase(item.status) }}</span
+              >
+            </h5>
+          </td>
+
+          <td>
+            <span class="text-muted fs-12">Total time spent</span>
+            <h5 class="fs-base mb-0 fw-normal">{{ item.time }}</h5>
+          </td>
+
+          <td style="width: 30px">
+            <div ngbDropdown>
+              <a [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none" ngbDropdownToggle>
+                <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+              </a>
+              <div ngbDropdownMenu class="dropdown-menu-end">
+                <a ngbDropdownItem [routerLink]="[]">View Task</a>
+                <a ngbDropdownItem [routerLink]="[]">Edit Task</a>
+                <a ngbDropdownItem [routerLink]="[]">Mark as Completed</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        }} @else {
+        <tr class="no-results">
+          <td colspan="8" class="text-center text-muted py-3">Nothing found.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="tasks" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

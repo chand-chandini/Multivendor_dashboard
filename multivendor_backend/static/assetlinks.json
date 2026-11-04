@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.wedzing.guest",
+      "sha256_cert_fingerprints": [
+        "F9:6C:CD:1C:E5:41:79:D9:95:DD:E9:12:3C:84:ED:06:4E:43:4C:07:62:A3:C4:06:A9:58:95:37:60:7C:A6:42"
+      ]
+    }
+  }
+]

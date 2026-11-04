@@ -1,0 +1,231 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search expenses..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <button class="btn btn-primary" (click)="openExpenseModal(content)"><app-icon icon="plus" class="me-1"></app-icon> Add Expense</button>
+
+      @if (hasSelection) {
+      <button class="btn btn-danger" (click)="deleteSelected()">Delete</button>
+      }
+    </div>
+
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <div class="app-search">
+        <select [(ngModel)]="filterCategory" (ngModelChange)="tableService.setFilter('category', filterCategory)" class="form-select form-control my-1 my-md-0">
+          <option value="">Category</option>
+          <option value="Office Supplies">Office Supplies</option>
+          <option value="Travel">Travel</option>
+          <option value="Meals">Meals</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Equipment">Equipment</option>
+          <option value="Utilities">Utilities</option>
+          <option value="Maintenance">Maintenance</option>
+        </select>
+        <app-icon icon="category" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Status</option>
+          <option value="approved">Approved</option>
+          <option value="pending">Pending</option>
+          <option value="rejected">Rejected</option>
+          <option value="reimbursed">Reimbursed</option>
+        </select>
+        <app-icon icon="circle-check" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="8">8</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+        <thead class="bg-light align-middle bg-opacity-25 thead-sm text-nowrap">
+          <tr class="text-uppercase fs-xxs">
+            <th class="ps-3" style="width: 1%">
+              <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+            </th>
+            <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">ID</th>
+            <th>Expense Title</th>
+            <th sortable="category" (sort)="tableService.setSort($event.column, $event.direction)">Category</th>
+            <th>Payment Method</th>
+            <th sortable="amount" (sort)="tableService.setSort($event.column, $event.direction)">Amount</th>
+            <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+            <th sortable="date" (sort)="tableService.setSort($event.column, $event.direction)">Date</th>
+            <th sortable="addedBy.name" (sort)="tableService.setSort($event.column, $event.direction)">Added By</th>
+            <th class="text-center" style="width: 1%">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for (expense of (expenseData$ | async); track $index) {
+          <tr>
+            <td class="ps-3">
+              <input [checked]="selectedIds.has(expense.id)" (change)="toggleSingleSelection(expense)" class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" />
+            </td>
+
+            <td>
+              <a [routerLink]="[]" class="fw-semibold link-reset">{{ expense.id }}</a>
+            </td>
+
+            <td>{{ expense.title }}</td>
+
+            <td>{{ expense.category }}</td>
+
+            <td>
+              <div class="d-flex align-items-center">
+                <img [src]="expense.paymentMethod.image" [alt]="expense.paymentMethod.name || expense.paymentMethod.number" class="me-2" height="26" />
+                <span> {{ expense.paymentMethod.type === 'card' ? expense.paymentMethod.number : expense.paymentMethod.name }} </span>
+              </div>
+            </td>
+
+            <td>{{ expense.amount }}</td>
+
+            <td>
+              <span
+                class="badge badge-label"
+                [class]="
+                                expense.status === 'pending' ? 'bg-warning-subtle text-warning' :
+                                expense.status === 'rejected' ? 'bg-danger-subtle text-danger' :
+                                 'bg-success-subtle text-success'
+                            "
+              >
+                {{ toPascalCase(expense.status) }}
+              </span>
+            </td>
+
+            <td>{{ expense.date }} <small class="text-muted">{{ expense.time }}</small></td>
+
+            <td>
+              <div class="d-flex gap-2 align-items-center">
+                <img [src]="expense.addedBy.image" [alt]="expense.addedBy.name" class="avatar-xs rounded-circle" />
+                <span>{{ expense.addedBy.name }}</span>
+              </div>
+            </td>
+
+            <td>
+              <div class="d-flex justify-content-center gap-1">
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="eye" class="fs-lg"></app-icon>
+                </a>
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="edit" class="fs-lg"></app-icon>
+                </a>
+                <a [routerLink]="[]" (click)="tableService.deleteItem(expense)" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="trash" class="fs-lg"></app-icon>
+                </a>
+              </div>
+            </td>
+          </tr>
+          } } @else {
+          <tr class="no-results">
+            <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="Expenses" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header bg-light border-bottom">
+    <h5 class="modal-title fw-semibold" id="addExpenseModalLabel">Add New Expense</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <form id="addExpenseForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <!-- Expense Title -->
+        <div class="col-md-6">
+          <label for="expenseTitle" class="form-label">Expense Title <span class="text-danger">*</span></label>
+          <input type="text" id="expenseTitle" class="form-control" placeholder="Enter expense title" required />
+        </div>
+
+        <!-- Amount -->
+        <div class="col-md-6">
+          <label for="expenseAmount" class="form-label">Amount ($) <span class="text-danger">*</span></label>
+          <input type="number" step="0.01" id="expenseAmount" class="form-control" placeholder="Enter amount" required />
+        </div>
+
+        <!-- Category -->
+        <div class="col-md-6">
+          <label for="expenseCategory" class="form-label">Category <span class="text-danger">*</span></label>
+          <select id="expenseCategory" class="form-select" required>
+            <option value="">Select category</option>
+            <option value="Office Supplies">Office Supplies</option>
+            <option value="Travel">Travel</option>
+            <option value="Meals">Meals</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Equipment">Equipment</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Training & Events">Training & Events</option>
+          </select>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="col-md-6">
+          <label for="expensePayment" class="form-label">Payment Method</label>
+          <select id="expensePayment" class="form-select">
+            <option value="">Select payment method</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Cash">Cash</option>
+            <option value="PayPal">PayPal</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+          </select>
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-6">
+          <label for="expenseStatus" class="form-label">Status</label>
+          <select id="expenseStatus" class="form-select">
+            <option value="">Select status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="reimbursed">Reimbursed</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label for="expenseDate" class="form-label">Date & Time</label>
+          <input type="text" mwlFlatpickr mwlFlatpickr [options]="flatPickrOptions" id="expenseDate" class="form-control" />
+        </div>
+
+        <div class="col-12">
+          <label for="expenseDesc" class="form-label">Description</label>
+          <textarea id="expenseDesc" class="form-control" rows="3" placeholder="Optional notes or description"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer border-top">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary"><app-icon icon="device-floppy" class="me-1"></app-icon> Save Expense</button>
+    </div>
+  </form>
+</ng-template>

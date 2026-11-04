@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-body">
+    <input type="text" class="form-control card-calendar-widget d-none" mwlFlatpickr [options]="flatpickrOptions" />
+
+    <h4 class="card-title fs-sm my-3">Today's Schedule: <a [routerLink]="[]" class="float-end fs-sm">View All</a></h4>
+    <ul class="list-unstyled mt-1 mb-0">
+      @for(item of scheduleData; track $index; let last = $last){
+      <li [class]="!last ? 'mb-3' : ''">
+        <div class="d-flex gap-2 align-items-center">
+          <div class="avatar-sm">
+            <span class="avatar-title  rounded-circle fs-22 rounded {{ item.className }}">
+              <app-icon [icon]="item.icon"></app-icon>
+            </span>
+          </div>
+          <div>
+            <p class="text-muted mb-1 fs-13"><app-icon icon="calendar"></app-icon> {{ item.time }}</p>
+            <h5 class="m-0 fs-14">{{ item.title }}</h5>
+          </div>
+          <div class="ms-auto">
+            <button type="button" class="btn btn-sm btn-default btn-icon">
+              <app-icon icon="x" class="fs-md"></app-icon>
+            </button>
+          </div>
+        </div>
+      </li>
+      }
+    </ul>
+    <div class="text-center mt-3">
+      <a [routerLink]="[]" class="btn btn-sm btn-primary">
+        <app-icon icon="plus" class="me-1"></app-icon>
+
+        Add New</a
+      >
+    </div>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="container-fluid">
+  <app-page-breadcrumb
+    title="COD Settlements"
+    subTitle="Delivery Boys"
+  />
+
+  <!-- Tabs -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body pb-0">
+
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <button
+                type="button"
+                class="nav-link"
+                [class.active]="activeTab() === 'settlements'"
+                (click)="selectTab('settlements')"
+              >
+                Settlements
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button
+                type="button"
+                class="nav-link"
+                [class.active]="activeTab() === 'history'"
+                (click)="selectTab('history')"
+              >
+                History
+              </button>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settlements -->
+  @if (activeTab() === 'settlements') {
+    <div class="row">
+      <div class="col-12">
+        <app-data-table
+          title="Settlements"
+          searchPlaceholder="Search delivery partners..."
+          itemsName="settlements"
+          emptyMessage="No pending COD settlements."
+          [rows]="settlements()"
+          [columns]="settlementColumns"
+          [actions]="settlementActions"
+(action)="onSettlementAction($event)"
+          [loading]="loading()"
+        />
+      </div>
+    </div>
+  }
+
+  <!-- History -->
+  @if (activeTab() === 'history') {
+    <div class="row">
+      <div class="col-12">
+        <app-data-table
+          title="History"
+          searchPlaceholder="Search delivery partners..."
+          itemsName="settled records"
+          emptyMessage="No settlement history."
+          [rows]="history()"
+          [columns]="historyColumns"
+          [loading]="loading()"
+        />
+      </div>
+    </div>
+  }
+</div>

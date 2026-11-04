@@ -1,0 +1,80 @@
+<div class="card">
+  <div class="card-body pb-2">
+    <div class="d-flex align-items-center mb-2">
+      <img class="me-2 avatar-md rounded-circle" src="assets/images/users/user-10.jpg" alt="Generic placeholder image" />
+      <div class="w-100">
+        <h5 class="m-0">
+          <a [routerLink]="[]" class="link-reset">Sophia Martinez</a>
+        </h5>
+        <p class="text-muted mb-0">
+          <small>about 5 minutes ago</small>
+        </p>
+      </div>
+      <div ngbDropdown class="ms-auto" placement="bottom-end">
+        <a ngbDropdownToggle [routerLink]="[]" class="text-muted drop-arrow-none card-drop p-0">
+          <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+        </a>
+        <div ngbDropdownMenu class="dropdown-menu-end">
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="edit" class="me-2"></app-icon>
+            Edit Post
+          </a>
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="trash" class="me-2"></app-icon>
+            Delete Post
+          </a>
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="share" class="me-2"></app-icon>
+            Share
+          </a>
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="pin" class="me-2"></app-icon>
+            Pin to Top
+          </a>
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="flag" class="me-2"></app-icon>
+            Report Post
+          </a>
+        </div>
+      </div>
+    </div>
+    <p>Story inspired by the beauty of changing seasons — a nature-themed animation coming soon!</p>
+
+    <div class="row g-1">
+      <!-- Left tall image -->
+      <div class="col-md-6">
+        <img src="assets/images/gallery/10.jpg" class="img-fluid w-100 h-100 rounded" style="aspect-ratio: 3/4; object-fit: cover" alt="Tall Image" />
+      </div>
+
+      <!-- Right column with two stacked images -->
+      <div class="col-md-6 d-flex flex-column gap-1">
+        <img src="assets/images/gallery/2.jpg" class="img-fluid w-100 rounded" style="aspect-ratio: 4/3; object-fit: cover" alt="Top Right" />
+        <img src="assets/images/gallery/3.jpg" class="img-fluid w-100 rounded" style="aspect-ratio: 4/3; object-fit: cover" alt="Bottom Right" />
+      </div>
+    </div>
+
+    <div class="mt-2">
+      <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+        <app-icon icon="corner-up-left" class="me-1"></app-icon>
+        Reply
+      </a>
+      <span class="btn btn-sm fs-sm btn-link text-muted" (click)="toggleLike()">
+        @if (liked) {
+        <span class="align-middle">
+          <app-icon icon="heart-filled" class="text-danger"></app-icon>
+          Liked!
+        </span>
+        } @else {
+        <span class="align-middle">
+          <app-icon icon="heart" class="text-muted"></app-icon>
+          Like
+        </span>
+        }
+      </span>
+      <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+        <app-icon icon="share" class="me-1"></app-icon>
+        Share
+      </a>
+    </div>
+  </div>
+</div>

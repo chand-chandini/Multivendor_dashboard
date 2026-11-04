@@ -1,0 +1,43 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Recent Activity</h4>
+    <div ngbDropdown class="ms-auto">
+      <a [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none" ngbDropdownToggle>
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="activity" class="me-2"></app-icon> View Activity Log </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="filter-2" class="me-2"></app-icon> Filter Activities </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Export Logs </a>
+        </li>
+        <li><hr class="dropdown-divider" /></li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="trash" class="me-2"></app-icon> Clear Activity </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <ngx-simplebar class="card-body" style="max-height: 426px">
+    <div class="timeline timeline-users">
+      @for(item of activityData; track $index ;let last = $last){
+      <div class="timeline-item d-flex align-items-stretch">
+        <div class="timeline-dot {{ item.className }}">
+          <app-icon [icon]="item.icon" class="fs-md"></app-icon>
+        </div>
+
+        <div class="timeline-content ps-3 {{ !last ? 'pb-4' : '' }}">
+          <h5 class="mb-1">{{ item.title }}</h5>
+          <p class="mb-1 text-muted">{{ item.description }}</p>
+          <span class="text-primary fw-semibold">By {{ item.author }}</span>
+        </div>
+      </div>
+      }
+    </div>
+  </ngx-simplebar>
+</div>

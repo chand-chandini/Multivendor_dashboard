@@ -1,0 +1,168 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Settlements" subTitle="Masters" />
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Vendor Settlements"
+        searchPlaceholder="Search settlements..."
+        itemsName="settlements"
+        addLabel="Create Settlement"
+        emptyMessage="No settlements created yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <ng-template #settlementModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Create Settlement</h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <form [formGroup]="settlementForm" (ngSubmit)="submitSettlement()">
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <label for="settlementVendor" class="form-label">Vendor <span class="text-danger">*</span></label>
+            <select id="settlementVendor" formControlName="vendor_id" class="form-select">
+              <option [ngValue]="null">Select a vendor</option>
+              @for (vendor of vendors(); track vendor.id) {
+                <option [ngValue]="vendor.id">{{ vendor.vendor_name }}</option>
+              }
+            </select>
+                @if (fieldError(settlementForm, 'vendor_id', 'Vendor')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(settlementForm, 'vendor_id', 'Vendor') }}</div>
+                }
+
+          </div>
+
+          <div class="col-md-6">
+            <label for="periodStart" class="form-label">Period Start <span class="text-danger">*</span></label>
+            <input type="date" id="periodStart" formControlName="period_start" class="form-control" />
+                @if (fieldError(settlementForm, 'period_start', 'Period Start')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(settlementForm, 'period_start', 'Period Start') }}</div>
+                }
+
+          </div>
+
+          <div class="col-md-6">
+            <label for="periodEnd" class="form-label">Period End <span class="text-danger">*</span></label>
+            <input type="date" id="periodEnd" formControlName="period_end" class="form-control" />
+                @if (fieldError(settlementForm, 'period_end', 'Period End')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(settlementForm, 'period_end', 'Period End') }}</div>
+                }
+
+          </div>
+
+          <div class="col-md-3">
+            <label for="totalOrders" class="form-label">Total Orders <span class="text-danger">*</span></label>
+            <input type="number" id="totalOrders" formControlName="total_orders" class="form-control" min="0" />
+                @if (fieldError(settlementForm, 'total_orders', 'Total Orders')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(settlementForm, 'total_orders', 'Total Orders') }}</div>
+                }
+          </div>
+
+          <div class="col-md-3">
+            <label for="grossSales" class="form-label">Gross Sales <span class="text-danger">*</span></label>
+            <input type="number" id="grossSales" formControlName="gross_sales" class="form-control" min="0" step="0.01" />
+                @if (fieldError(settlementForm, 'gross_sales', 'Gross Sales')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(settlementForm, 'gross_sales', 'Gross Sales') }}</div>
+                }
+          </div>
+
+          <div class="col-md-3">
+            <label for="commissionAmount" class="form-label">Commission <span class="text-danger">*</span></label>
+            <input type="number" id="commissionAmount" formControlName="commission_amount" class="form-control" min="0" step="0.01" />
+                @if (fieldError(settlementForm, 'commission_amount', 'Commission')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(settlementForm, 'commission_amount', 'Commission') }}</div>
+                }
+          </div>
+
+          <div class="col-md-3">
+            <label for="netPayable" class="form-label">Net Payable <span class="text-danger">*</span></label>
+            <input type="number" id="netPayable" formControlName="net_payable" class="form-control" min="0" step="0.01" />
+                @if (fieldError(settlementForm, 'net_payable', 'Net Payable')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(settlementForm, 'net_payable', 'Net Payable') }}</div>
+                }
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          }
+          Create Settlement
+        </button>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #payoutModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Record Payout — {{ payoutTarget()?.settlement_number }}</h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <form [formGroup]="payoutForm" (ngSubmit)="submitPayout()">
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="payoutAmount" class="form-label">Payout Amount <span class="text-danger">*</span></label>
+            <input type="number" id="payoutAmount" formControlName="payout_amount" class="form-control" min="0" step="0.01" />
+                @if (fieldError(payoutForm, 'payout_amount', 'Payout Amount')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(payoutForm, 'payout_amount', 'Payout Amount') }}</div>
+                }
+
+          </div>
+
+          <div class="col-md-6">
+            <label for="payoutMethod" class="form-label">Payout Method <span class="text-danger">*</span></label>
+            <select id="payoutMethod" formControlName="payout_method" class="form-select">
+              <option value="bank_transfer">Bank Transfer</option>
+              <option value="upi">UPI</option>
+              <option value="cash">Cash</option>
+            </select>
+                @if (fieldError(payoutForm, 'payout_method', 'Payout Method')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(payoutForm, 'payout_method', 'Payout Method') }}</div>
+                }
+          </div>
+
+          <div class="col-12">
+            <label for="transactionReference" class="form-label">Transaction Reference <span class="text-danger">*</span></label>
+            <input type="text" id="transactionReference" formControlName="transaction_reference" class="form-control" />
+                @if (fieldError(payoutForm, 'transaction_reference', 'Transaction Reference')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(payoutForm, 'transaction_reference', 'Transaction Reference') }}</div>
+                }
+          </div>
+
+          <div class="col-12">
+            <label for="payoutProof" class="form-label">Payout Proof URL <span class="text-danger">*</span></label>
+            <input type="text" id="payoutProof" formControlName="payout_proof" class="form-control" placeholder="https://..." />
+                @if (fieldError(payoutForm, 'payout_proof', 'Payout Proof URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(payoutForm, 'payout_proof', 'Payout Proof URL') }}</div>
+                }
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          }
+          Record Payout
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

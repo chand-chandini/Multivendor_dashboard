@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header card-tabs d-flex align-items-center">
+    <div class="flex-grow-1">
+      <h4 class="card-title">My Account</h4>
+    </div>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="activeId" class="nav nav-tabs card-header-tabs nav-bordered">
+      <li ngbNavItem="about">
+        <a [routerLink]="[]" ngbNavLink>
+          <span class="d-none d-md-block fw-bold">About Me</span>
+        </a>
+        <ng-template ngbNavContent>
+          <app-about />
+        </ng-template>
+      </li>
+      <li ngbNavItem="timeline">
+        <a [routerLink]="[]" ngbNavLink>
+          <span class="d-none d-md-block fw-bold">Timeline</span>
+        </a>
+        <ng-template ngbNavContent>
+          <app-timeline />
+        </ng-template>
+      </li>
+      <li ngbNavItem="settings">
+        <a [routerLink]="[]" ngbNavLink>
+          <span class="d-none d-md-block fw-bold">Settings</span>
+        </a>
+        <ng-template ngbNavContent>
+          <app-settings />
+        </ng-template>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card-body">
+    <div class="tab-content" [ngbNavOutlet]="nav"></div>
+  </div>
+</div>

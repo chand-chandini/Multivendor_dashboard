@@ -1,0 +1,31 @@
+<div class="card card-h-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div>
+        <h5 class="text-muted fs-base text-uppercase" [title]="state.title">{{ state.title }}</h5>
+        <h3 class="my-3 py-1 fw-semibold">
+          <span
+            [countUp]="state.value"
+            [countUpOptions]="{ prefix: state.prefix ? state.prefix + ' ' : '',
+                suffix: state.suffix || '', decimalPlaces: Number.isInteger(state.value) ? 0 : 2 }"
+          ></span>
+        </h3>
+        <p class="mb-0 text-muted">
+          <span [class]="state.change < 0 ? 'text-danger' : 'text-success'" class="me-2">
+            @if(state.change < 0){
+            <app-icon icon="arrow-down"></app-icon>
+            }@else{
+            <app-icon icon="arrow-up"></app-icon>
+            } {{ state.change }}%
+          </span>
+          <span class="text-nowrap">Since last month</span>
+        </p>
+      </div>
+      <div class="avatar-md flex-shrink-0">
+        <span class="avatar-title bg-primary-subtle rounded-circle fs-22">
+          <app-icon [icon]="state.icon" class="text-primary"></app-icon>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

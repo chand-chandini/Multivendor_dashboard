@@ -1,0 +1,88 @@
+<ngx-simplebar class="card h-100 mb-0 rounded-end-0">
+  <div class="card-body">
+    <button (click)="openModal(content)" class="btn btn-success fw-medium w-100">
+      Create New
+      <app-icon icon="plus" class="ms-1"></app-icon>
+    </button>
+    <div class="my-3">
+      <label for="taskDate" class="form-label">Select Date</label>
+      <input type="text" id="taskDate" mwlFlatpickr [options]="flatPickrOptions" class="form-control flatpickr-input" placeholder="Select Date" />
+    </div>
+
+    <div class="mb-3">
+      <label for="taskPriority" class="form-label">Select Priority</label>
+      <select class="form-select" id="taskPriority">
+        <option value="all" selected="">All</option>
+        <option value="High">High</option>
+        <option value="Normal">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="taskStatus" class="form-label">Select Status</label>
+      <select class="form-select" id="taskStatus">
+        <option value="all" selected="">All</option>
+        <option value="New">New</option>
+        <option value="Pending">Pending</option>
+        <option value="Inprogress">Inprogress</option>
+        <option value="Completed">Completed</option>
+        <option value="Urgent">Urgent</option>
+        <option value="Scheduled">Scheduled</option>
+      </select>
+    </div>
+  </div>
+</ngx-simplebar>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="addTaskModalLabel">Add New Task</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <form id="addTaskForm">
+    <div class="modal-body">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Task Title</label>
+        <input type="text" class="form-control" name="taskTitle" placeholder="Enter task title" required />
+      </div>
+
+      <div class="row g-3">
+        <!-- Due Date -->
+        <div class="col-md-6">
+          <label for="DueDate" class="form-label">Due Date</label>
+          <input type="date" class="form-control" mwlFlatpickr [options]="flatPickrOptions" id="DueDate" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Priority</label>
+          <select class="form-select" name="taskPriority">
+            <option value="badge-soft-success p-1">Low</option>
+            <option value="badge-soft-primary p-1">Medium</option>
+            <option value="badge-soft-danger p-1" selected>High</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <label class="form-label fw-semibold">Status</label>
+        <select class="form-select" name="taskStatus">
+          <option value="badge-outline-warning">New</option>
+          <option value="badge-outline-success">In Progress</option>
+          <option value="badge-outline-primary">Scheduled</option>
+          <option value="badge-outline-danger">Urgent</option>
+        </select>
+      </div>
+
+      <div class="mt-3">
+        <label class="form-label fw-semibold">Assign To</label>
+        <input type="text" class="form-control" name="taskAvatars" placeholder="Comma-separated user IDs" />
+        <small class="text-muted">set @username</small>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary">Add Task</button>
+    </div>
+  </form>
+</ng-template>

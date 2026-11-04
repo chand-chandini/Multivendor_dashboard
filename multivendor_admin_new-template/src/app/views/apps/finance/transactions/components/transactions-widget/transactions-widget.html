@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="avatar fs-60 avatar-img-size flex-shrink-0">
+        <span class="avatar-title rounded-circle fs-24" [class]="item.className">
+          <app-icon [icon]="item.icon"></app-icon>
+        </span>
+      </div>
+
+      <div class="text-end">
+        <h3 class="mb-2 fw-normal">
+          <span [countUp]="item.value" [countUpOptions]="{ prefix: item.prefix }"></span>
+        </h3>
+        <p class="mb-0 text-muted"><span>{{ item.title }}</span></p>
+      </div>
+    </div>
+  </div>
+</div>

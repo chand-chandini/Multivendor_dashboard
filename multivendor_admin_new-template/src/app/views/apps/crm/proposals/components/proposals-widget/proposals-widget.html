@@ -1,0 +1,17 @@
+<div class="card mb-2">
+  <div class="card-body">
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+      <h5 class="fs-xl mb-0">
+        {{ item.prefix }}{{ item.value }}
+        <small class="fs-6">{{ item.suffix }}</small>
+      </h5>
+      <span>
+        {{ item.change > 0 ? '+' : item.change < 0 ? '' : '' }}{{ item.change }}% @if(item.change> 0){
+        <app-icon icon="arrow-up" class="text-success"></app-icon>
+        } @if(item.change < 0){ <app-icon icon="arrow-down" class="text-danger"></app-icon>
+        }
+      </span>
+    </div>
+    <p class="text-muted mb-0">{{ item.description }}</p>
+  </div>
+</div>

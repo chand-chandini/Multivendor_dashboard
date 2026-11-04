@@ -1,0 +1,44 @@
+<h5 class="mb-3 text-uppercase fw-bold">Search</h5>
+
+<div class="app-search">
+  <input type="text" class="form-control bg-light-subtle border-light" placeholder="Search post..." />
+  <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+</div>
+
+<!-- Related post -->
+<div class="align-items-center mt-5">
+  <h5 class="mb-3 text-uppercase fw-bold">Related post:</h5>
+
+  <ul class="list-group list-group-flush">
+    @for (post of popularPostData; track $index) {
+    <li class="list-group-item ps-0">
+      <a [routerLink]="post.href" class="link-reset fw-medium">
+        <app-icon icon="article" class="me-2"></app-icon>
+        {{ post.title }}
+      </a>
+    </li>
+    }
+  </ul>
+</div>
+
+<!-- Popular tags -->
+<div class="align-items-center my-5">
+  <h5 class="mb-3 text-uppercase fw-bold">Popular Tags:</h5>
+  <div class="d-flex flex-wrap gap-1">
+    @for(tag of tagData; track $index) {
+    <a class="btn btn-light btn-sm" [routerLink]="tag.href"> {{ tag.name }} </a>
+    }
+  </div>
+</div>
+
+<!-- Newsletter -->
+<div class="p-4 bg-light-subtle rounded-3 border">
+  <h5 class="text-uppercase fw-bold mb-3">Subscribe to Newsletter</h5>
+  <p class="text-muted fs-sm mb-3">Get the latest articles and updates directly to your inbox.</p>
+  <form action="#">
+    <div class="input-group">
+      <input type="email" class="form-control" placeholder="Your email address" />
+      <button class="btn btn-dark" type="submit"><app-icon icon="send-2"></app-icon></button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,41 @@
+<div class="card mb-1">
+  <div class="card-body">
+    <a [routerLink]="[]" class="text-muted float-end mt-n1 fs-xl">
+      <app-icon icon="external-link"></app-icon>
+    </a>
+    <h5 title="Customer Orders">{{stats.title}}</h5>
+    <div class="d-flex align-items-center gap-2 my-3">
+      <div class="avatar-md flex-shrink-0">
+        <span class="avatar-title rounded-circle fs-22" [class]="stats.iconClassName">
+          <app-icon [icon]="stats.icon"></app-icon>
+        </span>
+      </div>
+      <h3 class="mb-0">
+        <span
+          [countUp]="stats.value"
+          [countUpOptions]="{
+                    prefix: stats.prefix ?? '',
+                    suffix: stats.suffix ?? '',
+                    decimalPlaces: Number.isInteger(stats.value) ? 0 : 2
+                    }"
+        ></span>
+      </h3>
+      <span
+        class="badge fw-medium fs-xs ms-auto"
+        [class]="{
+          'badge-soft-success': stats.change >= 0,
+          'badge-soft-danger': stats.change < 0
+        }"
+      >
+        {{ stats.change >= 0 ? '+' : '' }}{{ stats.change }}%
+      </span>
+    </div>
+    <p class="mb-0">
+      <span [class]="stats.bulletClassName">
+        <app-icon icon="circle-filled" class="align-middle me-1"></app-icon>
+      </span>
+      <span class="text-nowrap text-muted">{{ stats.metric }}</span>
+      <span class="float-end"><b>{{ stats.metricValue }}</b></span>
+    </p>
+  </div>
+</div>

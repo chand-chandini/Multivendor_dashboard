@@ -1,0 +1,45 @@
+@if (item.isActive) {
+<div
+  class="card border-0 rounded-3 text-white"
+  [ngStyle]="{
+    'background-image': 'url(' + item.image + ')',
+    'background-size': 'cover'
+  }"
+>
+  <div class="card-body bg-gradient bg-secondary bg-opacity-90 rounded-3">
+    <h5 class="text-white text-opacity-75 fs-13 text-uppercase">{{ item.day }}</h5>
+    <div class="d-flex align-items-center justify-content-center gap-2 my-3">
+      <div class="avatar-md flex-shrink-0">
+        <span class="avatar-title rounded-circle fs-22" [class]="item.className">
+          <iconify-icon [icon]="item.icon"></iconify-icon>
+        </span>
+      </div>
+      <h3 class="mb-0 fw-bold text-white">{{item.temperature}}</h3>
+    </div>
+    <p class="mb-1 text-white text-center">{{item.status}}</p>
+    <p class="mb-0 text-white text-opacity-75 text-center gap-3 d-flex justify-content-center">
+      <span><iconify-icon icon="tabler:wind"></iconify-icon> {{item.wind}}</span>
+      <span><iconify-icon icon="tabler:droplet"></iconify-icon> {{item.humidity}}</span>
+    </p>
+  </div>
+</div>
+}@else{
+<div class="card">
+  <div class="card-body">
+    <h5 class="text-muted fs-13 text-uppercase">{{ item.day }}</h5>
+    <div class="d-flex align-items-center justify-content-center gap-2 my-3">
+      <div class="avatar-md flex-shrink-0">
+        <span class="avatar-title rounded-circle fs-22" [class]="item.className">
+          <iconify-icon [icon]="item.icon"></iconify-icon>
+        </span>
+      </div>
+      <h3 class="mb-0 fw-bold">{{item.temperature}}</h3>
+    </div>
+    <p class="mb-1 text-muted text-center">{{item.status}}</p>
+    <p class="mb-0 text-muted text-center gap-3 d-flex justify-content-center">
+      <span><iconify-icon icon="tabler:wind"></iconify-icon> {{item.wind}}</span>
+      <span><iconify-icon icon="tabler:droplet"></iconify-icon> {{item.humidity}}</span>
+    </p>
+  </div>
+</div>
+}

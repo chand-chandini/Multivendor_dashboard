@@ -1,0 +1,20 @@
+<div class="row">
+  @for (item of cityWeatherData; track item.city) {
+  <div class="col-sm-6">
+    <div class="card text-white overflow-hidden">
+      <div [ngStyle]="{ background: 'url(' + item.image + ') center / cover'  }">
+        <div class="w-100 h-100 d-flex flex-column justify-content-end p-3 bg-dark bg-gradient bg-opacity-75">
+          <div class="fw-bold fs-28">{{ item.temperature }}</div>
+          <div class="fw-semibold fs-5">{{ item.city }}</div>
+          <div class="text-white-50">{{ item.status }}</div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-dark text-white text-opacity-75">
+        <div class="d-flex align-items-center gap-1"><iconify-icon icon="tabler:wind"></iconify-icon> <span>{{ item.wind.speed }}</span></div>
+        <div class="d-flex align-items-center gap-1"><iconify-icon icon="tabler:compass"></iconify-icon> <span>{{ item.wind.direction }}</span></div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,277 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Payment History" subTitle="Payments" />
+
+  <!-- Filters -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Filters</h5>
+        </div>
+
+        <div class="card-body">
+          <form
+            [formGroup]="filterForm"
+            (ngSubmit)="load()"
+          >
+            <div class="row g-3 align-items-end">
+
+              <!-- From Date -->
+              <div class="col-md-3">
+                <label for="phFrom" class="form-label">
+                  From Date
+                </label>
+
+                <input
+                  id="phFrom"
+                  type="date"
+                  class="form-control"
+                  formControlName="from_date"
+                />
+              </div>
+
+              <!-- To Date -->
+              <div class="col-md-3">
+                <label for="phTo" class="form-label">
+                  To Date
+                </label>
+
+                <input
+                  id="phTo"
+                  type="date"
+                  class="form-control"
+                  formControlName="to_date"
+                />
+              </div>
+
+              <!-- Location -->
+              <div class="col-md-3">
+                <label for="phLocation" class="form-label">
+                  Location
+                </label>
+
+                <select
+                  id="phLocation"
+                  class="form-select"
+                  formControlName="location_id"
+                >
+                  <option value="">Select Location</option>
+
+                  @for (location of locations(); track location.id) {
+                    <option [value]="location.id">
+                      {{ location.city }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Category -->
+              <div class="col-md-3">
+                <label for="phCategory" class="form-label">
+                  Category
+                </label>
+
+                <select
+                  id="phCategory"
+                  class="form-select"
+                  formControlName="category_id"
+                >
+                  <option value="">Select Category</option>
+
+                  @for (category of categories(); track category.id) {
+                    <option [value]="category.id">
+                      {{ category.category_name }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Shop -->
+              <div class="col-md-3">
+                <label for="phShop" class="form-label">
+                  Shop
+                </label>
+
+                <select
+                  id="phShop"
+                  class="form-select"
+                  formControlName="vendor_id"
+                >
+                  <option value="">Select Shop</option>
+
+                  @for (vendor of vendors(); track vendor.id) {
+                    <option [value]="vendor.id">
+                      {{ vendor.vendor_name }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <!-- Buttons -->
+              <div class="col-md-3 d-flex gap-2">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="loading()"
+                >
+                  Search
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-light"
+                  [disabled]="loading()"
+                  (click)="resetFilters()"
+                >
+                  Reset
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment History Table -->
+  <div class="row">
+    <div class="col-12">
+
+      <app-data-table
+        title="Payment History"
+        searchPlaceholder="Search shops..."
+        itemsName="payment history records"
+        emptyMessage="No payment history found."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (action)="onAction($event)"
+      />
+
+    </div>
+  </div>
+
+  <!-- Settlement Details -->
+  <ng-template #detailsModal let-modal>
+
+    <div class="modal-header">
+      <h5 class="modal-title">
+        Payment Details
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+
+      @if (selectedSettlement(); as settlement) {
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase fs-xxs text-body-secondary fw-semibold">
+              Shop
+            </h6>
+
+            <p class="mb-0">
+              {{ settlement.vendor_name || '-' }}
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase fs-xxs text-body-secondary fw-semibold">
+              Settlement Number
+            </h6>
+
+            <p class="mb-0">
+              {{ settlement.settlement_number || '-' }}
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase fs-xxs text-body-secondary fw-semibold">
+              Settlement Date
+            </h6>
+
+            <p class="mb-0">
+              {{ settlement.i_ts || '-' }}
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase fs-xxs text-body-secondary fw-semibold">
+              Payment Period
+            </h6>
+
+            <p class="mb-0">
+              {{ settlement.payment_period || '-' }}
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase fs-xxs text-body-secondary fw-semibold">
+              Total Orders
+            </h6>
+
+            <p class="mb-0">
+              {{ settlement.total_orders || 0 }}
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase fs-xxs text-body-secondary fw-semibold">
+              Total Amount
+            </h6>
+
+            <p class="mb-0">
+              {{ settlement.gross_sales || 0 }}
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase fs-xxs text-body-secondary fw-semibold">
+              Commission
+            </h6>
+
+            <p class="mb-0">
+              {{ settlement.commission_amount || 0 }}
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase fs-xxs text-body-secondary fw-semibold">
+              Net Payable
+            </h6>
+
+            <p class="mb-0 fw-semibold">
+              {{ settlement.net_payable || 0 }}
+            </p>
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.dismiss()"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </ng-template>
+
+</div>

@@ -1,0 +1,47 @@
+<div class="position-absolute top-0 end-0">
+  <img src="assets/images/auth-card-bg.svg" class="auth-card-bg-img" alt="auth-card-bg" />
+</div>
+<div class="position-absolute bottom-0 start-0" style="transform: rotate(180deg)">
+  <img src="assets/images/auth-card-bg.svg" class="auth-card-bg-img" alt="auth-card-bg" />
+</div>
+<div class="auth-box d-flex align-items-center">
+  <div class="container-xxl">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-xl-6">
+        <div class="card mb-0">
+          <div class="card-body">
+            <div class="auth-brand text-center mb-0">
+              <a routerLink="/" class="logo-dark">
+                <img [src]="branding.logoDark()" [alt]="branding.name()" />
+              </a>
+              <a routerLink="/" class="logo-light">
+                <img [src]="branding.logoLight()" [alt]="branding.name()" />
+              </a>
+            </div>
+
+            <div class="p-2 text-center">
+              <div class="w-md-50 mx-auto">
+                <img src="assets/images/maintenance.svg" alt="Maintenance" class="img-fluid" />
+              </div>
+
+              <h3 class="fw-bold text-uppercase">We’ll Be Back Soon</h3>
+              <p class="text-muted">
+                Our site is undergoing routine maintenance to improve your experience.
+                <br />
+                Thank you for your patience.
+              </p>
+
+              <button class="btn btn-primary mt-3 me-1">Call Support</button>
+              <button class="btn btn-info mt-3">Send Email</button>
+            </div>
+
+            <p class="text-center text-muted mt-5 mb-0">
+              © {{ currentYear }} {{ name }} — by
+              <span class="fw-semibold">{{ author }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

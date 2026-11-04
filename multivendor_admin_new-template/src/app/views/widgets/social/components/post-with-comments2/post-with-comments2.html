@@ -1,0 +1,112 @@
+<div class="card overflow-hidden">
+  <div class="card-body pb-0">
+    <div class="d-flex align-items-center">
+      <img src="assets/images/users/user-4.jpg" class="avatar-md rounded-circle me-2" alt="User" />
+
+      <div class="flex-grow-1">
+        <h5 class="m-0">
+          <a [routerLink]="[]" class="link-reset">Liam Anderson</a>
+        </h5>
+        <p class="text-muted mb-0">
+          <small>30 minutes ago</small>
+        </p>
+      </div>
+
+      <!-- Options -->
+      <div ngbDropdown placement="bottom-end">
+        <a ngbDropdownToggle [routerLink]="[]" class="text-muted drop-arrow-none">
+          <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+        </a>
+        <ul ngbDropdownMenu class="dropdown-menu-end">
+          <li>
+            <a ngbDropdownItem [routerLink]="[]"><app-icon icon="edit" class="me-2"></app-icon>Edit</a>
+          </li>
+          <li>
+            <a ngbDropdownItem [routerLink]="[]"><app-icon icon="trash" class="me-2"></app-icon>Delete</a>
+          </li>
+          <li>
+            <a ngbDropdownItem [routerLink]="[]"><app-icon icon="share" class="me-2"></app-icon>Share</a>
+          </li>
+          <li>
+            <a ngbDropdownItem [routerLink]="[]"><app-icon icon="pin" class="me-2"></app-icon>Pin</a>
+          </li>
+          <li>
+            <a ngbDropdownItem [routerLink]="[]"><app-icon icon="flag" class="me-2"></app-icon>Report</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quote Style Post Content -->
+    <div class="border-start border-3 border-primary ps-3 mt-3 mb-4">
+      <p class="text-muted mb-0 fst-italic fs-15">
+        <app-icon icon="quote" class="me-2 fs-20 opacity-75"></app-icon>
+        Discovering peaceful nature trails today — captured some beautiful shots I can't wait to share. 🌲✨
+      </p>
+    </div>
+  </div>
+
+  <!-- Comment Thread -->
+  <div class="bg-light-subtle px-3 py-3 border-top">
+    <!-- Top Comment -->
+    <div class="d-flex align-items-start mb-3">
+      <img src="assets/images/users/user-5.jpg" class="avatar-sm rounded-circle me-3" alt="User" />
+
+      <div class="flex-grow-1">
+        <div class="d-flex justify-content-between">
+          <h6 class="fw-semibold mb-0 fs-sm"><a [routerLink]="[]" class="link-reset">Ethan Reynolds</a></h6>
+          <small class="text-muted">20 minutes ago</small>
+        </div>
+
+        <p class="mb-1 text-muted">This sounds amazing! Excited to see the photos — the last set you shared was incredible.</p>
+
+        <a [routerLink]="[]" class="small text-muted"> <app-icon icon="corner-up-left" class="me-1"></app-icon>Reply </a>
+
+        <!-- Nested Reply -->
+        <div class="d-flex align-items-start mt-3 ps-4 border-start">
+          <img src="assets/images/users/user-6.jpg" class="avatar-sm rounded-circle me-3" alt="User" />
+
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between">
+              <h6 class="fw-semibold fs-sm mb-0"><a [routerLink]="[]" class="link-reset">Mia Thompson</a></h6>
+              <small class="text-muted">12 minutes ago</small>
+            </div>
+
+            <p class="mb-0 text-muted">I hiked there last month! Those trails are perfect for photography — can't wait to see your shots!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Comment Box -->
+    <div class="d-flex align-items-center mt-3">
+      <img src="assets/images/users/user-3.jpg" class="avatar-sm rounded-circle me-2" alt="User" />
+      <input type="text" class="form-control form-control-sm rounded-pill" placeholder="Write a comment..." />
+    </div>
+  </div>
+
+  <!-- Footer Reactions -->
+  <div class="p-2">
+    <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+      <app-icon icon="corner-up-left" class="me-1"></app-icon>
+      Reply
+    </a>
+    <span class="btn btn-sm fs-sm btn-link text-muted" (click)="toggleLike()">
+      @if (liked) {
+      <span class="align-middle">
+        <app-icon icon="heart-filled" class="text-danger"></app-icon>
+        Liked!
+      </span>
+      } @else {
+      <span class="align-middle">
+        <app-icon icon="heart" class="text-muted"></app-icon>
+        Like
+      </span>
+      }
+    </span>
+    <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+      <app-icon icon="share" class="me-1"></app-icon>
+      Share
+    </a>
+  </div>
+</div>

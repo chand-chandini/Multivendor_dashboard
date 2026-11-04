@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <h5 [attr.title]="item.title">{{ item.title }}</h5>
+    </div>
+    <div class="d-flex align-items-center gap-2 my-2">
+      <div class="avatar-md flex-shrink-0">
+        <span class="avatar-title bg-opacity-90 rounded-circle fs-22" [class]="item.iconClassName">
+          <app-icon [icon]="item.icon"></app-icon>
+        </span>
+      </div>
+      <h3 class="mb-0" [countUp]="item.value" [countUpOptions]="{prefix: item.prefix || '', suffix : item.suffix || '', decimalPlaces: Number.isInteger(item.value) ? 0 : 1}"></h3>
+    </div>
+    <div class="d-flex align-items-center">
+      <span class="d-flex" [class]="item.bulletClassName"><app-icon icon="circle-filled" class="me-1"></app-icon></span>
+      <span class="text-nowrap text-muted">{{ item.subTitle }}</span>
+      <span class="ms-auto"><b>{{ item.totalCount }}</b></span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <h4 class="card-title">Top Cities Weather</h4>
+
+    <div class="d-flex align-items-center gap-2">
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-custom table-nowrap table-centered table-select table-hover w-100 mb-0">
+      <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+        <tr class="text-uppercase fs-xxs">
+          <th sortable="city" (sort)="tableService.setSort($event.column, $event.direction)">City</th>
+          <th sortable="temperature" (sort)="tableService.setSort($event.column, $event.direction)">Temp</th>
+          <th sortable="humidity" (sort)="tableService.setSort($event.column, $event.direction)">Humidity</th>
+          <th sortable="wind" (sort)="tableService.setSort($event.column, $event.direction)">Wind</th>
+          <th>•••</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if ((total$ | async)! > 0) { @for (item of (topCityWeatherData$ | async); track $index) {
+        <tr>
+          <td>
+            <h5 class="fs-14 mb-0 fw-normal">{{ item.city }}</h5>
+            <span class="text-muted fs-12"> {{ item.status }} </span>
+          </td>
+          <td>{{ item.temperature }}</td>
+          <td>{{ item.humidity }}</td>
+          <td>{{ item.wind }}</td>
+
+          <td>
+            <a [routerLink]="[]" class="text-muted fs-20"><iconify-icon icon="tabler:eye"></iconify-icon></a>
+          </td>
+        </tr>
+        } }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="cities" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

@@ -1,0 +1,2789 @@
+diff --git a/dashboard_api/controllers/mainCtrl.js b/dashboard_api/controllers/mainCtrl.js
+index 97f8c81..4847015 100644
+--- a/dashboard_api/controllers/mainCtrl.js
++++ b/dashboard_api/controllers/mainCtrl.js
+@@ -17,8 +17,7 @@ var MODULE_PATH_MAP = {
+     'Settlements': '/masters/vendorsettlements',
+     'Settings': '/masters/settings',
+     'Dev Support': '/masters/devsupport',
+-    'Permissions': '/permission/permissions',
+-    'Payments': '/masters/payment'
++    'Permissions': '/permission/permissions'
+ };
+ 
+ // ---------------------------------------------------------------------------
+@@ -505,12 +504,7 @@ exports.getupdatemodules = function (req, res) {
+ 
+     // Get standalone modules (no sub-modules) — use (m.id + 10000) as id to avoid collision with sub_module IDs
+     var standaloneQry = "SELECT m.id AS module_id, m.module_name AS module_nm, m.module_icon AS icon, m.module_order, " +
+-"(m.id + 10000) AS id, m.module_name AS label, " +
+-"CASE " +
+-"WHEN m.module_name = 'Payments' THEN '/masters/payment' " +
+-"ELSE NULL " +
+-"END AS link, " +
+-"0 AS sub_module_order, " +
++        "(m.id + 10000) AS id, m.module_name AS label, NULL AS link, 0 AS sub_module_order, " +
+         "CASE WHEN p.id IS NOT NULL THEN 1 ELSE 0 END AS check_sub_menu, " +
+         "IFNULL(p.can_view,1) AS can_view, IFNULL(p.can_add,1) AS can_add, IFNULL(p.can_edit,1) AS can_edit, IFNULL(p.can_delete,1) AS can_delete, " +
+         "IFNULL(m.d_in,0) AS d_in " +
+@@ -830,58 +824,37 @@ exports.updatelocation = function (req, res) {
+ // Hard delete, refused while anything still points at the location, so removing
+ // a row can never leave vendors, partners, banners or coupons dangling.
+ exports.deletelocation = function (req, res) {
+-
+     var tenant_id = req.admin.tenant_id;
+     var id = req.body.id;
++    if (!id) return res.json({ status: 202, message: 'Location ID is required' });
+ 
+-    if (!id) {
+-        return res.json({
+-            status: 202,
+-            message: 'Location ID is required'
+-        });
+-    }
+-
+-    var QRY =
+-        "DELETE FROM locations " +
+-        "WHERE id = ? " +
+-        "AND tenant_id = ?";
+-
+-    dbutil.sqlinjection(
+-        sqldb.MySQLConPool,
+-        QRY,
+-        [id, tenant_id],
+-        'deletelocation',
+-        function (err, result) {
+-
+-            if (err) {
+-
+-                console.log(
+-                    'DELETE LOCATION ERROR:',
+-                    err
+-                );
+-
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
+-                });
+-            }
+-
+-            if (!result || !result.affectedRows) {
++    var CHECK_QRY = "SELECT " +
++        "(SELECT COUNT(*) FROM locations WHERE id = ? AND tenant_id = ?) AS found, " +
++        "(SELECT COUNT(*) FROM vendors WHERE location_id = ? AND IFNULL(d_in,0) = 0) AS vendors, " +
++        "(SELECT COUNT(*) FROM delivery_partners WHERE location_id = ? AND IFNULL(d_in,0) = 0) AS delivery_partners, " +
++        "(SELECT COUNT(*) FROM banners WHERE location_id = ? AND IFNULL(d_in,0) = 0) AS banners, " +
++        "(SELECT COUNT(*) FROM coupons WHERE location_id = ? AND IFNULL(d_in,0) = 0) AS coupons";
+ 
+-                return res.json({
+-                    status: 202,
+-                    message: 'Location not found'
+-                });
+-            }
++    dbutil.sqlinjection(sqldb.MySQLConPool, CHECK_QRY, [id, tenant_id, id, id, id, id], 'deletelocation-check', function (err, rows) {
++        if (err) return res.json({ status: 500, message: 'Internal server error' });
++        var r = rows && rows[0];
++        if (!r || !r.found) return res.json({ status: 202, message: 'Location not found' });
+ 
+-            return res.json({
+-                status: 200,
+-                message: 'Location deleted successfully',
+-                affectedRows: result.affectedRows
+-            });
++        var usage = [];
++        if (r.vendors) usage.push(r.vendors + ' vendor(s)');
++        if (r.delivery_partners) usage.push(r.delivery_partners + ' delivery partner(s)');
++        if (r.banners) usage.push(r.banners + ' banner(s)');
++        if (r.coupons) usage.push(r.coupons + ' coupon(s)');
++        if (usage.length) {
++            return res.json({ status: 202, message: 'Cannot delete: this location is currently used by ' + usage.join(', ') });
+         }
+-    );
++
++        dbutil.sqlinjection(sqldb.MySQLConPool, 'DELETE FROM locations WHERE id = ? AND tenant_id = ?', [id, tenant_id], 'deletelocation', function (err2, result) {
++            if (err2) return res.json({ status: 500, message: 'Internal server error' });
++            if (!result || !result.affectedRows) return res.json({ status: 202, message: 'Location not found' });
++            return res.json({ status: 200, message: 'Location deleted successfully', affectedRows: result.affectedRows });
++        });
++    });
+ };
+ // POST /updatelocationactivestatus
+ exports.updatelocationactivestatus = function (req, res) {
+@@ -1045,59 +1018,49 @@ exports.updatecategoryactivestatus = function (req, res) {
+ // mirroring the guard deletesubcategory already applies, so removing a row can
+ // never orphan sub-categories, products, coupons, vendors or filters.
+ exports.deletecategory = function (req, res) {
+-
+     var tenant_id = req.admin.tenant_id;
+     var id = req.body.id;
++    if (!id) return res.json({ status: 202, message: 'Category ID is required' });
+ 
+-    if (!id) {
+-        return res.json({
+-            status: 202,
+-            message: 'Category ID is required'
+-        });
+-    }
+-
+-    var QRY =
+-        "DELETE FROM categories " +
+-        "WHERE id = ? " +
+-        "AND tenant_id = ? " +
+-        "AND parent_id IS NULL";
+-
+-    dbutil.sqlinjection(
+-        sqldb.MySQLConPool,
+-        QRY,
+-        [id, tenant_id],
+-        'deletecategory',
+-        function (err, result) {
+-
+-            if (err) {
+-
+-                console.log(
+-                    'DELETE CATEGORY ERROR:',
+-                    err
+-                );
++    var CHECK_QRY = "SELECT " +
++        "(SELECT COUNT(*) FROM categories c WHERE c.id = ? AND c.tenant_id = ? AND c.parent_id IS NULL) AS found, " +
++        "(SELECT COUNT(*) FROM categories WHERE parent_id = ? AND IFNULL(d_in,0) = 0) AS sub_categories, " +
++        "(SELECT COUNT(*) FROM products WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS products, " +
++        "(SELECT COUNT(*) FROM coupons WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS coupons, " +
++        "(SELECT COUNT(*) FROM vendors WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS vendors, " +
++        "(SELECT COUNT(*) FROM catalog_filters WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS catalog_filters";
+ 
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
+-                });
+-            }
++    var checkParams = [id, tenant_id, id, id, id, id, id];
+ 
+-            if (!result || !result.affectedRows) {
++    dbutil.sqlinjection(sqldb.MySQLConPool, CHECK_QRY, checkParams, 'deletecategory-check', function (err, rows) {
++        if (err) return res.json({ status: 500, message: 'Internal server error' });
++        var r = rows && rows[0];
++        if (!r || !r.found) return res.json({ status: 202, message: 'Category not found' });
+ 
+-                return res.json({
+-                    status: 202,
+-                    message: 'Category not found'
+-                });
+-            }
++        var usage = [];
++        if (r.sub_categories) usage.push(r.sub_categories + ' sub-category(ies)');
++        if (r.products) usage.push(r.products + ' product(s)');
++        if (r.coupons) usage.push(r.coupons + ' coupon(s)');
++        if (r.vendors) usage.push(r.vendors + ' vendor(s)');
++        if (r.catalog_filters) usage.push(r.catalog_filters + ' filter(s)');
++        if (usage.length) {
++            return res.json({
++                status: 202,
++                message: 'Cannot delete: this category is currently used by ' + usage.join(', ')
++            });
++        }
+ 
++        var QRY = 'DELETE FROM categories WHERE id = ? AND tenant_id = ? AND parent_id IS NULL';
++        dbutil.sqlinjection(sqldb.MySQLConPool, QRY, [id, tenant_id], 'deletecategory', function (err2, result) {
++            if (err2) return res.json({ status: 500, message: 'Internal server error' });
++            if (!result || !result.affectedRows) return res.json({ status: 202, message: 'Category not found' });
+             return res.json({
+                 status: 200,
+                 message: 'Category deleted successfully',
+                 affectedRows: result.affectedRows
+             });
+-        }
+-    );
++        });
++    });
+ };
+ 
+ // Checks that parent_id is an active main category (parent_id IS NULL) of this tenant
+@@ -1206,152 +1169,45 @@ exports.updatesubcategory = function (req, res) {
+ exports.deletesubcategory = function (req, res) {
+     var tenant_id = req.admin.tenant_id;
+     var id = req.body.id;
++    if (!id) return res.json({ status: 202, message: 'Subcategory ID is required' });
+ 
+-    if (!id) {
+-        return res.json({
+-            status: 202,
+-            message: 'Subcategory ID is required'
+-        });
+-    }
+-
+-    var CHECK_QRY =
+-        "SELECT " +
+-        "(SELECT COUNT(*) " +
+-        " FROM categories c " +
+-        " WHERE c.id = ? " +
+-        " AND c.tenant_id = ? " +
+-        " AND c.parent_id IS NOT NULL) AS found, " +
+-
+-        "(SELECT COUNT(*) " +
+-        " FROM categories " +
+-        " WHERE parent_id = ? " +
+-        " AND IFNULL(d_in,0) = 0) AS child_categories, " +
+-
+-        "(SELECT COUNT(*) " +
+-        " FROM products " +
+-        " WHERE category_id = ? " +
+-        " AND IFNULL(d_in,0) = 0) AS products, " +
+-
+-        "(SELECT COUNT(*) " +
+-        " FROM coupons " +
+-        " WHERE category_id = ? " +
+-        " AND IFNULL(d_in,0) = 0) AS coupons, " +
+-
+-        "(SELECT COUNT(*) " +
+-        " FROM catalog_filters " +
+-        " WHERE category_id = ? " +
+-        " AND IFNULL(d_in,0) = 0) AS catalog_filters, " +
+-
+-        "(SELECT COUNT(*) " +
+-        " FROM category_attributes " +
+-        " WHERE category_id = ? " +
+-        " AND IFNULL(d_in,0) = 0) AS category_attributes";
+-
+-    var checkParams = [
+-        id,
+-        tenant_id,
+-        id,
+-        id,
+-        id,
+-        id,
+-        id
+-    ];
+-
+-    dbutil.sqlinjection(
+-        sqldb.MySQLConPool,
+-        CHECK_QRY,
+-        checkParams,
+-        'deletesubcategory-check',
+-        function (err, rows) {
+-
+-            if (err) {
+-                console.log('DELETE SUBCATEGORY CHECK ERROR:', err);
+-
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
+-                });
+-            }
+-
+-            var r = rows[0];
+-
+-            if (!r.found) {
+-                return res.json({
+-                    status: 202,
+-                    message: 'Subcategory not found'
+-                });
+-            }
+-
+-            var usage = [];
+-
+-            if (r.child_categories) {
+-                usage.push(r.child_categories + ' child categories');
+-            }
+-
+-            if (r.products) {
+-                usage.push(r.products + ' products');
+-            }
+-
+-            if (r.coupons) {
+-                usage.push(r.coupons + ' coupons');
+-            }
+-
+-            if (r.catalog_filters) {
+-                usage.push(r.catalog_filters + ' catalog filters');
+-            }
+-
+-            if (r.category_attributes) {
+-                usage.push(r.category_attributes + ' category attributes');
+-            }
+-
+-            if (usage.length) {
+-                return res.json({
+-                    status: 202,
+-                    message:
+-                        'Cannot delete: this subcategory is currently used by ' +
+-                        usage.join(', ')
+-                });
+-            }
+-
+-            var QRY =
+-                'DELETE FROM categories ' +
+-                'WHERE id = ? ' +
+-                'AND tenant_id = ? ' +
+-                'AND parent_id IS NOT NULL';
+-
+-            dbutil.sqlinjection(
+-                sqldb.MySQLConPool,
+-                QRY,
+-                [id, tenant_id],
+-                'deletesubcategory',
+-                function (err2, result) {
+-
+-                    if (err2) {
+-                        console.log('DELETE SUBCATEGORY ERROR:', err2);
++    // Block the delete while any active record still uses this subcategory
++    var CHECK_QRY = "SELECT " +
++        "(SELECT COUNT(*) FROM categories c WHERE c.id = ? AND c.tenant_id = ? AND c.parent_id IS NOT NULL) AS found, " +
++        "(SELECT COUNT(*) FROM categories WHERE parent_id = ? AND IFNULL(d_in,0) = 0) AS child_categories, " +
++        "(SELECT COUNT(*) FROM products WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS products, " +
++        "(SELECT COUNT(*) FROM coupons WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS coupons, " +
++        "(SELECT COUNT(*) FROM vendors WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS vendors, " +
++        "(SELECT COUNT(*) FROM catalog_filters WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS catalog_filters, " +
++        "(SELECT COUNT(*) FROM category_attributes WHERE category_id = ? AND IFNULL(d_in,0) = 0) AS category_attributes";
++    var checkParams = [id, tenant_id, id, id, id, id, id, id];
++
++    dbutil.sqlinjection(sqldb.MySQLConPool, CHECK_QRY, checkParams, 'deletesubcategory-check', function (err, rows) {
++        if (err) return res.json({ status: 500, message: 'Internal server error' });
+ 
+-                        return res.json({
+-                            status: 500,
+-                            message: 'Internal server error',
+-                            error: err2.message
+-                        });
+-                    }
++        var r = rows[0];
++        if (!r.found) return res.json({ status: 202, message: 'Subcategory not found' });
+ 
+-                    if (!result || !result.affectedRows) {
+-                        return res.json({
+-                            status: 202,
+-                            message: 'Subcategory not found'
+-                        });
+-                    }
++        var usage = [];
++        if (r.child_categories) usage.push(r.child_categories + ' child categories');
++        if (r.products) usage.push(r.products + ' products');
++        if (r.coupons) usage.push(r.coupons + ' coupons');
++        if (r.vendors) usage.push(r.vendors + ' vendors');
++        if (r.catalog_filters) usage.push(r.catalog_filters + ' catalog filters');
++        if (r.category_attributes) usage.push(r.category_attributes + ' category attributes');
+ 
+-                    return res.json({
+-                        status: 200,
+-                        message: 'Subcategory deleted successfully'
+-                    });
+-                }
+-            );
++        if (usage.length) {
++            return res.json({ status: 202, message: 'Cannot delete: this subcategory is currently used by ' + usage.join(', ') });
+         }
+-    );
++
++        // Physical delete; parent_id IS NOT NULL guarantees a main category can never be deleted here
++        var QRY = 'DELETE FROM categories WHERE id = ? AND tenant_id = ? AND parent_id IS NOT NULL';
++        dbutil.sqlinjection(sqldb.MySQLConPool, QRY, [id, tenant_id], 'deletesubcategory', function (err2, result) {
++            if (err2) return res.json({ status: 500, message: 'Internal server error' });
++            if (!result || !result.affectedRows) return res.json({ status: 202, message: 'Subcategory not found' });
++            return res.json({ status: 200, message: 'Subcategory deleted successfully' });
++        });
++    });
+ };
+ 
+ // =============================================
+@@ -1408,7 +1264,6 @@ function saveVendorChargeSettings(vendorId, b, callback) {
+     });
+ }
+ exports.addvendor = function (req, res) {
+-
+     var b = req.body;
+     var tenant_id = req.admin.tenant_id;
+ 
+@@ -1419,11 +1274,9 @@ exports.addvendor = function (req, res) {
+         });
+     }
+ 
++    // Check duplicate mobile within tenant
+     var checkQry =
+-        'SELECT id FROM vendors ' +
+-        'WHERE vendor_mobile_number = ? ' +
+-        'AND tenant_id = ? ' +
+-        'AND IFNULL(d_in,0) = 0';
++        'SELECT id FROM vendors WHERE vendor_mobile_number = ? AND tenant_id = ? AND IFNULL(d_in,0) = 0';
+ 
+     dbutil.sqlinjection(
+         sqldb.MySQLConPool,
+@@ -1433,13 +1286,9 @@ exports.addvendor = function (req, res) {
+         function (err, rows) {
+ 
+             if (err) {
+-
+-                console.log('ADD VENDOR CHECK ERROR:', err);
+-
+                 return res.json({
+                     status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
++                    message: 'Internal server error'
+                 });
+             }
+ 
+@@ -1450,30 +1299,31 @@ exports.addvendor = function (req, res) {
+                 });
+             }
+ 
+-           var QRY =
+-    "INSERT INTO vendors (" +
+-    "tenant_id, location_id, " +
+-    "vendor_name, store_category, vendor_unique_code, " +
+-    "vendor_mobile_number, vendor_mobile_number2, vendor_email, pwd, vendor_address, " +
+-    "latitude, longitude, fssai_license_number, gst_number, trade_license_number, " +
+-    "drug_license_number, pan_number, shop_image, shop_interior_image1, " +
+-    "shop_interior_image2, agreement_copy, " +
+-    "bank_account_holder, bank_account_number, bank_ifsc_code, bank_name, upi_id, " +
+-    "opening_time, closing_time, weekly_holiday, " +
+-    "commission_percentage, kyc_status, is_online, login_status, active_status, i_ts" +
+-  ") VALUES (" +
+-"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
+-"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
+-"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
+-"0, 0, 1, NOW()" +
+-")";
++            var QRY =
++                "INSERT INTO vendors (" +
++                "tenant_id, location_id, category_id, subcategory, filter, " +
++                "vendor_name, vendor_unique_code, " +
++                "vendor_mobile_number, vendor_mobile_number2, vendor_email, pwd, vendor_address, " +
++                "latitude, longitude, fssai_license_number, gst_number, trade_license_number, " +
++                "drug_license_number, pan_number, shop_image, shop_interior_image1, " +
++                "shop_interior_image2, shop_interior_image3, bank_details_image, agreement_copy, " +
++                "bank_account_holder, bank_account_number, " +
++                "bank_ifsc_code, bank_name, upi_id, " +
++                "opening_time, closing_time, opening_time2, closing_time2, weekly_holiday, " +
++                "commission_percentage, kyc_status, is_online, login_status, active_status, i_ts" +
++                ") VALUES (" +
++                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
++                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 1, NOW()" +
++                ")";
+ 
+             var params = [
+                 tenant_id,
+                 nullableNum(b.location_id),
++                nullableNum(b.category_id),
++                emptyToNull(b.subcategory),
++                emptyToNull(b.filter),
+ 
+                 b.vendor_name,
+-                b.store_category || null,
+                 b.vendor_unique_code || null,
+ 
+                 b.vendor_mobile_number,
+@@ -1484,7 +1334,6 @@ exports.addvendor = function (req, res) {
+ 
+                 emptyToNull(b.latitude),
+                 emptyToNull(b.longitude),
+-
+                 b.fssai_license_number || null,
+                 b.gst_number || null,
+                 b.trade_license_number || null,
+@@ -1494,7 +1343,8 @@ exports.addvendor = function (req, res) {
+                 emptyToNull(b.shop_image),
+                 emptyToNull(b.shop_interior_image1),
+                 emptyToNull(b.shop_interior_image2),
+-
++                emptyToNull(b.shop_interior_image3),
++                emptyToNull(b.bank_details_image),
+                 emptyToNull(b.agreement_copy),
+ 
+                 b.bank_account_holder || null,
+@@ -1505,6 +1355,8 @@ exports.addvendor = function (req, res) {
+ 
+                 emptyToNull(b.opening_time),
+                 emptyToNull(b.closing_time),
++                emptyToNull(b.opening_time2),
++                emptyToNull(b.closing_time2),
+                 emptyToNull(b.weekly_holiday),
+ 
+                 num(b.commission_percentage, 0),
+@@ -1519,83 +1371,89 @@ exports.addvendor = function (req, res) {
+                 function (err, result) {
+ 
+                     if (err) {
+-
+-                        console.log(
+-                            'ADD VENDOR ERROR:',
+-                            err
+-                        );
++                        console.log('ADD VENDOR ERROR:', err);
+ 
+                         return res.json({
+                             status: 500,
+-                            message: 'Internal server error',
+-                            error: err.message
++                            message: 'Internal server error'
+                         });
+                     }
+ 
+-                  return res.json({
+-    status: 200,
+-    message: 'Vendor added successfully',
+-    insertId: result.insertId
+-});
++                    // Payment Details ride in the same payload and are written
++                    // to vendor_charge_settings against the new vendor id.
++                    saveVendorChargeSettings(result.insertId, b, function () {
++                        return res.json({
++                            status: 200,
++                            message: 'Vendor added successfully',
++                            insertId: result.insertId
++                        });
++                    });
+                 }
+             );
+         }
+     );
+ };
+ 
++// GET /getvendors
++exports.getvendors = function (req, res) {
++    var tenant_id = req.admin.tenant_id;
++
++    // Only the eight charge columns are selected from vendor_charge_settings -
++    // pulling vcs.* as well would overwrite v.id / v.i_ts / v.d_in in the result.
++    var QRY = "SELECT v.*, l.city, l.area, c.category_name, " +
++        "vcs.admin_service, vcs.packing_charges, vcs.max_free_delivery_cost, " +
++        "vcs.minimum_order_amount, vcs.minimum_km, vcs.minimum_delivery_charge, " +
++        "vcs.per_km_charges, vcs.maximum_delivery_km " +
++        "FROM vendors v " +
++        "LEFT JOIN locations l ON l.id = v.location_id " +
++        "LEFT JOIN categories c ON c.id = v.category_id " +
++        "LEFT JOIN vendor_charge_settings vcs ON vcs.vendor_id = v.id AND IFNULL(vcs.d_in,0) = 0 " +
++        "WHERE v.tenant_id = ? AND IFNULL(v.d_in,0) = 0 " +
++        "ORDER BY v.i_ts DESC";
++
++    dbutil.sqlinjection(sqldb.MySQLConPool, QRY, [tenant_id], 'getvendors', function (err, rows) {
++        if (err) {
++            console.log('GET VENDORS ERROR:', err);
++            return res.json({ status: 500, message: 'Internal server error' });
++        }
++        return res.json({ status: 200, data: rows });
++    });
++};
++
+ // POST /updatevendor
+ exports.updatevendor = function (req, res) {
+-
+     var b = req.body;
+     var tenant_id = req.admin.tenant_id;
+ 
+-    if (!b.id) {
+-        return res.json({
+-            status: 202,
+-            message: 'Vendor ID is required'
+-        });
+-    }
+-
+-    var QRY =
+-        "UPDATE vendors SET " +
+-        "location_id = ?, " +
+-        "vendor_name = ?, " +
+-        "store_category = ?, " +
+-        "vendor_unique_code = ?, " +
+-        "vendor_mobile_number = ?, " +
+-        "vendor_mobile_number2 = ?, " +
+-        "vendor_email = ?, " +
+-        "vendor_address = ?, " +
+-        "latitude = ?, " +
+-        "longitude = ?, " +
+-        "fssai_license_number = ?, " +
+-        "gst_number = ?, " +
+-        "trade_license_number = ?, " +
+-        "drug_license_number = ?, " +
+-        "pan_number = ?, " +
+-        "shop_image = ?, " +
+-        "shop_interior_image1 = ?, " +
+-        "shop_interior_image2 = ?, " +
+-        "agreement_copy = ?, " +
+-        "bank_account_holder = ?, " +
+-        "bank_account_number = ?, " +
+-        "bank_ifsc_code = ?, " +
+-        "bank_name = ?, " +
+-        "upi_id = ?, " +
+-        "opening_time = ?, " +
+-        "closing_time = ?, " +
+-        "weekly_holiday = ?, " +
+-        "commission_percentage = ?, " +
+-        "kyc_status = ? " +
+-        "WHERE id = ? " +
+-        "AND tenant_id = ?";
++    if (!b.id) return res.json({ status: 202, message: 'Vendor ID is required' });
++
++    // Every column the Shop Details form carries is written plainly, so a value
++    // the admin clears is actually cleared. special_offer and agreement_copy are
++    // NOT on the form, so they stay behind COALESCE and keep whatever is stored.
++    var QRY = "UPDATE vendors SET " +
++        "location_id = ?, category_id = ?, subcategory = ?, filter = ?, " +
++        "vendor_name = ?, vendor_unique_code = ?, " +
++        "vendor_mobile_number = ?, vendor_mobile_number2 = ?, vendor_email = ?, " +
++        "vendor_address = ?, latitude = ?, longitude = ?, " +
++        "fssai_license_number = ?, gst_number = ?, trade_license_number = ?, " +
++        "drug_license_number = ?, pan_number = ?, " +
++        "shop_image = ?, shop_interior_image1 = ?, shop_interior_image2 = ?, " +
++        "shop_interior_image3 = ?, bank_details_image = ?, " +
++        "special_offer = COALESCE(?, special_offer), " +
++        "agreement_copy = COALESCE(?, agreement_copy), " +
++        "bank_account_holder = ?, bank_account_number = ?, bank_ifsc_code = ?, " +
++        "bank_name = ?, upi_id = ?, " +
++        "opening_time = ?, closing_time = ?, opening_time2 = ?, closing_time2 = ?, " +
++        "weekly_holiday = ?, commission_percentage = ?, kyc_status = ? " +
++        "WHERE id = ? AND tenant_id = ?";
+ 
+     var params = [
+-
+         nullableNum(b.location_id),
++        nullableNum(b.category_id),
++        emptyToNull(b.subcategory),
++        emptyToNull(b.filter),
+ 
+         b.vendor_name || '',
+-        b.store_category || null,
+         b.vendor_unique_code || null,
+ 
+         b.vendor_mobile_number || '',
+@@ -1609,13 +1467,17 @@ exports.updatevendor = function (req, res) {
+         b.fssai_license_number || null,
+         b.gst_number || null,
+         b.trade_license_number || null,
++
+         b.drug_license_number || null,
+         b.pan_number || null,
+ 
+         emptyToNull(b.shop_image),
+         emptyToNull(b.shop_interior_image1),
+         emptyToNull(b.shop_interior_image2),
++        emptyToNull(b.shop_interior_image3),
++        emptyToNull(b.bank_details_image),
+ 
++        emptyToNull(b.special_offer),
+         emptyToNull(b.agreement_copy),
+ 
+         b.bank_account_holder || null,
+@@ -1626,8 +1488,10 @@ exports.updatevendor = function (req, res) {
+ 
+         emptyToNull(b.opening_time),
+         emptyToNull(b.closing_time),
+-        emptyToNull(b.weekly_holiday),
++        emptyToNull(b.opening_time2),
++        emptyToNull(b.closing_time2),
+ 
++        emptyToNull(b.weekly_holiday),
+         num(b.commission_percentage, 0),
+         num(b.kyc_status, 0),
+ 
+@@ -1635,74 +1499,27 @@ exports.updatevendor = function (req, res) {
+         tenant_id
+     ];
+ 
+-    dbutil.sqlinjection(
+-        sqldb.MySQLConPool,
+-        QRY,
+-        params,
+-        'updatevendor',
+-        function (err, result) {
+-
+-            if (err) {
+-
+-                console.log(
+-                    'UPDATE VENDOR ERROR:',
+-                    err
+-                );
+-
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
+-                });
+-            }
+-
+-            if (!result || !result.affectedRows) {
+-
+-                return res.json({
+-                    status: 202,
+-                    message: 'Vendor not found'
+-                });
+-            }
++    dbutil.sqlinjection(sqldb.MySQLConPool, QRY, params, 'updatevendor', function (err, result) {
++        if (err) {
++            console.log('UPDATE VENDOR ERROR:', err);
++            return res.json({ status: 500, message: 'Internal server error' });
++        }
++        if (!result || !result.affectedRows) {
++            return res.json({ status: 202, message: 'Vendor not found' });
++        }
+ 
++        // Payment Details upsert - the vendor row above was already matched on
++        // tenant_id, so reaching here proves the shop belongs to this tenant.
++        saveVendorChargeSettings(b.id, b, function () {
+             return res.json({
+                 status: 200,
+                 message: 'Vendor updated successfully',
+                 affectedRows: result.affectedRows
+             });
+-        }
+-    );
++        });
++    });
+ };
+-// GET /getvendors
+-exports.getvendors = function (req, res) {
+-    var tenant_id = req.admin.tenant_id;
+-
+-    // Use only tables and columns that exist in the current database.
+-    // Vendor-specific charge settings are not available in this database,
+-    // so those response fields are returned as null for now.
+-    var QRY = "SELECT v.*, l.city, l.area, " +
+-        "v.store_category AS category_name, " +
+-        "NULL AS admin_service, " +
+-        "NULL AS packing_charges, " +
+-        "NULL AS max_free_delivery_cost, " +
+-        "NULL AS minimum_order_amount, " +
+-        "NULL AS minimum_km, " +
+-        "NULL AS minimum_delivery_charge, " +
+-        "NULL AS per_km_charges, " +
+-        "NULL AS maximum_delivery_km " +
+-        "FROM vendors v " +
+-        "LEFT JOIN locations l ON l.id = v.location_id " +
+-        "WHERE v.tenant_id = ? AND IFNULL(v.d_in,0) = 0 " +
+-        "ORDER BY v.i_ts DESC";
+-
+-    dbutil.sqlinjection(sqldb.MySQLConPool, QRY, [tenant_id], 'getvendors', function (err, rows) {
+-        if (err) {
+-            console.log('GET VENDORS ERROR:', err);
+-            return res.json({ status: 500, message: 'Internal server error' });
+-        }
+ 
+-        return res.json({ status: 200, data: rows });
+-    });
+-};
+ // POST /deletevendor
+ exports.deletevendor = function (req, res) {
+     var tenant_id = req.admin.tenant_id;
+@@ -2757,7 +2574,6 @@ exports.getorders = function(req, res) {
+     var tenant_id = req.admin.tenant_id;
+     var b = req.body;
+ console.log('GET ORDERS FILTERS:', b);
+-console.log('GET ORDERS STATUS:', b.order_status, typeof b.order_status);
+     var conditions = ['v.tenant_id=?', 'o.d_in=0'];
+     var params = [tenant_id];
+ 
+@@ -2771,19 +2587,7 @@ console.log('GET ORDERS STATUS:', b.order_status, typeof b.order_status);
+         params.push(b.vendor_id);
+     }
+ if (b.category_id) {
+-    conditions.push(`
+-        EXISTS (
+-            SELECT 1
+-            FROM order_items oi
+-            INNER JOIN product_variants pv
+-                ON pv.id = oi.product_variant_id
+-            INNER JOIN products p
+-                ON p.id = pv.product_id
+-            WHERE oi.order_id = o.id
+-              AND p.category_id = ?
+-        )
+-    `);
+-
++    conditions.push('v.category_id=?');
+     params.push(b.category_id);
+ }
+ 
+@@ -2869,44 +2673,16 @@ exports.getorderdetails = function(req, res) {
+ 
+ exports.updateorderstatus = function(req, res) {
+     var b = req.body;
+-    var tenant_id = req.admin.tenant_id;
+-    var allowedStatuses = [0, 1, 2, 3, 4, 5, 6];
+-
+-    var orderId = Number(b.order_id);
+-    var newStatus = Number(b.new_status);
+-
+-    if (!orderId || !allowedStatuses.includes(newStatus)) {
+-        return res.json({
+-            status: 202,
+-            message: 'Invalid order ID or order status'
+-        });
+-    }
+-
+-    /*
+-     * Get current order.
+-     *
+-     * Orders does not contain tenant_id, so tenant ownership
+-     * is verified through the vendor.
+-     */
+-    var GET_QRY =
+-        'SELECT o.order_status, o.payment_type, o.grand_total ' +
+-        'FROM orders o ' +
+-        'INNER JOIN vendors v ON v.id=o.vendor_id ' +
+-        'WHERE o.id=? ' +
+-        'AND v.tenant_id=? ' +
+-        'AND IFNULL(o.d_in,0)=0 ' +
+-        'AND IFNULL(v.d_in,0)=0';
+ 
++    // Get current order information first.
+     dbutil.sqlinjection(
+         sqldb.MySQLConPool,
+-        GET_QRY,
+-        [orderId, tenant_id],
++        'SELECT order_status, payment_type, grand_total FROM orders WHERE id=? AND d_in=0',
++        [b.order_id],
+         'updateorderstatus-get',
+         function(err, rows) {
+ 
+             if (err) {
+-                console.log('GET ORDER STATUS ERROR:', err);
+-
+                 return res.json({
+                     status: 500,
+                     message: 'Internal server error'
+@@ -2920,104 +2696,54 @@ exports.updateorderstatus = function(req, res) {
+                 });
+             }
+ 
+-            var oldStatus = Number(rows[0].order_status);
++            var oldStatus = rows[0].order_status;
+             var paymentType = rows[0].payment_type;
+             var grandTotal = Number(rows[0].grand_total || 0);
+ 
+-            /*
+-             * Do not create a duplicate history entry
+-             * when the same status is selected again.
+-             */
+-            if (oldStatus === newStatus) {
+-                return res.json({
+-                    status: 202,
+-                    message: 'Order already has this status'
+-                });
+-            }
+-
+-            /*
+-             * Build timestamp update according to status.
+-             */
+-            var timestampField = '';
+-
+-            if (newStatus === 1) {
+-                timestampField = ', accepted_at=NOW()';
+-            } else if (newStatus === 2) {
+-                timestampField = ', ready_at=NOW()';
+-            } else if (newStatus === 3) {
+-                timestampField = ', picked_up_at=NOW()';
+-            } else if (newStatus === 4) {
+-                timestampField = ', delivered_at=NOW()';
+-            } else if (newStatus === 5 || newStatus === 6) {
+-                timestampField = ', cancelled_at=NOW()';
+-            }
+-
+-            var UPDATE_QRY =
+-                'UPDATE orders ' +
+-                'SET order_status=? ' +
+-                timestampField +
+-                ' WHERE id=? ' +
+-                'AND d_in=0';
+-
++            // Update order status.
+             dbutil.sqlinjection(
+                 sqldb.MySQLConPool,
+-                UPDATE_QRY,
+-                [newStatus, orderId],
++                'UPDATE orders SET order_status=? WHERE id=? AND d_in=0',
++                [b.new_status, b.order_id],
+                 'updateorderstatus-update',
+                 function(err2) {
+ 
+                     if (err2) {
+-                        console.log('UPDATE ORDER STATUS ERROR:', err2);
+-
+                         return res.json({
+                             status: 500,
+                             message: 'Internal server error'
+                         });
+                     }
+ 
+-                    /*
+-                     * Save status history.
+-                     */
+-                    var HISTORY_QRY =
+-                        'INSERT INTO order_status_history ' +
+-                        '(order_id, old_status, new_status, changed_by_type, changed_by_id, remarks, i_ts) ' +
+-                        'VALUES (?,?,?,?,?,?,NOW())';
+-
++                    // Insert order status history.
+                     dbutil.sqlinjection(
+                         sqldb.MySQLConPool,
+-                        HISTORY_QRY,
++                        'INSERT INTO order_status_history ' +
++                        '(order_id, old_status, new_status, changed_by_type, changed_by_id, remarks, i_ts) ' +
++                        'VALUES (?,?,?,?,?,?,NOW())',
+                         [
+-                            orderId,
++                            b.order_id,
+                             oldStatus,
+-                            newStatus,
++                            b.new_status,
+                             'admin',
+                             req.admin.id,
+                             b.remarks || null
+                         ],
+                         'updateorderstatus-history',
+-                        function(err3) {
+-
+-                            if (err3) {
+-                                console.log(
+-                                    'ORDER STATUS HISTORY ERROR:',
+-                                    err3
+-                                );
+-
+-                                return res.json({
+-                                    status: 500,
+-                                    message: 'Order updated, but status history could not be saved'
+-                                });
+-                            }
++                        function() {
+ 
+                             /*
+                              * COD SETTLEMENT
+                              *
+-                             * Only process settlement when:
+-                             * - Order becomes Completed (4)
+-                             * - Payment type is COD
++                             * Create a settlement only when:
++                             * 1. Order becomes Completed (status 4)
++                             * 2. Order is COD
++                             * 3. Order has an active delivery assignment
++                             * 4. A settlement does not already exist
+                              */
++
+                             if (
+-                                newStatus !== 4 ||
++                                Number(b.new_status) !== 4 ||
+                                 String(paymentType || '').toLowerCase() !== 'cod'
+                             ) {
+                                 return res.json({
+@@ -3026,45 +2752,26 @@ exports.updateorderstatus = function(req, res) {
+                                 });
+                             }
+ 
+-                            /*
+-                             * Find the actual completed delivery assignment.
+-                             *
+-                             * assignment_status = 3
+-                             * delivered_at IS NOT NULL
+-                             *
+-                             * This prevents using an old/pending assignment.
+-                             */
++                            // Find the delivery assignment for this order.
+                             var assignmentQry =
+-                                'SELECT ' +
+-                                'da.id AS assignment_id, ' +
+-                                'da.delivery_partner_id, ' +
+-                                'da.base_pay, ' +
+-                                'da.distance_pay, ' +
+-                                'da.tip_pay, ' +
+-                                'da.delivered_at ' +
++                                'SELECT da.id AS assignment_id, ' +
++                                'da.delivery_partner_id ' +
+                                 'FROM delivery_assignments da ' +
+-                                'INNER JOIN orders o ON o.id=da.order_id ' +
+-                                'INNER JOIN vendors v ON v.id=o.vendor_id ' +
+                                 'WHERE da.order_id=? ' +
+-                                'AND v.tenant_id=? ' +
+-                                'AND da.assignment_status=3 ' +
+-                                'AND da.delivered_at IS NOT NULL ' +
+                                 'AND IFNULL(da.d_in,0)=0 ' +
+-                                'AND IFNULL(v.d_in,0)=0 ' +
+-                                'ORDER BY da.delivered_at DESC, da.id DESC ' +
+-                                'LIMIT 1';
++                                'ORDER BY da.id DESC LIMIT 1';
+ 
+                             dbutil.sqlinjection(
+                                 sqldb.MySQLConPool,
+                                 assignmentQry,
+-                                [orderId, tenant_id],
++                                [b.order_id],
+                                 'updateorderstatus-assignment',
+-                                function(err4, assignmentRows) {
++                                function(err3, assignmentRows) {
+ 
+-                                    if (err4) {
++                                    if (err3) {
+                                         console.log(
+-                                            'GET COMPLETED DELIVERY ASSIGNMENT ERROR:',
+-                                            err4
++                                            'GET DELIVERY ASSIGNMENT ERROR:',
++                                            err3
+                                         );
+ 
+                                         return res.json({
+@@ -3073,11 +2780,7 @@ exports.updateorderstatus = function(req, res) {
+                                         });
+                                     }
+ 
+-                                    /*
+-                                     * If there is no completed delivery assignment,
+-                                     * the order can still be completed, but no
+-                                     * delivery-partner settlement is created.
+-                                     */
++                                    // No delivery partner assigned.
+                                     if (
+                                         !assignmentRows ||
+                                         !assignmentRows.length
+@@ -3088,168 +2791,31 @@ exports.updateorderstatus = function(req, res) {
+                                         });
+                                     }
+ 
+-                                    var assignment =
+-                                        assignmentRows[0];
+-
+                                     var assignmentId =
+-                                        Number(
+-                                            assignment.assignment_id
+-                                        );
++                                        assignmentRows[0].assignment_id;
+ 
+                                     var deliveryPartnerId =
+-                                        Number(
+-                                            assignment.delivery_partner_id
+-                                        );
+-
+-                                    /*
+-                                     * Delivery earning =
+-                                     * base pay + distance pay + tip pay
+-                                     */
+-                                    var deliveryEarnings =
+-                                        Number(
+-                                            assignment.base_pay || 0
+-                                        ) +
+-                                        Number(
+-                                            assignment.distance_pay || 0
+-                                        ) +
+-                                        Number(
+-                                            assignment.tip_pay || 0
+-                                        );
+-
+-                                    /*
+-                                     * Use delivered_at to determine
+-                                     * the settlement week.
+-                                     *
+-                                     * Settlement week:
+-                                     * Saturday -> Friday
+-                                     *
+-                                     * JavaScript:
+-                                     * Sunday    = 0
+-                                     * Monday    = 1
+-                                     * Tuesday   = 2
+-                                     * Wednesday = 3
+-                                     * Thursday  = 4
+-                                     * Friday    = 5
+-                                     * Saturday  = 6
+-                                     */
+-                                    var deliveredDate =
+-                                        new Date(
+-                                            assignment.delivered_at
+-                                        );
+-
+-                                    var deliveredDay =
+-                                        deliveredDate.getDay();
+-
+-                                    /*
+-                                     * Number of days to move backwards
+-                                     * from delivered date to Saturday.
+-                                     */
+-                                    var daysFromSaturday =
+-                                        (deliveredDay + 1) % 7;
+-
+-                                    var settlementStart =
+-                                        new Date(
+-                                            deliveredDate
+-                                        );
++                                        assignmentRows[0].delivery_partner_id;
+ 
+-                                    settlementStart.setHours(
+-                                        0,
+-                                        0,
+-                                        0,
+-                                        0
+-                                    );
+-
+-                                    settlementStart.setDate(
+-                                        settlementStart.getDate() -
+-                                        daysFromSaturday
+-                                    );
+-
+-                                    var settlementEnd =
+-                                        new Date(
+-                                            settlementStart
+-                                        );
+-
+-                                    settlementEnd.setDate(
+-                                        settlementEnd.getDate() + 6
+-                                    );
+-
+-                                    function formatSettlementDate(date) {
+-                                        var year =
+-                                            date.getFullYear();
+-
+-                                        var month =
+-                                            String(
+-                                                date.getMonth() + 1
+-                                            ).padStart(2, '0');
+-
+-                                        var day =
+-                                            String(
+-                                                date.getDate()
+-                                            ).padStart(2, '0');
+-
+-                                        return (
+-                                            year +
+-                                            '-' +
+-                                            month +
+-                                            '-' +
+-                                            day
+-                                        );
+-                                    }
+-
+-                                    var periodStart =
+-                                        formatSettlementDate(
+-                                            settlementStart
+-                                        );
+-
+-                                    var periodEnd =
+-                                        formatSettlementDate(
+-                                            settlementEnd
+-                                        );
+-
+-                                    /*
+-                                     * Find the current pending weekly settlement.
+-                                     *
+-                                     * IMPORTANT:
+-                                     * settlement_status = 0 means pending.
+-                                     *
+-                                     * Existing paid settlements
+-                                     * (settlement_status = 1)
+-                                     * will NOT be modified.
+-                                     */
+-                                    var weeklySettlementQry =
+-                                        'SELECT ' +
+-                                        'id, ' +
+-                                        'total_orders, ' +
+-                                        'cod_amount_collected, ' +
+-                                        'delivery_earnings, ' +
+-                                        'advance_deducted ' +
++                                    // Check whether settlement already exists.
++                                    var settlementCheckQry =
++                                        'SELECT id ' +
+                                         'FROM delivery_partner_settlements ' +
+-                                        'WHERE delivery_partner_id=? ' +
+-                                        'AND settlement_period_start=? ' +
+-                                        'AND settlement_period_end=? ' +
+-                                        'AND settlement_status=0 ' +
++                                        'WHERE delivery_assignment_id=? ' +
+                                         'AND IFNULL(d_in,0)=0 ' +
+-                                        'ORDER BY id DESC ' +
+                                         'LIMIT 1';
+ 
+                                     dbutil.sqlinjection(
+                                         sqldb.MySQLConPool,
+-                                        weeklySettlementQry,
+-                                        [
+-                                            deliveryPartnerId,
+-                                            periodStart,
+-                                            periodEnd
+-                                        ],
+-                                        'updateorderstatus-weekly-settlement-check',
+-                                        function(
+-                                            err5,
+-                                            weeklyRows
+-                                        ) {
+-
+-                                            if (err5) {
++                                        settlementCheckQry,
++                                        [assignmentId],
++                                        'updateorderstatus-settlement-check',
++                                        function(err4, settlementRows) {
++
++                                            if (err4) {
+                                                 console.log(
+-                                                    'CHECK WEEKLY COD SETTLEMENT ERROR:',
+-                                                    err5
++                                                    'CHECK COD SETTLEMENT ERROR:',
++                                                    err4
+                                                 );
+ 
+                                                 return res.json({
+@@ -3258,155 +2824,40 @@ exports.updateorderstatus = function(req, res) {
+                                                 });
+                                             }
+ 
+-                                            /*
+-                                             * Existing pending weekly
+-                                             * settlement found.
+-                                             *
+-                                             * Add this order's values.
+-                                             */
++                                            // Already settled.
+                                             if (
+-                                                weeklyRows &&
+-                                                weeklyRows.length
++                                                settlementRows &&
++                                                settlementRows.length
+                                             ) {
+-
+-                                                var weeklySettlement =
+-                                                    weeklyRows[0];
+-
+-                                                var settlementId =
+-                                                    Number(
+-                                                        weeklySettlement.id
+-                                                    );
+-
+-                                                var totalOrders =
+-                                                    Number(
+-                                                        weeklySettlement.total_orders || 0
+-                                                    ) + 1;
+-
+-                                                var codAmountCollected =
+-                                                    Number(
+-                                                        weeklySettlement.cod_amount_collected || 0
+-                                                    ) +
+-                                                    grandTotal;
+-
+-                                                var totalDeliveryEarnings =
+-                                                    Number(
+-                                                        weeklySettlement.delivery_earnings || 0
+-                                                    ) +
+-                                                    deliveryEarnings;
+-
+-                                                var advanceDeducted =
+-                                                    Number(
+-                                                        weeklySettlement.advance_deducted || 0
+-                                                    );
+-
+-                                                var netPayable =
+-                                                    totalDeliveryEarnings -
+-                                                    advanceDeducted;
+-
+-                                                /*
+-                                                 * Update only the pending
+-                                                 * settlement.
+-                                                 */
+-                                                var updateSettlementQry =
+-                                                    'UPDATE delivery_partner_settlements ' +
+-                                                    'SET total_orders=?, ' +
+-                                                    'cod_amount_collected=?, ' +
+-                                                    'delivery_earnings=?, ' +
+-                                                    'net_payable=? ' +
+-                                                    'WHERE id=? ' +
+-                                                    'AND delivery_partner_id=? ' +
+-                                                    'AND settlement_status=0 ' +
+-                                                    'AND IFNULL(d_in,0)=0';
+-
+-                                                var updateSettlementParams = [
+-                                                    totalOrders,
+-                                                    codAmountCollected,
+-                                                    totalDeliveryEarnings,
+-                                                    netPayable,
+-                                                    settlementId,
+-                                                    deliveryPartnerId
+-                                                ];
+-
+-                                                dbutil.sqlinjection(
+-                                                    sqldb.MySQLConPool,
+-                                                    updateSettlementQry,
+-                                                    updateSettlementParams,
+-                                                    'updateorderstatus-update-weekly-settlement',
+-                                                    function(err6) {
+-
+-                                                        if (err6) {
+-                                                            console.log(
+-                                                                'UPDATE WEEKLY COD SETTLEMENT ERROR:',
+-                                                                err6
+-                                                            );
+-
+-                                                            return res.json({
+-                                                                status: 500,
+-                                                                message: 'Order status updated, but settlement could not be updated'
+-                                                            });
+-                                                        }
+-
+-                                                        return res.json({
+-                                                            status: 200,
+-                                                            message: 'Order completed and COD settlement updated'
+-                                                        });
+-                                                    }
+-                                                );
+-
+-                                                return;
++                                                return res.json({
++                                                    status: 200,
++                                                    message: 'Order status updated'
++                                                });
+                                             }
+ 
+                                             /*
+-                                             * No pending settlement exists
+-                                             * for this partner and week.
+-                                             *
+-                                             * Create a new weekly settlement.
++                                             * Get the latest delivery partner
++                                             * earning configured for this tenant.
+                                              */
+-                                            var advanceDeducted = 0;
+-
+-                                            var netPayable =
+-                                                deliveryEarnings -
+-                                                advanceDeducted;
+-
+-                                            var settlementQry =
+-                                                'INSERT INTO delivery_partner_settlements ' +
+-                                                '(delivery_partner_id, ' +
+-                                                'delivery_assignment_id, ' +
+-                                                'settlement_period_start, ' +
+-                                                'settlement_period_end, ' +
+-                                                'total_orders, ' +
+-                                                'cod_amount_collected, ' +
+-                                                'delivery_earnings, ' +
+-                                                'advance_deducted, ' +
+-                                                'net_payable, ' +
+-                                                'settlement_status, ' +
+-                                                'i_ts, ' +
+-                                                'd_in) ' +
+-                                                'VALUES (?,?,?,?,?,?,?,?,?,0,NOW(),0)';
+-
+-                                            var settlementParams = [
+-                                                deliveryPartnerId,
+-                                                assignmentId,
+-                                                periodStart,
+-                                                periodEnd,
+-                                                1,
+-                                                grandTotal,
+-                                                deliveryEarnings,
+-                                                advanceDeducted,
+-                                                netPayable
+-                                            ];
++                                            var chargeQry =
++                                                'SELECT delivery_boy_order_amount ' +
++                                                'FROM tenant_charge_settings ' +
++                                                'WHERE tenant_id=? ' +
++                                                'AND IFNULL(d_in,0)=0 ' +
++                                                'ORDER BY i_ts DESC ' +
++                                                'LIMIT 1';
+ 
+                                             dbutil.sqlinjection(
+                                                 sqldb.MySQLConPool,
+-                                                settlementQry,
+-                                                settlementParams,
+-                                                'updateorderstatus-create-weekly-settlement',
+-                                                function(err7) {
++                                                chargeQry,
++                                                [req.admin.tenant_id],
++                                                'updateorderstatus-charge',
++                                                function(err5, chargeRows) {
+ 
+-                                                    if (err7) {
++                                                    if (err5) {
+                                                         console.log(
+-                                                            'CREATE WEEKLY COD SETTLEMENT ERROR:',
+-                                                            err7
++                                                            'GET DELIVERY CHARGE ERROR:',
++                                                            err5
+                                                         );
+ 
+                                                         return res.json({
+@@ -3415,10 +2866,90 @@ exports.updateorderstatus = function(req, res) {
+                                                         });
+                                                     }
+ 
+-                                                    return res.json({
+-                                                        status: 200,
+-                                                        message: 'Order completed and COD settlement created'
+-                                                    });
++                                                    var deliveryEarnings = 0;
++
++                                                    if (
++                                                        chargeRows &&
++                                                        chargeRows.length
++                                                    ) {
++                                                        deliveryEarnings =
++                                                            Number(
++                                                                chargeRows[0]
++                                                                    .delivery_boy_order_amount || 0
++                                                            );
++                                                    }
++
++                                                    /*
++                                                     * Advance deduction is currently
++                                                     * not implemented anywhere in
++                                                     * the backend, so it is zero.
++                                                     */
++                                                    var advanceDeducted = 0;
++
++                                                    var netPayable =
++                                                        deliveryEarnings -
++                                                        advanceDeducted;
++
++                                                    /*
++                                                     * Create COD settlement.
++                                                     */
++                                                    var settlementQry =
++                                                        'INSERT INTO delivery_partner_settlements ' +
++                                                        '(delivery_partner_id, ' +
++                                                        'delivery_assignment_id, ' +
++                                                        'settlement_period_start, ' +
++                                                        'settlement_period_end, ' +
++                                                        'total_orders, ' +
++                                                        'cod_amount_collected, ' +
++                                                        'delivery_earnings, ' +
++                                                        'advance_deducted, ' +
++                                                        'net_payable, ' +
++                                                        'settlement_status, ' +
++                                                        'i_ts, ' +
++                                                        'd_in) ' +
++                                                        'VALUES (?,?,?,?,?,?,?,?,?,0,NOW(),0)';
++
++                                                    var settlementParams = [
++                                                        deliveryPartnerId,
++                                                        assignmentId,
++                                                        new Date()
++                                                            .toISOString()
++                                                            .slice(0, 10),
++                                                        new Date()
++                                                            .toISOString()
++                                                            .slice(0, 10),
++                                                        1,
++                                                        grandTotal,
++                                                        deliveryEarnings,
++                                                        advanceDeducted,
++                                                        netPayable
++                                                    ];
++
++                                                    dbutil.sqlinjection(
++                                                        sqldb.MySQLConPool,
++                                                        settlementQry,
++                                                        settlementParams,
++                                                        'updateorderstatus-create-settlement',
++                                                        function(err6) {
++
++                                                            if (err6) {
++                                                                console.log(
++                                                                    'CREATE COD SETTLEMENT ERROR:',
++                                                                    err6
++                                                                );
++
++                                                                return res.json({
++                                                                    status: 500,
++                                                                    message: 'Order status updated, but settlement could not be created'
++                                                                });
++                                                            }
++
++                                                            return res.json({
++                                                                status: 200,
++                                                                message: 'Order completed and COD settlement created'
++                                                            });
++                                                        }
++                                                    );
+                                                 }
+                                             );
+                                         }
+@@ -4015,57 +3546,34 @@ exports.deletebanner = function (req, res) {
+ // columns (coupon_name, coupon_percentage, validate_from ...) are deliberately
+ // left untouched rather than dropped, so nothing that still reads them breaks.
+ exports.addcoupon = function(req, res) {
+-
+     var b = req.body;
+     var tenant_id = req.admin.tenant_id;
+ 
+     if (!b.coupon_name) {
+-        return res.json({
+-            status: 202,
+-            message: 'Coupon name is required'
+-        });
++        return res.json({ status: 202, message: 'Coupon name is required' });
+     }
+ 
+-    // Map the existing frontend fields to the actual coupons table fields.
+-    var coupon_code = b.coupon_name;
+-    var description = b.coupon_description || null;
+-    var discount_value = num(b.coupon_percentage, 0);
+-    var max_discount_amount = nullableNum(b.coupon_max_price_limit);
+-
+-    var QRY =
+-        "INSERT INTO coupons (" +
+-        "tenant_id, vendor_id, category_id, coupon_code, description, " +
+-        "discount_type, discount_value, max_discount_amount, min_order_value, " +
+-        "usage_limit_per_user, total_usage_limit, valid_from, valid_upto, " +
+-        "is_active, i_ts, d_in" +
+-        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), 0)";
++    var QRY = "INSERT INTO coupons (" +
++        "tenant_id, location_id, shop_id, coupon_name, coupon_description, " +
++        "coupon_percentage, coupon_upto_price, coupon_max_price_limit, " +
++        "coupon_code, description, discount_type, discount_value, " +
++        "is_active, i_ts" +
++        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'percentage', ?, 1, NOW())";
+ 
+     var params = [
+         tenant_id,
+-
+-        // Existing frontend shop_id maps to the real vendor_id column.
++        nullableNum(b.location_id),
+         nullableNum(b.shop_id),
+-
+-        nullableNum(b.category_id),
+-
+-        coupon_code,
+-        description,
+-
+-        'percentage',
+-        discount_value,
+-        max_discount_amount,
+-
+-        // coupon_upto_price has no matching column in the real table.
+-        // Keep min_order_value at its database default.
+-        0,
+-
+-        1,
+-        null,
+-
+-        null,
+-        null,
+-
+-        1
++        b.coupon_name,
++        b.coupon_description || null,
++        num(b.coupon_percentage, 0),
++        nullableNum(b.coupon_upto_price),
++        nullableNum(b.coupon_max_price_limit),
++
++        // Required by the existing coupons table.
++        b.coupon_name,
++        b.coupon_description || null,
++        num(b.coupon_percentage, 0)
+     ];
+ 
+     dbutil.sqlinjection(
+@@ -4074,18 +3582,11 @@ exports.addcoupon = function(req, res) {
+         params,
+         'addcoupon',
+         function(err, result) {
+-
+             if (err) {
+-
+-                console.log(
+-                    'ADD COUPON ERROR:',
+-                    err
+-                );
+-
++                console.log('ADD COUPON ERROR:', err);
+                 return res.json({
+                     status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
++                    message: 'Internal server error'
+                 });
+             }
+ 
+@@ -4099,8 +3600,50 @@ exports.addcoupon = function(req, res) {
+ };
+ 
+ 
+-exports.updatecoupon = function(req, res) {
++exports.getcoupons = function(req, res) {
++    var QRY =
++        "SELECT " +
++        "co.id, " +
++        "co.coupon_name, " +
++        "co.coupon_description, " +
++        "co.coupon_percentage, " +
++        "co.coupon_upto_price, " +
++        "co.coupon_max_price_limit, " +
++        "co.location_id, " +
++        "co.shop_id, " +
++        "l.city AS location_name, " +
++        "v.vendor_name AS shop_name " +
++        "FROM coupons co " +
++        "LEFT JOIN locations l ON l.id = co.location_id " +
++        "LEFT JOIN vendors v ON v.id = co.shop_id " +
++        "WHERE co.tenant_id = ? " +
++        "AND IFNULL(co.d_in, 0) = 0 " +
++        "ORDER BY co.i_ts DESC";
++
++    dbutil.sqlinjection(
++        sqldb.MySQLConPool,
++        QRY,
++        [req.admin.tenant_id],
++        'getcoupons',
++        function(err, rows) {
++            if (err) {
++                console.log('GET COUPONS ERROR:', err);
++                return res.json({
++                    status: 500,
++                    message: 'Internal server error'
++                });
++            }
+ 
++            return res.json({
++                status: 200,
++                data: rows
++            });
++        }
++    );
++};
++
++
++exports.updatecoupon = function(req, res) {
+     var b = req.body;
+     var tenant_id = req.admin.tenant_id;
+ 
+@@ -4118,41 +3661,38 @@ exports.updatecoupon = function(req, res) {
+         });
+     }
+ 
+-    // Map the existing frontend fields to the actual coupons table fields.
+-    var coupon_code = b.coupon_name;
+-    var description = b.coupon_description || null;
+-    var discount_value = num(b.coupon_percentage, 0);
+-    var max_discount_amount = nullableNum(b.coupon_max_price_limit);
+-
+     var QRY =
+         "UPDATE coupons SET " +
+-        "vendor_id = ?, " +
+-        "category_id = ?, " +
++        "location_id = ?, " +
++        "shop_id = ?, " +
++        "coupon_name = ?, " +
++        "coupon_description = ?, " +
++        "coupon_percentage = ?, " +
++        "coupon_upto_price = ?, " +
++        "coupon_max_price_limit = ?, " +
++
++        // Keep the existing required/newer columns synchronized.
+         "coupon_code = ?, " +
+         "description = ?, " +
+         "discount_type = 'percentage', " +
+-        "discount_value = ?, " +
+-        "max_discount_amount = ?, " +
+-        "min_order_value = ? " +
++        "discount_value = ? " +
++
+         "WHERE id = ? " +
+         "AND tenant_id = ? " +
+         "AND IFNULL(d_in, 0) = 0";
+ 
+     var params = [
+-
+-        // Existing frontend shop_id -> real vendor_id.
++        nullableNum(b.location_id),
+         nullableNum(b.shop_id),
++        b.coupon_name,
++        b.coupon_description || null,
++        num(b.coupon_percentage, 0),
++        nullableNum(b.coupon_upto_price),
++        nullableNum(b.coupon_max_price_limit),
+ 
+-        nullableNum(b.category_id),
+-
+-        coupon_code,
+-        description,
+-
+-        discount_value,
+-        max_discount_amount,
+-
+-        // No direct matching column for coupon_upto_price.
+-        0,
++        b.coupon_name,
++        b.coupon_description || null,
++        num(b.coupon_percentage, 0),
+ 
+         b.id,
+         tenant_id
+@@ -4164,23 +3704,15 @@ exports.updatecoupon = function(req, res) {
+         params,
+         'updatecoupon',
+         function(err, result) {
+-
+             if (err) {
+-
+-                console.log(
+-                    'UPDATE COUPON ERROR:',
+-                    err
+-                );
+-
++                console.log('UPDATE COUPON ERROR:', err);
+                 return res.json({
+                     status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
++                    message: 'Internal server error'
+                 });
+             }
+ 
+             if (!result || !result.affectedRows) {
+-
+                 return res.json({
+                     status: 202,
+                     message: 'Coupon not found'
+@@ -4197,68 +3729,6 @@ exports.updatecoupon = function(req, res) {
+ };
+ 
+ 
+-
+-exports.getcoupons = function(req, res) {
+-    var tenant_id = req.admin.tenant_id;
+-
+-    var QRY =
+-        "SELECT " +
+-        "co.id, " +
+-        "co.coupon_code, " +
+-        "co.description, " +
+-        "co.discount_type, " +
+-        "co.discount_value, " +
+-        "co.max_discount_amount, " +
+-        "co.min_order_value, " +
+-        "co.usage_limit_per_user, " +
+-        "co.total_usage_limit, " +
+-        "co.valid_from, " +
+-        "co.valid_upto, " +
+-        "co.is_active, " +
+-        "co.vendor_id, " +
+-        "co.category_id, " +
+-        "v.vendor_name AS shop_name, " +
+-        "c.category_name, " +
+-        "NULL AS location_name " +
+-        "FROM coupons co " +
+-        "LEFT JOIN vendors v ON v.id = co.vendor_id " +
+-        "LEFT JOIN categories c ON c.id = co.category_id " +
+-        "WHERE co.tenant_id = ? " +
+-        "AND IFNULL(co.d_in, 0) = 0 " +
+-        "ORDER BY co.i_ts DESC";
+-
+-    dbutil.sqlinjection(
+-        sqldb.MySQLConPool,
+-        QRY,
+-        [tenant_id],
+-        'getcoupons',
+-        function(err, rows) {
+-
+-            if (err) {
+-                console.log(
+-                    'GET COUPONS ERROR:',
+-                    err
+-                );
+-
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
+-                });
+-            }
+-
+-            return res.json({
+-                status: 200,
+-                data: rows || []
+-            });
+-        }
+-    );
+-};
+-
+-
+-
+-
+-
+ exports.deletecoupon = function(req, res) {
+     var id = req.body.id;
+ 
+@@ -4483,249 +3953,46 @@ exports.getcodsettlements = function(req, res) {
+     );
+ 
+ };
+-exports.paycodsettlement = function(req, res) {
+-
+-    var settlementId = req.body.settlement_id;
+-
+-    if (!settlementId) {
+-
+-        return res.json({
+-            status: 400,
+-            message: 'Settlement ID is required'
+-        });
+-
+-    }
+-
+-    var QRY =
+-        "UPDATE delivery_partner_settlements dps " +
+-        "INNER JOIN delivery_partners dp " +
+-        "ON dp.id = dps.delivery_partner_id " +
+-        "SET " +
+-        "dps.settlement_status = 1, " +
+-        "dps.paid_at = NOW() " +
+-        "WHERE dps.id = ? " +
+-        "AND dp.tenant_id = ? " +
+-        "AND IFNULL(dps.d_in,0) = 0 " +
+-        "AND IFNULL(dps.settlement_status,0) = 0";
+-
+-
+-    dbutil.sqlinjection(
+-        sqldb.MySQLConPool,
+-        QRY,
+-        [
+-            settlementId,
+-            req.admin.tenant_id
+-        ],
+-        'paycodsettlement',
+-        function(err, result) {
+-
+-            if (err) {
+-
+-                console.log(
+-                    'PAY COD SETTLEMENT ERROR:',
+-                    err
+-                );
+-
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error'
+-                });
+-
+-            }
+-
+-            if (!result || result.affectedRows === 0) {
+-
+-                return res.json({
+-                    status: 404,
+-                    message: 'Settlement not found or already settled'
+-                });
+-
+-            }
+-
+-            return res.json({
+-                status: 200,
+-                message: 'COD settlement paid successfully'
+-            });
+-
+-        }
+-    );
+-
+-};
+-// Delivery Boy Payments
+-// Returns pending/unpaid delivery partner settlements for the current tenant.
+-exports.getdeliveryboypayments = function(req, res) {
+-
+-    var tenant_id = req.admin.tenant_id;
+-    var b = req.body || {};
+-
+-    var conditions = [
+-        'dp.tenant_id=?',
+-        'IFNULL(dps.d_in,0)=0',
+-    ];
+-
+-    var params = [tenant_id];
+-
+-    // Delivery Boy filter
+-    if (b.delivery_partner_id) {
+-        conditions.push('dps.delivery_partner_id=?');
+-        params.push(b.delivery_partner_id);
+-    }
+-
+-    // Location filter
+-    if (b.location_id) {
+-        conditions.push('dp.location_id=?');
+-        params.push(b.location_id);
+-    }
+-
+-    // From Date + To Date
+-    if (b.from_date && b.to_date) {
+-        conditions.push(
+-            'dps.settlement_period_start >= ? AND dps.settlement_period_end <= ?'
+-        );
+-
+-        params.push(
+-            b.from_date,
+-            b.to_date
+-        );
+-    }
+-
+-    var WHERE = conditions.join(' AND ');
+-
+-    var QRY =
+-        "SELECT " +
+-        "dps.id, " +
+-        "dps.delivery_partner_id, " +
+-        "dps.settlement_period_start, " +
+-        "dps.settlement_period_end, " +
+-    "dps.cod_amount_collected AS total_amount, " +
+-"dps.total_orders, " +
+-"CASE " +
+-"WHEN dps.total_orders > 0 " +
+-"THEN ROUND(dps.delivery_earnings / dps.total_orders, 2) " +
+-"ELSE 0 " +
+-"END AS amount_per_order, " +
+-"dps.net_payable AS net_pay, " +
+-        "dps.settlement_status, " +
+-        "dps.paid_at, " +
+-        "dps.i_ts, " +
+-        "dp.name AS delivery_partner_name, " +
+-        "dp.mobile_number, " +
+-        "dp.profile_image, " +
+-        "dp.location_id " +
+-        "FROM delivery_partner_settlements dps " +
+-        "INNER JOIN delivery_partners dp " +
+-        "ON dp.id=dps.delivery_partner_id " +
+-        "WHERE " + WHERE +
+-        " ORDER BY dps.i_ts DESC";
+-
+-    dbutil.sqlinjection(
+-        sqldb.MySQLConPool,
+-        QRY,
+-        params,
+-        'getdeliveryboypayments',
+-        function(err, rows) {
+-
+-            if (err) {
+-
+-                console.log(
+-                    'GET DELIVERY BOY PAYMENTS ERROR:',
+-                    err
+-                );
+-
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error'
+-                });
+-            }
+-
+-            return res.json({
+-                status: 200,
+-                data: rows || []
+-            });
+-        }
+-    );
+-};
+-// Delivery Boy Payment History
+-// Returns paid/processed delivery partner settlements for the current tenant.
+-exports.getdeliveryboypaymenthistory = function(req, res) {
+-
+-    var tenant_id = req.admin.tenant_id;
+-    var b = req.body || {};
+-
+-    var conditions = [
+-        'dp.tenant_id=?',
+-        'IFNULL(dps.d_in,0)=0',
+-        '(dps.paid_at IS NOT NULL OR dps.settlement_status IN (1,2))'
+-    ];
+-
+-    var params = [tenant_id];
++exports.paycodsettlement = function(req, res) {
+ 
+-    // Delivery Boy filter
+-    if (b.delivery_partner_id) {
+-        conditions.push('dps.delivery_partner_id=?');
+-        params.push(b.delivery_partner_id);
+-    }
++    var settlementId = req.body.settlement_id;
+ 
+-    // Location filter
+-    if (b.location_id) {
+-        conditions.push('dp.location_id=?');
+-        params.push(b.location_id);
+-    }
++    if (!settlementId) {
+ 
+-    // From Date + To Date
+-    if (b.from_date && b.to_date) {
+-        conditions.push(
+-            'dps.settlement_period_start >= ? AND dps.settlement_period_end <= ?'
+-        );
++        return res.json({
++            status: 400,
++            message: 'Settlement ID is required'
++        });
+ 
+-        params.push(
+-            b.from_date,
+-            b.to_date
+-        );
+     }
+ 
+-    var WHERE = conditions.join(' AND ');
+-
+     var QRY =
+-        "SELECT " +
+-        "dps.id, " +
+-        "dps.delivery_partner_id, " +
+-        "dps.settlement_period_start, " +
+-        "dps.settlement_period_end, " +
+-        "dps.total_orders, " +
+-        "dps.cod_amount_collected AS total_amount, " +
+-        "CASE " +
+-        "WHEN dps.total_orders > 0 " +
+-        "THEN ROUND(dps.delivery_earnings / dps.total_orders, 2) " +
+-        "ELSE 0 " +
+-        "END AS amount_per_order, " +
+-        "dps.delivery_earnings, " +
+-        "dps.advance_deducted, " +
+-        "dps.net_payable AS net_pay, " +
+-        "dps.settlement_status, " +
+-        "dps.paid_at, " +
+-        "dps.i_ts, " +
+-        "dp.name AS delivery_partner_name, " +
+-        "dp.mobile_number, " +
+-        "dp.profile_image, " +
+-        "dp.location_id " +
+-        "FROM delivery_partner_settlements dps " +
++        "UPDATE delivery_partner_settlements dps " +
+         "INNER JOIN delivery_partners dp " +
+-        "ON dp.id=dps.delivery_partner_id " +
+-        "WHERE " + WHERE +
+-        " ORDER BY dps.paid_at DESC, dps.i_ts DESC";
++        "ON dp.id = dps.delivery_partner_id " +
++        "SET " +
++        "dps.settlement_status = 1, " +
++        "dps.paid_at = NOW() " +
++        "WHERE dps.id = ? " +
++        "AND dp.tenant_id = ? " +
++        "AND IFNULL(dps.d_in,0) = 0 " +
++        "AND IFNULL(dps.settlement_status,0) = 0";
++
+ 
+     dbutil.sqlinjection(
+         sqldb.MySQLConPool,
+         QRY,
+-        params,
+-        'getdeliveryboypaymenthistory',
+-        function(err, rows) {
++        [
++            settlementId,
++            req.admin.tenant_id
++        ],
++        'paycodsettlement',
++        function(err, result) {
+ 
+             if (err) {
+ 
+                 console.log(
+-                    'GET DELIVERY BOY PAYMENT HISTORY ERROR:',
++                    'PAY COD SETTLEMENT ERROR:',
+                     err
+                 );
+ 
+@@ -4733,14 +4000,26 @@ exports.getdeliveryboypaymenthistory = function(req, res) {
+                     status: 500,
+                     message: 'Internal server error'
+                 });
++
++            }
++
++            if (!result || result.affectedRows === 0) {
++
++                return res.json({
++                    status: 404,
++                    message: 'Settlement not found or already settled'
++                });
++
+             }
+ 
+             return res.json({
+                 status: 200,
+-                data: rows || []
++                message: 'COD settlement paid successfully'
+             });
++
+         }
+     );
++
+ };
+ exports.getvendorsettlements = function(req, res) {
+ 
+@@ -4748,13 +4027,13 @@ exports.getvendorsettlements = function(req, res) {
+     var b = req.body || {};
+ 
+     var conditions = [
+-        'v.tenant_id = ?',
+-        'vs.d_in = 0'
++        'v.tenant_id=?',
++        'vs.d_in=0'
+     ];
+ 
+     var params = [tenant_id];
+ 
+-    // Date filter
++    // From Date + To Date
+     if (b.from_date && b.to_date) {
+         conditions.push(
+             'vs.period_start >= ? AND vs.period_end <= ?'
+@@ -4766,15 +4045,21 @@ exports.getvendorsettlements = function(req, res) {
+         );
+     }
+ 
+-    // Location filter
++    // Location
+     if (b.location_id) {
+-        conditions.push('v.location_id = ?');
++        conditions.push('v.location_id=?');
+         params.push(b.location_id);
+     }
+ 
+-    // Vendor filter
++    // Category
++    if (b.category_id) {
++        conditions.push('v.category_id=?');
++        params.push(b.category_id);
++    }
++
++    // Shop
+     if (b.vendor_id) {
+-        conditions.push('vs.vendor_id = ?');
++        conditions.push('vs.vendor_id=?');
+         params.push(b.vendor_id);
+     }
+ 
+@@ -4782,29 +4067,16 @@ exports.getvendorsettlements = function(req, res) {
+ 
+     var QRY =
+         "SELECT " +
+-        "vs.id, " +
+-        "vs.vendor_id, " +
+-        "vs.settlement_number, " +
+-        "vs.period_start, " +
+-        "vs.period_end, " +
+-        "vs.total_orders, " +
+-        "vs.gross_sales, " +
+-        "vs.commission_amount, " +
+-        "vs.net_payable, " +
+-        "vs.settlement_status, " +
+-        "vs.i_ts, " +
++        "vs.*, " +
+         "v.vendor_name, " +
+         "v.shop_image, " +
+         "v.location_id, " +
+-        "v.store_category " +
++        "v.category_id " +
+         "FROM vendor_settlements vs " +
+-        "LEFT JOIN vendors v ON v.id = vs.vendor_id " +
++        "LEFT JOIN vendors v ON v.id=vs.vendor_id " +
+         "WHERE " + WHERE +
+         " ORDER BY vs.i_ts DESC";
+ 
+-    console.log('GET VENDOR SETTLEMENTS SQL:', QRY);
+-    console.log('GET VENDOR SETTLEMENTS PARAMS:', params);
+-
+     dbutil.sqlinjection(
+         sqldb.MySQLConPool,
+         QRY,
+@@ -4813,6 +4085,7 @@ exports.getvendorsettlements = function(req, res) {
+         function(err, rows) {
+ 
+             if (err) {
++
+                 console.log(
+                     'GET VENDOR SETTLEMENTS ERROR:',
+                     err
+@@ -4900,7 +4173,11 @@ exports.addcharges = function(req, res) {
+         INSERT INTO tenant_charge_settings
+         (
+             tenant_id,
++            support_number,
++            mail_id,
+             handling_charge,
++            extra_charges,
++            delivery_boy_order_amount,
+             packing_charge,
+             donation_charge,
+             rain_surge_charge,
+@@ -4908,7 +4185,7 @@ exports.addcharges = function(req, res) {
+             i_ts,
+             d_in
+         )
+-        VALUES (?, ?, ?, ?, ?, ?, NOW(), 0)
++        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), 0)
+     `;
+ 
+     dbutil.sqlinjection(
+@@ -4916,63 +4193,70 @@ exports.addcharges = function(req, res) {
+         QRY,
+         [
+             tenant_id,
+-            num(b.handling_charge, 0),
+-            num(b.packing_charge, 0),
+-            num(b.donation_charge, 0),
+-            num(b.rain_surge_charge, 0),
+-            num(b.rain_surge_active, 0)
++            b.support_number || null,
++            b.mail_id || null,
++            b.handling_charge || 0,
++            b.extra_charges || 0,
++            b.delivery_boy_order_amount || 0,
++            b.packing_charge || 0,
++            b.donation_charge || 0,
++            b.rain_surge_charge || 0,
++            b.rain_surge_active || 0
+         ],
+         'addcharges',
+-        function(err, result) {
++      function(err, result) {
+ 
+-            console.log('ADD CHARGES ERROR:', err);
+-            console.log('ADD CHARGES RESULT:', result);
++    console.log('ADD CHARGES ERROR:', err);
++    console.log('ADD CHARGES RESULT:', result);
+ 
+-            if (err) {
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error',
+-                    error: err.message
+-                });
+-            }
++    if (err) {
++        return res.json({
++            status: 500,
++            message: 'Internal server error',
++            error: err.message
++        });
++    }
+ 
+-            return res.json({
+-                status: 200,
+-                message: 'Charges added successfully',
+-                insertId: result.insertId
+-            });
+-        }
++    return res.json({
++        status: 200,
++        message: 'Charges added successfully',
++        insertId: result.insertId
++    });
++
++}
+     );
+ };
+ 
+ 
++// The Settings page edits only a subset of the charge columns, so the fields it
++// does not carry are written through COALESCE and keep whatever is stored. The
++// standalone Charges page sends them all and still overwrites normally.
+ exports.updatecharges = function (req, res) {
+-
+     var b = req.body;
+     var tenant_id = req.admin.tenant_id;
+ 
+     if (!b.id) {
+-        return res.json({
+-            status: 202,
+-            message: 'Charge ID is required'
+-        });
++        return res.json({ status: 202, message: 'Charge ID is required' });
+     }
+ 
+-    var QRY = `
+-        UPDATE tenant_charge_settings
+-        SET
+-            handling_charge = ?,
+-            packing_charge = ?,
+-            donation_charge = ?,
+-            rain_surge_charge = ?,
+-            rain_surge_active = ?
+-        WHERE id = ?
+-          AND tenant_id = ?
+-          AND IFNULL(d_in, 0) = 0
+-    `;
++    var QRY = "UPDATE tenant_charge_settings SET " +
++        "support_number = COALESCE(?, support_number), " +
++        "mail_id = COALESCE(?, mail_id), " +
++        "handling_charge = ?, " +
++        "extra_charges = COALESCE(?, extra_charges), " +
++        "delivery_boy_order_amount = COALESCE(?, delivery_boy_order_amount), " +
++        "packing_charge = ?, " +
++        "donation_charge = ?, " +
++        "rain_surge_charge = ?, " +
++        "rain_surge_active = ? " +
++        "WHERE id = ? AND tenant_id = ? AND IFNULL(d_in,0) = 0";
+ 
+     var params = [
++        emptyToNull(b.support_number),
++        emptyToNull(b.mail_id),
+         num(b.handling_charge, 0),
++        nullableNum(b.extra_charges),
++        nullableNum(b.delivery_boy_order_amount),
+         num(b.packing_charge, 0),
+         num(b.donation_charge, 0),
+         num(b.rain_surge_charge, 0),
+@@ -4981,35 +4265,20 @@ exports.updatecharges = function (req, res) {
+         tenant_id
+     ];
+ 
+-    dbutil.sqlinjection(
+-        sqldb.MySQLConPool,
+-        QRY,
+-        params,
+-        'updatecharges',
+-        function (err, result) {
+-
+-            if (err) {
+-                console.log('UPDATE CHARGES ERROR:', err);
+-                return res.json({
+-                    status: 500,
+-                    message: 'Internal server error'
+-                });
+-            }
+-
+-            if (!result || !result.affectedRows) {
+-                return res.json({
+-                    status: 202,
+-                    message: 'Charges not found'
+-                });
+-            }
+-
+-            return res.json({
+-                status: 200,
+-                message: 'Charges updated successfully',
+-                affectedRows: result.affectedRows
+-            });
++    dbutil.sqlinjection(sqldb.MySQLConPool, QRY, params, 'updatecharges', function (err, result) {
++        if (err) {
++            console.log('UPDATE CHARGES ERROR:', err);
++            return res.json({ status: 500, message: 'Internal server error' });
+         }
+-    );
++        if (!result || !result.affectedRows) {
++            return res.json({ status: 202, message: 'Charges not found' });
++        }
++        return res.json({
++            status: 200,
++            message: 'Charges updated successfully',
++            affectedRows: result.affectedRows
++        });
++    });
+ };
+ 
+ exports.getpaymentgateway = function(req, res) {
+@@ -5027,137 +4296,6 @@ exports.updatepaymentgateway = function(req, res) {
+         return res.json({ status: 200, message: 'Payment gateway updated' });
+     });
+ };
+-
+-// Toggle tenant payment modes. COD is stored explicitly; online is derived from
+-// the gateway settings row and only becomes active when credentials are saved.
+-exports.updatepaymentmodes = function(req, res) {
+-    var b = req.body || {};
+-    var tenant_id = req.admin.tenant_id;
+-
+-    function getPaymentModesSummary(callback) {
+-        var QRY = "SELECT " +
+-            "(SELECT IFNULL(MAX(c.cod_enabled), 1) FROM tenant_charge_settings c WHERE c.tenant_id = ? AND IFNULL(c.d_in, 0) = 0) AS cod_enabled, " +
+-            "(SELECT COUNT(*) FROM payment_gateway_settings g WHERE g.tenant_id = ? AND IFNULL(g.d_in, 0) = 0 AND IFNULL(g.api_key, '') <> '' AND IFNULL(g.api_secret, '') <> '') AS online_configured, " +
+-            "(SELECT COUNT(*) FROM payment_gateway_settings g WHERE g.tenant_id = ? AND IFNULL(g.d_in, 0) = 0 AND g.is_active = 1 AND IFNULL(g.api_key, '') <> '' AND IFNULL(g.api_secret, '') <> '') AS online_enabled, " +
+-            "(SELECT g.gateway_name FROM payment_gateway_settings g WHERE g.tenant_id = ? AND IFNULL(g.d_in, 0) = 0 ORDER BY g.id DESC LIMIT 1) AS gateway_name";
+-
+-        dbutil.sqlinjection(sqldb.MySQLConPool, QRY, [tenant_id, tenant_id, tenant_id, tenant_id], 'updatepaymentmodes-summary', function (err, rows) {
+-            if (err) return callback(err, null);
+-            callback(null, (rows && rows[0]) || {
+-                cod_enabled: 1,
+-                online_configured: 0,
+-                online_enabled: 0,
+-                gateway_name: null
+-            });
+-        });
+-    }
+-
+-    getPaymentModesSummary(function (err, before) {
+-        if (err) return res.json({ status: 500, message: 'Internal server error' });
+-
+-        function finalize(after, restoredCod) {
+-            var msg = restoredCod ? 'Payment modes updated. Cash on delivery was switched back on so the tenant can still take payment.' : 'Payment modes updated';
+-            return res.json({ status: 200, message: msg, data: after });
+-        }
+-
+-        function completeAfterMutation() {
+-            getPaymentModesSummary(function (summaryErr, after) {
+-                if (summaryErr) return res.json({ status: 500, message: 'Internal server error' });
+-
+-                var restoredCod = false;
+-                if (!after.cod_enabled && !after.online_enabled) {
+-                    dbutil.sqlinjection(
+-                        sqldb.MySQLConPool,
+-                        'UPDATE tenant_charge_settings SET cod_enabled = 1 WHERE tenant_id = ? AND IFNULL(d_in,0) = 0',
+-                        [tenant_id],
+-                        'updatepaymentmodes-restore-cod',
+-                        function (restoreErr, restoreResult) {
+-                            if (restoreErr) return res.json({ status: 500, message: 'Internal server error' });
+-                            if (!restoreResult || !restoreResult.affectedRows) {
+-                                dbutil.sqlinjection(
+-                                    sqldb.MySQLConPool,
+-                                    'INSERT INTO tenant_charge_settings (tenant_id, cod_enabled, i_ts) VALUES (?, 1, NOW())',
+-                                    [tenant_id],
+-                                    'updatepaymentmodes-insert-cod',
+-                                    function (insertErr) {
+-                                        if (insertErr) return res.json({ status: 500, message: 'Internal server error' });
+-                                        getPaymentModesSummary(function (finalErr, finalAfter) {
+-                                            if (finalErr) return res.json({ status: 500, message: 'Internal server error' });
+-                                            return finalize(finalAfter, true);
+-                                        });
+-                                    }
+-                                );
+-                                return;
+-                            }
+-                            getPaymentModesSummary(function (finalErr, finalAfter) {
+-                                if (finalErr) return res.json({ status: 500, message: 'Internal server error' });
+-                                return finalize(finalAfter, true);
+-                            });
+-                        }
+-                    );
+-                    return;
+-                }
+-
+-                return finalize(after, false);
+-            });
+-        }
+-
+-        function continueWithOnline() {
+-            if (b.online_enabled === undefined) {
+-                return completeAfterMutation();
+-            }
+-
+-            var online = Number(b.online_enabled) === 1;
+-            if (online && Number(before.online_configured || 0) === 0) {
+-                return res.json({ status: 202, message: 'Please save your payment gateway credentials before enabling online payments.', data: before });
+-            }
+-
+-            dbutil.sqlinjection(
+-                sqldb.MySQLConPool,
+-                'UPDATE payment_gateway_settings SET is_active = ? WHERE tenant_id = ? AND IFNULL(d_in,0) = 0',
+-                [online ? 1 : 0, tenant_id],
+-                'updatepaymentmodes-online',
+-                function (err2) {
+-                    if (err2) return res.json({ status: 500, message: 'Internal server error' });
+-                    completeAfterMutation();
+-                }
+-            );
+-        }
+-
+-        if (b.cod_enabled === undefined) {
+-            return continueWithOnline();
+-        }
+-
+-        var cod = Number(b.cod_enabled) === 1 ? 1 : 0;
+-        if (!cod && Number(before.online_enabled || 0) === 0) {
+-            return res.json({ status: 202, message: 'Cash on delivery cannot be switched off while no online payment option is enabled.', data: before });
+-        }
+-
+-        dbutil.sqlinjection(
+-            sqldb.MySQLConPool,
+-            'UPDATE tenant_charge_settings SET cod_enabled = ? WHERE tenant_id = ? AND IFNULL(d_in,0) = 0',
+-            [cod, tenant_id],
+-            'updatepaymentmodes-cod',
+-            function (err2, result) {
+-                if (err2) return res.json({ status: 500, message: 'Internal server error' });
+-                if (!result || !result.affectedRows) {
+-                    dbutil.sqlinjection(
+-                        sqldb.MySQLConPool,
+-                        'INSERT INTO tenant_charge_settings (tenant_id, cod_enabled, i_ts) VALUES (?, ?, NOW())',
+-                        [tenant_id, cod],
+-                        'updatepaymentmodes-cod-insert',
+-                        function (insertErr) {
+-                            if (insertErr) return res.json({ status: 500, message: 'Internal server error' });
+-                            continueWithOnline();
+-                        }
+-                    );
+-                    return;
+-                }
+-                continueWithOnline();
+-            }
+-        );
+-    });
+-};
+ // Add Shop Item
+ // Add Shop Item
+ exports.addshopitem = function(req, res) {
+@@ -5452,13 +4590,13 @@ exports.getproductassignment = function(req, res) {
+             p.is_available,
+             p.active_status,
+             p.category_id,
+-            p.vendor_id,
+-            v.shop_image
++            p.vendor_id
+         FROM products p
+-        LEFT JOIN vendors v
++        INNER JOIN vendors v
+             ON v.id = p.vendor_id
+-            AND v.tenant_id = ?
+-        WHERE p.category_id = ?
++        WHERE p.vendor_id = ?
++          AND p.category_id = ?
++          AND v.tenant_id = ?
+           AND p.d_in = 0
+           AND p.active_status = 1
+           AND p.is_available = 1
+@@ -5466,8 +4604,9 @@ exports.getproductassignment = function(req, res) {
+     `;
+ 
+     var params = [
+-        tenant_id,
+-        category_id
++        shop_id,
++        category_id,
++        tenant_id
+     ];
+ 
+     dbutil.sqlinjection(
+@@ -5506,50 +4645,50 @@ exports.submitproductassignment = function(req, res) {
+ 
+     var category_id = req.body.category_id;
+     var shop_id = req.body.shop_id;
++    var phone_address = req.body.phone_address;
+     var products = req.body.products;
+ 
+     if (!category_id || !shop_id || !products || !Array.isArray(products) || products.length === 0) {
++
+         return res.json({
+             status: 400,
+             message: 'Category, shop and products are required'
+         });
++
+     }
+ 
+-    var updated = 0;
++    var inserted = 0;
+ 
+-    function updateNext(index) {
++    function insertNext(index) {
+ 
+         if (index >= products.length) {
++
+             return res.json({
+                 status: 200,
+                 message: 'Products assigned successfully',
+-                updated: updated
++                inserted: inserted
+             });
+-        }
+ 
+-        var product_id = Number(products[index].id);
+-
+-        if (!product_id) {
+-            return updateNext(index + 1);
+         }
+ 
+         var QRY = `
+-            UPDATE products p
+-            INNER JOIN vendors v
+-                ON v.id = ?
+-            SET p.vendor_id = ?
+-            WHERE p.id = ?
+-              AND p.category_id = ?
+-              AND v.tenant_id = ?
+-              AND p.d_in = 0
++            INSERT INTO product_assignments
++            (
++                tenant_id,
++                category_id,
++                shop_id,
++                product_id,
++                phone_address
++            )
++            VALUES (?, ?, ?, ?, ?)
+         `;
+ 
+         var params = [
+-            shop_id,
+-            shop_id,
+-            product_id,
++            tenant_id,
+             category_id,
+-            tenant_id
++            shop_id,
++            products[index].id,
++            phone_address || null
+         ];
+ 
+         dbutil.sqlinjection(
+@@ -5560,6 +4699,7 @@ exports.submitproductassignment = function(req, res) {
+             function(err, result) {
+ 
+                 if (err) {
++
+                     console.log(
+                         'PRODUCT ASSIGNMENT ERROR:',
+                         err
+@@ -5569,82 +4709,67 @@ exports.submitproductassignment = function(req, res) {
+                         status: 500,
+                         message: 'Internal server error'
+                     });
++
+                 }
+ 
+-                updated += result.affectedRows || 0;
++                inserted++;
++
++                insertNext(index + 1);
+ 
+-                updateNext(index + 1);
+             }
+         );
++
+     }
+ 
+-    updateNext(0);
++    insertNext(0);
++
+ };
+ exports.getpayments = function(req, res) {
+ 
+     var tenant_id = req.admin.tenant_id;
+-    var b = req.body || {};
++    var b = req.body;
+ 
+     console.log('GET PAYMENTS FILTERS:', b);
+-
++console.log('GET PAYMENTS SQL:', QRY);
++console.log('GET PAYMENTS PARAMS:', params);
+     var conditions = [
+-        'v.tenant_id = ?',
+-        'o.d_in = 0',
+-        'p.d_in = 0'
++        'v.tenant_id=?',
++        'o.d_in=0',
++        'p.d_in=0'
+     ];
+ 
+     var params = [tenant_id];
+ 
+-    // Payment gateway filter
+-    if (b.payment_gateway) {
+-        conditions.push('p.payment_gateway = ?');
+-        params.push(b.payment_gateway);
+-    }
+-
+-    // Payment status filter
+-    if (
+-        b.payment_status !== null &&
+-        b.payment_status !== undefined &&
+-        b.payment_status !== ''
+-    ) {
+-        conditions.push('p.payment_status = ?');
+-        params.push(b.payment_status);
+-    }
+-
+-    // Shop filter
+-    if (b.vendor_id) {
+-        conditions.push('o.vendor_id = ?');
+-        params.push(b.vendor_id);
+-    }
+ 
+     // Location filter
+     if (b.location_id) {
+-        conditions.push('v.location_id = ?');
++        conditions.push('v.location_id=?');
+         params.push(b.location_id);
+     }
+ 
+-    // Category filter
+-    if (b.category_id) {
+-        conditions.push(`
+-            EXISTS (
+-                SELECT 1
+-                FROM order_items oi
+-                INNER JOIN product_variants pv
+-                    ON pv.id = oi.product_variant_id
+-                INNER JOIN products pr
+-                    ON pr.id = pv.product_id
+-                WHERE oi.order_id = o.id
+-                  AND pr.category_id = ?
+-            )
+-        `);
+ 
+-        params.push(b.category_id);
+-    }
++    // Category filter
++  if (b.category_id) {
++    conditions.push(`
++        EXISTS (
++            SELECT 1
++            FROM order_items oi
++            JOIN product_variants pv
++                ON pv.id = oi.product_variant_id
++            JOIN products p
++                ON p.id = pv.product_id
++            WHERE oi.order_id = o.id
++              AND p.category_id = ?
++        )
++    `);
++    params.push(b.category_id);
++}
+ 
+     // Date filter
+     if (b.from_date && b.to_date) {
++
+         conditions.push(
+-            'p.paid_at >= ? AND p.paid_at < DATE_ADD(?, INTERVAL 1 DAY)'
++            'o.order_date_time >= ? AND o.order_date_time < DATE_ADD(?, INTERVAL 1 DAY)'
+         );
+ 
+         params.push(
+@@ -5653,33 +4778,39 @@ exports.getpayments = function(req, res) {
+         );
+     }
+ 
++
+     var WHERE = conditions.join(' AND ');
+ 
++
+     var QRY =
+         "SELECT " +
+-        "p.id, " +
+-        "p.order_id, " +
+-        "p.payment_gateway, " +
+-        "p.gateway_payment_id, " +
+-        "p.gateway_order_id, " +
+-        "p.amount, " +
+-        "p.currency, " +
+-        "p.payment_status, " +
+-        "p.paid_at, " +
+-        "p.i_ts " +
++        "v.id AS vendor_id, " +
++        "v.vendor_name, " +
++        "v.shop_image, " +
++        "v.location_id, " +
++        "v.category_id, " +
++        "MIN(o.order_date_time) AS from_date, " +
++        "MAX(o.order_date_time) AS to_date, " +
++        "COUNT(DISTINCT o.id) AS total_orders, " +
++        "COALESCE(SUM(p.amount), 0) AS total_amount " +
+ 
+         "FROM payments p " +
+ 
+-        "LEFT JOIN orders o ON o.id = p.order_id " +
++        "LEFT JOIN orders o ON o.id=p.order_id " +
+ 
+-        "LEFT JOIN vendors v ON v.id = o.vendor_id " +
++        "LEFT JOIN vendors v ON v.id=o.vendor_id " +
+ 
+         "WHERE " + WHERE +
+ 
+-        " ORDER BY p.i_ts DESC";
++        " GROUP BY " +
++        "v.id, " +
++        "v.vendor_name, " +
++        "v.shop_image, " +
++        "v.location_id, " +
++        "v.category_id " +
++
++        "ORDER BY MAX(o.order_date_time) DESC";
+ 
+-    console.log('GET PAYMENTS SQL:', QRY);
+-    console.log('GET PAYMENTS PARAMS:', params);
+ 
+     dbutil.sqlinjection(
+         sqldb.MySQLConPool,
+@@ -5699,6 +4830,7 @@ exports.getpayments = function(req, res) {
+ 
+             }
+ 
++
+             return res.json({
+                 status: 200,
+                 data: rows || []

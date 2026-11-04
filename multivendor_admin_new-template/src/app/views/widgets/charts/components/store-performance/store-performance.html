@@ -1,0 +1,38 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Store Performance Analytics</h4>
+    <div>
+      <a [routerLink]="[]" class="btn btn-sm btn-default"><app-icon icon="refresh" class="me-1"></app-icon> Refresh</a>
+    </div>
+  </div>
+  <div class="card-body">
+    <div dir="ltr">
+      <app-apexchart [getOptions]="totalSalesChart" class="apex-charts" />
+    </div>
+    <div class="text-center">
+      <span class="badge badge-outline-light text-dark p-1 px-2 rounded-pill fs-12"><app-icon icon="star-filled" class="text-success me-1"></app-icon> GOOD SALES</span>
+    </div>
+    <div class="table-responsive mt-3">
+      <table class="table table-sm table-nowrap table-borderless table-centered mb-0">
+        <thead class="bg-light bg-opacity-50 thead-sm">
+          <tr class="text-uppercase fs-xxs">
+            <th>Page</th>
+            <th>Views</th>
+            <th>B. Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of insightData; track $index) {
+          <tr>
+            <td>
+              <a [routerLink]="[]" class="text-muted"> {{ item.pageLink }}</a>
+            </td>
+            <td>{{ item.views }}</td>
+            <td>{{ item.rate }}%</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

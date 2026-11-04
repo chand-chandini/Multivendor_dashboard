@@ -1,0 +1,265 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Gift Cards" subTitle="Promo" />
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <!-- Table Header -->
+        <div class="card-header border-light justify-content-between">
+          <div class="d-flex gap-2">
+            <div class="app-search">
+              <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search gift card..." />
+              <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+            </div>
+            @if (hasSelection) {
+            <button (click)="deleteSelected()" class="btn btn-danger">Delete</button>
+            }
+          </div>
+
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="me-2 fw-semibold">Filter By:</span>
+
+            <!-- Status Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+                <option value="">Status</option>
+                <option value="active">Active</option>
+                <option value="redeemed">Redeemed</option>
+                <option value="expired">Expired</option>
+                <option value="pending">Pending</option>
+              </select>
+              <app-icon icon="activity" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Type Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterType" (ngModelChange)="tableService.setFilter('type', filterType)" class="form-select form-control my-1 my-md-0">
+                <option value="">Type</option>
+                <option value="digital">Digital</option>
+                <option value="physical">Physical</option>
+              </select>
+              <app-icon icon="gift" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Records Per Page -->
+            <div>
+              <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="8">8</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="15">15</option>
+                <option [ngValue]="20">20</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-flex gap-1">
+            <a [routerLink]="[]" class="btn btn-primary ms-1" (click)="openModal(content)"> <app-icon icon="plus" class="fs-sm me-2"></app-icon> Add Gift Card </a>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+            <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+              <tr class="text-uppercase fs-xxs">
+                <th class="ps-3" style="width: 1%">
+                  <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+                </th>
+                <th sortable="code" (sort)="tableService.setSort($event.column, $event.direction)">Card Code</th>
+                <th sortable="recipient.name" (sort)="tableService.setSort($event.column, $event.direction)">Recipient</th>
+                <th sortable="type" (sort)="tableService.setSort($event.column, $event.direction)">Type</th>
+                <th sortable="value" (sort)="tableService.setSort($event.column, $event.direction)">Value</th>
+                <th sortable="balance" (sort)="tableService.setSort($event.column, $event.direction)">Balance</th>
+                <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+                <th sortable="issuedOn" (sort)="tableService.setSort($event.column, $event.direction)">Issued On</th>
+                <th sortable="expiresOn" (sort)="tableService.setSort($event.column, $event.direction)">Expires On</th>
+                <th class="text-center" style="width: 1%">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @if ((total$ | async)! > 0) { @for (gift of (giftCardData$ | async)!; track $index) {
+              <tr>
+                <td class="ps-3">
+                  <input [checked]="selectedIds.has(gift.code)" (change)="toggleSingleSelection(gift)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+                </td>
+
+                <td>
+                  <h5 class="fs-sm mb-0">
+                    <a [routerLink]="[]" class="link-reset">{{ gift.code }}</a>
+                  </h5>
+                </td>
+
+                <td>
+                  {{ gift.recipient.name }}<br />
+                  <small class="text-muted">{{ gift.recipient.email }}</small>
+                </td>
+
+                <td>
+                  <span
+                    class="badge badge-label fs-xs"
+                    [class]="
+                      gift.type === 'digital' ? 'badge-soft-primary' : 'badge-soft-secondary'
+                    "
+                  >
+                    {{ toPascalCase(gift.type) }}
+                  </span>
+                </td>
+
+                <td>{{ gift.value }}</td>
+                <td>{{ gift.balance }}</td>
+
+                <td
+                  class="fw-semibold"
+                  [class]="
+                    gift.status === 'pending'
+                      ? 'text-warning'
+                      : gift.status === 'redeemed'
+                      ? 'text-muted'
+                      : gift.status === 'expired'
+                      ? 'text-danger'
+                      : 'text-success'
+                  "
+                >
+                  <app-icon icon="circle-filled" class="fs-sm"></app-icon>
+                  {{ toPascalCase(gift.status) }}
+                </td>
+
+                <td>{{ gift.issuedOn }}</td>
+                <td>{{ gift.expiresOn }}</td>
+
+                <td>
+                  <div class="d-flex justify-content-center gap-1">
+                    <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="eye" class="fs-lg"></app-icon>
+                    </a>
+                    <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="edit" class="fs-lg"></app-icon>
+                    </a>
+                    <a [routerLink]="[]" (click)="tableService.deleteItem(gift)" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="trash" class="fs-lg"></app-icon>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              }} @else {
+              <tr class="no-results">
+                <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer border-0">
+          @if ((total$ | async)! > 0) {
+          <app-custom-pagination itemsName="giftcards" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+          }
+        </div>
+      </div>
+      <!-- /.card -->
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header bg-light">
+    <h5 class="modal-title fw-semibold" id="addGiftCardModalLabel"><app-icon icon="gift" class="me-2 text-primary"></app-icon> Add New Gift Card</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <!-- Modal Form -->
+  <form id="addGiftCardForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <!-- Gift Card Code -->
+        <div class="col-md-6">
+          <label class="form-label">Gift Card Code <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="gift_code" placeholder="e.g., GFT-A2025" required />
+        </div>
+
+        <!-- Gift Card Type -->
+        <div class="col-md-6">
+          <label class="form-label">Type <span class="text-danger">*</span></label>
+          <select class="form-select" name="gift_type" required>
+            <option value="">Select Type</option>
+            <option value="digital">Digital</option>
+            <option value="physical">Physical</option>
+          </select>
+        </div>
+
+        <!-- Value -->
+        <div class="col-md-6">
+          <label class="form-label">Gift Card Value ($) <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" name="gift_value" placeholder="e.g., 100" required />
+        </div>
+
+        <!-- Initial Balance -->
+        <div class="col-md-6">
+          <label class="form-label">Initial Balance</label>
+          <input type="number" class="form-control" name="gift_balance" placeholder="e.g., 100" />
+        </div>
+
+        <!-- Recipient Name -->
+        <div class="col-md-6">
+          <label class="form-label">Recipient Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="recipient_name" placeholder="e.g., John Doe" required />
+        </div>
+
+        <!-- Recipient Email -->
+        <div class="col-md-6">
+          <label class="form-label">Recipient Email <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" name="recipient_email" placeholder="e.g., john.doe@mail.com" required />
+        </div>
+
+        <!-- Message -->
+        <div class="col-12">
+          <label class="form-label">Personal Message</label>
+          <textarea class="form-control" name="gift_message" rows="2" placeholder="Write a short message to include with the gift card"></textarea>
+        </div>
+
+        <!-- Issue Date -->
+        <div class="col-md-6">
+          <label class="form-label">Issue Date <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" mwlFlatpickr [options]="flatPickrOptions" name="issue_date" placeholder="Select issue date" required />
+        </div>
+
+        <!-- Expiry Date -->
+        <div class="col-md-6">
+          <label class="form-label">Expiry Date <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" mwlFlatpickr [options]="flatPickrOptions" name="expiry_date" placeholder="Select expiry date" required />
+        </div>
+
+        <!-- Toggles -->
+        <div class="col-12">
+          <div class="d-flex flex-wrap gap-3 mt-2">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isGiftCardActive" checked />
+              <label class="form-check-label" for="isGiftCardActive">Active</label>
+            </div>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isGiftCardDelivered" />
+              <label class="form-check-label" for="isGiftCardDelivered">Send via Email</label>
+            </div>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isGiftCardPhysical" />
+              <label class="form-check-label" for="isGiftCardPhysical">Physical Delivery</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.modal-body -->
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary"><app-icon icon="plus" class="me-1"></app-icon> Add Gift Card</button>
+    </div>
+  </form>
+</ng-template>

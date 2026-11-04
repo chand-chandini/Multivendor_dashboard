@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Transactions" subTitle="Finance" />
+
+  <div class="row row-cols-xxl-4 row-cols-md-2 row-cols-1">
+    @for (item of transactionStatData; track $index) {
+    <div class="col">
+      <app-transactions-widget [item]="item" />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-transactions-table />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,228 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Dev Support" subTitle="Masters" />
+
+  <ng-template #devStatusCell let-row>
+    <span [class]="devStatusClass(row.dev_status)">{{ devStatusLabel(row.dev_status) }}</span>
+  </ng-template>
+
+  <ng-template #adminStatusCell let-row>
+    @if (permissions.canEdit()) {
+      <select class="form-select form-select-sm" [value]="row.admin_status" (change)="changeAdminStatus(row, $any($event.target).value)" [attr.aria-label]="'Admin status for ' + row.subject">
+        @for (status of adminStatuses; track status.value) {
+          <option [value]="status.value">{{ status.label }}</option>
+        }
+      </select>
+    } @else {
+      <span class="badge bg-secondary-subtle text-secondary">{{ adminStatusLabel(row.admin_status) }}</span>
+    }
+  </ng-template>
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Support Tickets"
+        searchPlaceholder="Search tickets..."
+        itemsName="tickets"
+        addLabel="Raise Ticket"
+        emptyMessage="No support tickets raised yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        [cellTemplates]="cellTemplates()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Raise Support Ticket</h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body">
+        <div class="row g-3">
+
+          <!-- Application -->
+          <div class="col-md-6">
+            <label for="ticketApplication" class="form-label">Application <span class="text-danger">*</span></label>
+
+            <select
+              id="ticketApplication"
+              formControlName="application"
+              class="form-select"
+            >
+              @for (app of applications; track app.value) {
+                <option [ngValue]="app.value">{{ app.label }}</option>
+              }
+            </select>
+                @if (fieldError(form, 'application', 'Application')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'application', 'Application') }}</div>
+                }
+          </div>
+
+          <!-- Issue -->
+          <div class="col-md-6">
+            <label for="ticketSubject" class="form-label">
+              Issue <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="ticketSubject"
+              formControlName="subject"
+              class="form-control"
+            />
+                @if (fieldError(form, 'subject', 'Issue')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'subject', 'Issue') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Description -->
+          <div class="col-12">
+            <label for="ticketDescription" class="form-label">
+              Description <span class="text-danger">*</span>
+            </label>
+
+            <textarea
+              id="ticketDescription"
+              formControlName="description"
+              class="form-control"
+              rows="4"
+            ></textarea>
+                @if (fieldError(form, 'description', 'Description')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'description', 'Description') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Ticket Type -->
+          <div class="col-md-6">
+            <label for="ticketType" class="form-label">Ticket Type <span class="text-danger">*</span></label>
+
+            <select
+              id="ticketType"
+              formControlName="ticket_type"
+              class="form-select"
+            >
+              @for (type of ticketTypes; track type.value) {
+                <option [ngValue]="type.value">{{ type.label }}</option>
+              }
+            </select>
+                @if (fieldError(form, 'ticket_type', 'Ticket Type')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'ticket_type', 'Ticket Type') }}</div>
+                }
+          </div>
+
+<!-- Image -->
+<div class="col-12">
+  <label for="ticketImage" class="form-label">Image <span class="text-danger">*</span></label>
+
+  <div class="d-flex align-items-center gap-3">
+    <div class="input-group">
+      <label
+        for="ticketImage"
+        class="input-group-text"
+        style="cursor: pointer"
+      >
+        Choose File
+      </label>
+
+      <input
+        type="text"
+        class="form-control"
+        [value]="selectedImageName() || 'No file chosen'"
+        readonly
+        aria-label="Selected ticket image filename"
+      />
+    </div>
+
+    <input
+      type="file"
+      id="ticketImage"
+      accept="image/png,image/jpeg,image/jpg,image/webp"
+      (change)="onImageSelected($event)"
+      hidden
+    />
+                @if (fieldError(form, 'image', 'Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'image', 'Image') }}</div>
+                }
+
+    @if (imagePreview()) {
+      <img
+        [src]="imagePreview()"
+        [alt]="selectedImageName() || 'Ticket image preview'"
+        width="55"
+        height="55"
+        class="rounded border"
+        style="object-fit: cover; flex-shrink: 0"
+      />
+    }
+  </div>
+</div>
+
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()">
+          Cancel
+        </button>
+
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          }
+          Raise Ticket
+        </button>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #remarksModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Remarks — {{ remarksTarget()?.subject }}</h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <form [formGroup]="remarksForm" (ngSubmit)="saveRemarks()">
+      <div class="modal-body">
+        @if (remarksTarget()?.description) {
+          <p class="text-muted">{{ remarksTarget()?.description }}</p>
+        }
+
+        <label for="ticketRemarks" class="form-label">Remarks <span class="text-danger">*</span></label>
+
+        <textarea
+          id="ticketRemarks"
+          formControlName="remarks"
+          class="form-control"
+          rows="4"
+        ></textarea>
+                @if (fieldError(remarksForm, 'remarks', 'Remarks')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(remarksForm, 'remarks', 'Remarks') }}</div>
+                }
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()">
+          Cancel
+        </button>
+
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          }
+          Save Remarks
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

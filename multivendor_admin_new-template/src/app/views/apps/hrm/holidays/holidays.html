@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Holidays" subTitle="HRM" />
+
+  <div class="row row-cols-2 row-cols-md-4 row-cols-xl-6 g-1 mb-1">
+    @for (item of holidayStatData; track $index) {
+    <div class="col">
+      <app-holiday-widget [item]="item" />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-holiday-table />
+    </div>
+  </div>
+</div>

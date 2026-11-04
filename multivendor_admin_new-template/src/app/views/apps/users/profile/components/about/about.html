@@ -1,0 +1,37 @@
+<p>I'm an Admin Template Author dedicated to building clean, efficient, and highly customizable dashboards for developers and businesses. My goal is to create UI solutions that are modern, scalable, and easy to integrate.</p>
+
+<p>
+  I specialize in crafting developer-friendly admin panels and UI kits using frameworks like Bootstrap, Tailwind CSS, React, Vue, Angular, Laravel, and Next.js. My templates are designed to accelerate development and provide a strong foundation for web apps, SaaS platforms, and
+  enterprise tools.
+</p>
+
+<p class="mb-0">
+  I focus on delivering well-structured, pixel-perfect layouts with a user-centric approach—ensuring responsive design, clean code, and seamless user experiences. Whether you're building a CRM, analytics dashboard, or backend system, my templates are made to help you build faster
+  and smarter.
+</p>
+
+<h4 class="card-title my-3 text-uppercase fs-sm">
+  <app-icon icon="briefcase"></app-icon>
+  Professional Experience:
+</h4>
+
+<div class="timeline">
+  @for (item of timelineData; track $index; let last = $last) {
+  <div class="timeline-item d-flex align-items-stretch">
+    <div class="timeline-time pe-3 text-muted">{{ item.yearRange }}</div>
+    <div class="timeline-dot" [class]="item.bulletClassName"></div>
+    <div class="timeline-content ps-3 {{!last ? 'pb-4' : ''}}">
+      <h5 class="mb-1">{{ item.title }}</h5>
+      <p class="mb-1 text-muted">{{ item.description }}</p>
+      <span class="text-muted fw-semibold">at {{ item.company }}</span>
+    </div>
+  </div>
+  }
+</div>
+
+<h4 class="card-title my-3 text-uppercase fs-sm">
+  <app-icon icon="list-check"></app-icon>
+  Tasks Overview:
+</h4>
+
+<app-task-overview />

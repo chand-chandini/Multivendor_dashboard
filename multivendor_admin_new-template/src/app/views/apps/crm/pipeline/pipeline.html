@@ -1,0 +1,123 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Pipeline" subTitle="CRM" />
+
+  <div class="outlook-box kanban-app">
+    <div class="card h-100 mb-0 flex-grow-1">
+      <div class="card-header border-light align-items-center gap-2">
+        <div class="app-search">
+          <input type="search" class="form-control" placeholder="Search deals..." />
+          <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <div class="app-search">
+            <select class="form-select form-control">
+              <option selected>Stage</option>
+              <option value="Qualification">Qualification</option>
+              <option value="Proposal Sent">Proposal Sent</option>
+              <option value="Negotiation">Negotiation</option>
+              <option value="Won">Won</option>
+              <option value="Lost">Lost</option>
+            </select>
+            <app-icon icon="arrows-shuffle" class="app-search-icon text-muted"></app-icon>
+          </div>
+
+          <div class="app-search">
+            <select class="form-select form-control">
+              <option selected>Closing Date</option>
+              <option value="Today">Today</option>
+              <option value="This Week">This Week</option>
+              <option value="This Month">This Month</option>
+            </select>
+            <app-icon icon="calendar" class="app-search-icon text-muted"></app-icon>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-secondary ms-lg-auto">
+          <app-icon icon="plus" class="me-1"></app-icon>
+          Add New Deal
+        </button>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="kanban-content" cdkDropListGroup>
+          <div class="kanban-board bg-warning bg-opacity-10">
+            <div class="kanban-item py-2 px-3 d-flex align-items-center">
+              <h5 class="m-0">Lead ({{ leads.length }})</h5>
+              <a [routerLink]="[]" class="ms-auto btn btn-sm btn-icon rounded-circle btn-primary">
+                <app-icon icon="plus" class="fs-md"></app-icon>
+              </a>
+            </div>
+
+            <ngx-simplebar data-simplebar-md class="kanban-board-group px-2">
+              <ul (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListData]="leads">
+                @for (task of leads; track $index ) {
+                <li class="kanban-item">
+                  <app-task-item [item]="task" cdkDrag />
+                </li>
+                }
+              </ul>
+            </ngx-simplebar>
+          </div>
+
+          <div class="kanban-board bg-info bg-opacity-10">
+            <div class="py-2 px-3 d-flex align-items-center">
+              <h5 class="m-0">Negotiation ({{ negotiations.length }})</h5>
+              <a [routerLink]="[]" class="ms-auto btn btn-sm btn-icon rounded-circle btn-primary">
+                <app-icon icon="plus" class="fs-md"></app-icon>
+              </a>
+            </div>
+
+            <ngx-simplebar data-simplebar-md class="kanban-board-group px-2">
+              <ul (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListData]="negotiations">
+                @for (task of negotiations; track $index) {
+                <li class="kanban-item">
+                  <app-task-item [item]="task" cdkDrag />
+                </li>
+                }
+              </ul>
+            </ngx-simplebar>
+          </div>
+
+          <div class="kanban-board bg-success bg-opacity-10">
+            <div class="kanban-item py-2 px-3 d-flex align-items-center">
+              <h5 class="m-0">Won ({{ won.length }})</h5>
+              <a [routerLink]="[]" class="ms-auto btn btn-sm btn-icon rounded-circle btn-primary">
+                <app-icon icon="plus" class="fs-md"></app-icon>
+              </a>
+            </div>
+
+            <ngx-simplebar data-simplebar-md class="kanban-board-group px-2">
+              <ul (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListData]="won">
+                @for (task of won; track $index) {
+                <li class="kanban-item">
+                  <app-task-item [item]="task" cdkDrag />
+                </li>
+                }
+              </ul>
+            </ngx-simplebar>
+          </div>
+
+          <div class="kanban-board bg-danger bg-opacity-10">
+            <div class="py-2 px-3 d-flex align-items-center">
+              <h5 class="m-0">Lost ({{ lost.length }})</h5>
+              <a [routerLink]="[]" class="ms-auto btn btn-sm btn-icon rounded-circle btn-primary">
+                <app-icon icon="plus" class="fs-md"></app-icon>
+              </a>
+            </div>
+
+            <ngx-simplebar data-simplebar-md class="kanban-board-group px-2">
+              <ul (cdkDropListDropped)="drop($event)" cdkDropList [cdkDropListData]="lost">
+                @for (task of lost; track $index) {
+                <li class="kanban-item">
+                  <app-task-item [item]="task" cdkDrag />
+                </li>
+                }
+              </ul>
+            </ngx-simplebar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

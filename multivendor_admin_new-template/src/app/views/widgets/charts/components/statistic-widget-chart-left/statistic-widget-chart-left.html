@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-header d-flex border-0 justify-content-between align-items-center">
+    <h5 class="card-title mb-0">{{ item.title }}</h5>
+    <span class="badge" [class]="item.className">{{item.change}}</span>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="text-end w-50">
+        @if (item.chartOptions) {
+        <app-apexchart [getOptions]="item.chartOptions" />
+        }
+      </div>
+      <div class="text-end ms-3">
+        <h3 class="mb-1 fw-normal">
+          <span
+            [countUp]="item.value"
+            [countUpOptions]="{
+                  prefix: item.prefix || '',
+                  suffix: item.suffix || '',                    
+                  }"
+          ></span>
+        </h3>
+        <p class="mb-0 text-muted">{{item.label}}</p>
+      </div>
+    </div>
+  </div>
+</div>

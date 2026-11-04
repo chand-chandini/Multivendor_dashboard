@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Expenses" subTitle="Finance" />
+
+  <div class="row row-cols-xxl-4 row-cols-md-2 row-cols-1">
+    @for (stat of expenseStatData; track $index) {
+    <div class="col">
+      <app-expenses-widget [stat]="stat" />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-expenses-table />
+    </div>
+  </div>
+</div>

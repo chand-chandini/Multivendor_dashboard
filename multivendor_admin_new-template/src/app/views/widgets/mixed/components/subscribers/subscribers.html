@@ -1,0 +1,64 @@
+<div class="card card-h-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start flex-wrap">
+      <div>
+        <h4 class="fs-13 mb-2 fw-bold text-uppercase text-muted">Total Subscribers</h4>
+        <div class="d-flex align-items-center gap-2 mb-2 py-1">
+          <div class="avatar-md flex-shrink-0">
+            <span class="avatar-title text-bg-info rounded-circle">
+              <app-icon icon="mail" class="fs-xxl"></app-icon>
+            </span>
+          </div>
+          <h3 class="mb-0"><span [countUp]="55.6" [countUpOptions]="{  decimalPlaces: 2 }"></span>k</h3>
+          <span class="badge fs-13 ms-auto badge-soft-success"> <app-icon icon="arrow-up"></app-icon> 4.87% </span>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="app-search app-search-sm">
+        <select class="form-select form-control form-select-sm">
+          <option value="All">All Time</option>
+          <option value="today">Today</option>
+          <option value="last_7_days">Last 7 Days</option>
+          <option value="last_30_days">Last 30 Days</option>
+          <option value="last_90_days" selected>Last 90 Days</option>
+          <option value="this_month">This Month</option>
+          <option value="last_month">Last Month</option>
+        </select>
+        <app-icon icon="calendar" class="app-search-icon text-muted"></app-icon>
+      </div>
+    </div>
+
+    @for(subscriber of subscriberData; track $index){
+    <div [class.pt-1]="$index === 0" [class.mt-2]="$index === 0" [class.mt-3]="$index !== 0">
+      <div class="d-flex justify-content-between">
+        <h5 class="fs-base mb-2">{{ subscriber.title }}</h5>
+        <div>
+          <span>+ <span [countUp]="subscriber.value"></span></span>
+          <span><app-icon icon="circle-filled" class="text-light mx-3 fs-10"></app-icon> {{ subscriber.progress }}%</span>
+        </div>
+      </div>
+
+      <ngb-progressbar [value]="subscriber.progress" [type]="subscriber.variant" [striped]="false" [animated]="false" class="progress-sm mb-1" [attr.aria-valuenow]="subscriber.progress" aria-valuemin="0" aria-valuemax="100"></ngb-progressbar>
+    </div>
+    }
+
+    <div class="p-2 mt-3 border-dashed border rounded">
+      <div class="d-flex align-items-center">
+        <div class="avatar-xl flex-shrink-0 me-2">
+          <span class="avatar-title bg-warning-subtle rounded-circle fs-1">
+            <app-icon icon="medal" class="text-warning"></app-icon>
+          </span>
+        </div>
+        <div class="flex-gow-1">
+          <h5 class="mb-0 fw-semibold">Congratulations !...</h5>
+          <p class="mb-0 text-muted">You've reached a new subscriber milestone.</p>
+        </div>
+        <div class="ms-auto">
+          <h4 class="fs-16 mt-1 mb-0">29.4k</h4>
+          <span class="text-muted fw-semibold fs-12">SUBSCRIBERS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Lead Source</h4>
+    <div>
+      <a [routerLink]="[]" class="btn btn-sm btn-default me-1"> <app-icon icon="cloud-upload" class="me-1"></app-icon> Export</a>
+      <a [routerLink]="[]" class="btn btn-sm btn-light"><app-icon icon="download" class="me-1"></app-icon> Import</a>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <app-apexchart class="apex-charts" [getOptions]="mostLeadsChart" />
+
+    <div class="row mt-2">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-center p-1">
+          <div>
+            <app-icon icon="speakerphone" class="fs-16 align-middle me-1 text-primary"></app-icon>
+            <span class="align-middle fw-semibold ms-1">Newsletter</span>
+          </div>
+          <span class="fw-semibold text-muted float-end"> <app-icon icon="chevron-up" class="text-success"></app-icon> 6.37% </span>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-1">
+          <div>
+            <app-icon icon="user-hexagon" class="fs-16 align-middle me-1 text-danger"></app-icon>
+            <span class="align-middle fw-semibold ms-1">Instagram</span>
+          </div>
+          <span class="fw-semibold text-muted float-end"> <app-icon icon="chevron-up" class="text-success"></app-icon> 34.8% </span>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-center p-1">
+          <div>
+            <app-icon icon="settings-2" class="fs-16 align-middle me-1 text-success"></app-icon>
+            <span class="align-middle fw-semibold ms-1">WhatsApp</span>
+          </div>
+          <span class="fw-semibold text-muted float-end"> <app-icon icon="chevron-down" class="text-danger"></app-icon> 8.9% </span>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-1">
+          <div>
+            <app-icon icon="world" class="fs-16 align-middle me-1 text-warning"></app-icon>
+            <span class="align-middle fw-semibold ms-1">Website</span>
+          </div>
+          <span class="fw-semibold text-muted float-end"> <app-icon icon="chevron-up" class="text-success"></app-icon>44.3% </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

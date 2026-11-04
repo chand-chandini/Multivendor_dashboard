@@ -1,0 +1,150 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Footer Settings" subTitle="Website Management" />
+
+  @if (!canEdit) {
+    <div class="alert alert-info">You have read-only access to footer settings.</div>
+  }
+
+  @if (loading()) {
+    <div class="card">
+      <div class="card-body text-center text-muted py-4">
+        <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+        Loading footer settings...
+      </div>
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">About &amp; Contact</h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label for="fsAbout" class="form-label">About Text <span class="text-danger">*</span></label>
+                  <textarea id="fsAbout" formControlName="about_text" class="form-control" rows="3" [readonly]="!canEdit" placeholder="Short paragraph shown in the footer"></textarea>
+                @if (fieldError(form, 'about_text', 'About Text')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'about_text', 'About Text') }}</div>
+                }
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fsEmail" class="form-label">Contact Email <span class="text-danger">*</span></label>
+                  <input type="email" id="fsEmail" formControlName="contact_email" class="form-control" [readonly]="!canEdit" />
+                @if (fieldError(form, 'contact_email', 'Contact Email')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'contact_email', 'Contact Email') }}</div>
+                }
+
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fsPhone" class="form-label">Contact Phone <span class="text-danger">*</span></label>
+                  <input type="tel" id="fsPhone" formControlName="contact_phone" class="form-control" [readonly]="!canEdit" />
+                @if (fieldError(form, 'contact_phone', 'Contact Phone')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'contact_phone', 'Contact Phone') }}</div>
+                }
+                </div>
+
+                <div class="col-12">
+                  <label for="fsAddress" class="form-label">Contact Address <span class="text-danger">*</span></label>
+                  <textarea id="fsAddress" formControlName="contact_address" class="form-control" rows="2" [readonly]="!canEdit"></textarea>
+                @if (fieldError(form, 'contact_address', 'Contact Address')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'contact_address', 'Contact Address') }}</div>
+                }
+                </div>
+
+                <div class="col-12">
+                  <label for="fsCopyright" class="form-label">Copyright Text <span class="text-danger">*</span></label>
+                  <input type="text" id="fsCopyright" formControlName="copyright_text" class="form-control" [readonly]="!canEdit" placeholder="&copy; 2026 Your Brand. All rights reserved." />
+                @if (fieldError(form, 'copyright_text', 'Copyright Text')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'copyright_text', 'Copyright Text') }}</div>
+                }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Social &amp; App Links</h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="fsFacebook" class="form-label">Facebook URL <span class="text-danger">*</span></label>
+                  <input type="text" id="fsFacebook" formControlName="facebook_url" class="form-control" [readonly]="!canEdit" placeholder="https://..." />
+                @if (fieldError(form, 'facebook_url', 'Facebook URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'facebook_url', 'Facebook URL') }}</div>
+                }
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fsInstagram" class="form-label">Instagram URL <span class="text-danger">*</span></label>
+                  <input type="text" id="fsInstagram" formControlName="instagram_url" class="form-control" [readonly]="!canEdit" placeholder="https://..." />
+                @if (fieldError(form, 'instagram_url', 'Instagram URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'instagram_url', 'Instagram URL') }}</div>
+                }
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fsTwitter" class="form-label">Twitter / X URL <span class="text-danger">*</span></label>
+                  <input type="text" id="fsTwitter" formControlName="twitter_url" class="form-control" [readonly]="!canEdit" placeholder="https://..." />
+                @if (fieldError(form, 'twitter_url', 'Twitter / X URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'twitter_url', 'Twitter / X URL') }}</div>
+                }
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fsYoutube" class="form-label">YouTube URL <span class="text-danger">*</span></label>
+                  <input type="text" id="fsYoutube" formControlName="youtube_url" class="form-control" [readonly]="!canEdit" placeholder="https://..." />
+                @if (fieldError(form, 'youtube_url', 'YouTube URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'youtube_url', 'YouTube URL') }}</div>
+                }
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fsLinkedin" class="form-label">LinkedIn URL <span class="text-danger">*</span></label>
+                  <input type="text" id="fsLinkedin" formControlName="linkedin_url" class="form-control" [readonly]="!canEdit" placeholder="https://..." />
+                @if (fieldError(form, 'linkedin_url', 'LinkedIn URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'linkedin_url', 'LinkedIn URL') }}</div>
+                }
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fsPlaystore" class="form-label">Play Store URL <span class="text-danger">*</span></label>
+                  <input type="text" id="fsPlaystore" formControlName="playstore_url" class="form-control" [readonly]="!canEdit" placeholder="https://..." />
+                @if (fieldError(form, 'playstore_url', 'Play Store URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'playstore_url', 'Play Store URL') }}</div>
+                }
+                </div>
+
+                <div class="col-md-6">
+                  <label for="fsAppstore" class="form-label">App Store URL <span class="text-danger">*</span></label>
+                  <input type="text" id="fsAppstore" formControlName="appstore_url" class="form-control" [readonly]="!canEdit" placeholder="https://..." />
+                @if (fieldError(form, 'appstore_url', 'App Store URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'appstore_url', 'App Store URL') }}</div>
+                }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      @if (canEdit) {
+        <div class="mb-3">
+          <button type="submit" class="btn btn-primary" [disabled]="saving()">
+            @if (saving()) {
+              <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+            }
+            Save Footer Settings
+          </button>
+        </div>
+      }
+    </form>
+  }
+</div>

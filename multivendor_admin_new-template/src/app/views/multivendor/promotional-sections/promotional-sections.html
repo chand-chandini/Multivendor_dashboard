@@ -1,0 +1,94 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Promotional Sections" subTitle="Website Management" />
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Promotional Sections"
+        searchPlaceholder="Search promotional sections..."
+        itemsName="promotional sections"
+        addLabel="Add Promotional Section"
+        emptyMessage="No promotional sections added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">{{ editingId() ? 'Update' : 'Add' }} Promotional Section</h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-12">
+            <label for="promotionalsectionsimage" class="form-label">Image URL <span class="text-danger">*</span></label>
+            <input type="text" id="promotionalsectionsimage" formControlName="image" class="form-control" placeholder="https://..." />
+                @if (fieldError(form, 'image', 'Image URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'image', 'Image URL') }}</div>
+                }
+            @if (form.controls.image.value) {
+              <img [src]="form.controls.image.value" alt="Promotional Section preview" class="img-fluid rounded mt-2" style="max-height: 120px" />
+            }
+          </div>
+          <div class="col-md-6">
+            <label for="promotionalsectionstitle" class="form-label">Title <span class="text-danger">*</span></label>
+            <input type="text" id="promotionalsectionstitle" formControlName="title" class="form-control" placeholder="e.g. Weekend Offer" />
+                @if (fieldError(form, 'title', 'Title')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'title', 'Title') }}</div>
+                }
+
+          </div>
+          <div class="col-md-6">
+            <label for="promotionalsectionslinkurl" class="form-label">Link URL <span class="text-danger">*</span></label>
+            <input type="text" id="promotionalsectionslinkurl" formControlName="link_url" class="form-control" placeholder="https://..." />
+                @if (fieldError(form, 'link_url', 'Link URL')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'link_url', 'Link URL') }}</div>
+                }
+          </div>
+          <div class="col-md-12">
+            <label for="promotionalsectionssubtitle" class="form-label">Subtitle <span class="text-danger">*</span></label>
+            <textarea id="promotionalsectionssubtitle" formControlName="subtitle" class="form-control" rows="2"></textarea>
+                @if (fieldError(form, 'subtitle', 'Subtitle')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'subtitle', 'Subtitle') }}</div>
+                }
+          </div>
+          <div class="col-md-6">
+            <label for="promotionalsectionsdisplayorder" class="form-label">Display Order <span class="text-danger">*</span></label>
+            <input type="number" id="promotionalsectionsdisplayorder" formControlName="display_order" class="form-control" min="0" />
+                @if (fieldError(form, 'display_order', 'Display Order')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'display_order', 'Display Order') }}</div>
+                }
+          </div>
+          <div class="col-md-6">
+            <label for="promotionalsectionsstatus" class="form-label">Status <span class="text-danger">*</span></label>
+            <select id="promotionalsectionsstatus" formControlName="status" class="form-select">
+              <option [ngValue]="1">Active</option>
+              <option [ngValue]="0">Inactive</option>
+            </select>
+                @if (fieldError(form, 'status', 'Status')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'status', 'Status') }}</div>
+                }
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          }
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

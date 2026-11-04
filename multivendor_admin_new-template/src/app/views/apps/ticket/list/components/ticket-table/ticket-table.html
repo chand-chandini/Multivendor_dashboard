@@ -1,0 +1,146 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search tickets..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+      <a routerLink="/apps/ticket/create" class="btn btn-primary"> <app-icon icon="plus" class="me-1"></app-icon> New Ticket </a>
+      @if (hasSelection) {
+      <button class="btn btn-danger" (click)="deleteSelected()">Delete</button>
+      }
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <!-- Status Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Status</option>
+          <option value="Open">Open</option>
+          <option value="Pending">Pending</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Closed">Closed</option>
+          <option value="Escalated">Escalated</option>
+        </select>
+        <app-icon icon="arrows-shuffle" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Priority Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterPriority" (ngModelChange)="tableService.setFilter('priority', filterPriority)" class="form-select form-control my-1 my-md-0">
+          <option value="">Priority</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+          <option value="Urgent">Urgent</option>
+        </select>
+        <app-icon icon="alert-triangle" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Records Per Page -->
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="8">8</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+        <thead class="bg-light align-middle bg-opacity-25 thead-sm text-nowrap">
+          <tr class="text-uppercase fs-xxs">
+            <th class="ps-3" style="width: 1%">
+              <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+            </th>
+            <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">ID</th>
+            <th>Requested By</th>
+            <th>Ticket Subject</th>
+            <th>Assigned Agent</th>
+            <th sortable="priority" (sort)="tableService.setSort($event.column, $event.direction)">Priority</th>
+            <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+            <th sortable="createdAt" (sort)="tableService.setSort($event.column, $event.direction)">Date Created</th>
+            <th sortable="dueDate" (sort)="tableService.setSort($event.column, $event.direction)">Due Date</th>
+            <th class="text-center" style="width: 1%">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for (ticket of (ticketData$ | async); track $index) {
+          <tr>
+            <td class="ps-3">
+              <input [checked]="selectedIds.has(ticket.id)" (change)="toggleSingleSelection(ticket)" class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" />
+            </td>
+            <td><a routerLink="/apps/ticket/details" class="fw-semibold link-reset">{{ticket.id}}</a></td>
+            <td>
+              <div class="d-flex gap-2 align-items-center">
+                <img [src]="ticket.requestedBy.image" [alt]="ticket.requestedBy.name" class="avatar-xs rounded-circle" />
+                <span>{{ticket.requestedBy.name}}</span>
+              </div>
+            </td>
+            <td>{{ticket.subject}}</td>
+            <td>
+              <div class="d-flex gap-2 align-items-center">
+                <img [src]="ticket.agent.image" [alt]="ticket.agent.name" class="avatar-xs rounded-circle" />
+                <a [routerLink]="[]" class="link-reset">{{ticket.agent.name}}</a>
+              </div>
+            </td>
+            <td>
+              <span
+                class="badge"
+                [class]="
+                                    ticket.priority === 'high' ? 'text-bg-danger' :
+                                    ticket.priority === 'medium' ? 'text-bg-warning' :
+                                    ticket.priority === 'low' ? 'text-bg-success' :
+                                    'text-bg-primary'                                     
+                                    "
+                >{{toPascalCase(ticket.priority)}}</span
+              >
+            </td>
+
+            <td>
+              <span
+                class="badge badge-label"
+                [class]="
+                                    ticket.status === 'pending' ? 'bg-warning-subtle text-warning' :
+                                    ticket.status === 'in-progress' ? 'bg-info-subtle text-info' :
+                                    ticket.status === 'resolved' ? 'bg-success-subtle text-success' :
+                                    ticket.status === 'closed' ? 'bg-secondary-subtle text-secondary' :
+                                    ticket.status === 'escalated' ? 'bg-danger-subtle text-danger' :'text-bg-primary'                                     
+                                    "
+                >{{toPascalCase(ticket.status)}}</span
+              >
+            </td>
+
+            <td>{{ ticket.createdAtDate }} <small class="text-muted">{{ ticket.createdAtTime }}</small></td>
+            <td>{{ ticket.dueDate }}</td>
+            <td>
+              <div class="d-flex justify-content-center gap-1">
+                <a routerLink="/apps/ticket/details" class="btn btn-default btn-icon btn-sm"><app-icon icon="eye" class="fs-lg"></app-icon></a>
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm"><app-icon icon="edit" class="fs-lg"></app-icon></a>
+                <a [routerLink]="[]" (click)="tableService.deleteItem(ticket)" class="btn btn-default btn-icon btn-sm"><app-icon icon="trash" class="fs-lg"></app-icon></a>
+              </div>
+            </td>
+          </tr>
+          } } @else {
+          <tr class="no-results">
+            <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="Support Tickets" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

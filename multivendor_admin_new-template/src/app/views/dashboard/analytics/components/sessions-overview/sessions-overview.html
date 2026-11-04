@@ -1,0 +1,43 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Sessions Overview <span class="text-muted fs-base fw-normal">(609.5k Sessions)</span></h4>
+    <div>
+      <a [routerLink]="[]" class="btn btn-sm btn-default me-1"> <app-icon icon="cloud-upload" class="me-1"></app-icon> Export </a>
+      <a [routerLink]="[]" class="btn btn-sm btn-light"> <app-icon icon="download" class="me-1"></app-icon> Import </a>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <ul ngbNav #nav="ngbNav" class="nav nav-tabs nav-justified nav-bordered">
+      @for (session of sessionData; track $index) {
+      <li [ngbNavItem]="session.tabId" class="nav-item text-start">
+        <button ngbNavLink class="nav-link py-3 d-flex align-items-center text-start justify-content-center gap-2" [class.active]="activeTab === session.tabId" (click)="handleTabChange(session.tabId)">
+          <div class="avatar-md flex-shrink-0 d-none d-xxl-block">
+            <span class="avatar-title bg-info-subtle text-info rounded-circle">
+              <app-icon [icon]="session.icon" class="fs-xxl"></app-icon>
+            </span>
+          </div>
+          <span>
+            <span class="text-muted">{{ session.title }}</span>
+            <p class="fs-xl mb-0 text-dark fw-semibold">
+              <span>{{ session.value }}</span>
+              <span class="fs-sm ms-2" [class.text-success]="session.change > 0" [class.text-danger]="session.change < 0">
+                <app-icon [icon]="session.change > 0 ? 'arrow-up' : 'arrow-down'"></app-icon>
+                <span>{{ session.change }}%</span>
+              </span>
+            </p>
+          </span>
+        </button>
+
+        <ng-template ngbNavContent>
+          <div dir="ltr">
+            <app-apexchart class="apex-charts" [getOptions]="sessionsOverviewChart" />
+          </div>
+        </ng-template>
+      </li>
+      }
+    </ul>
+
+    <div [ngbNavOutlet]="nav" class="p-3"></div>
+  </div>
+</div>

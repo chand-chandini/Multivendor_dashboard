@@ -1,0 +1,75 @@
+<div class="card">
+  <!-- Header -->
+  <div class="card-body pb-2 d-flex align-items-center">
+    <img src="assets/images/users/user-8.jpg" class="avatar-sm rounded-circle me-2" />
+    <div class="flex-grow-1">
+      <h5 class="fw-semibold mb-0"><a [routerLink]="[]" class="link-reset">Emma Wilson</a></h5>
+      <small class="text-muted">3 hours ago</small>
+    </div>
+
+    <div ngbDropdown placement="bottom-end">
+      <a ngbDropdownToggle [routerLink]="[]" class="text-muted drop-arrow-none">
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="share" class="me-2"></app-icon>Share</a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"><app-icon icon="flag" class="me-2"></app-icon>Report</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Song Info -->
+  <div class="px-3">
+    <h5 class="fw-bold mb-1 mt-3">🎧 Song of the Day</h5>
+    <p class="text-muted mb-2">Found this calming track for focus sessions — highly recommend giving it a listen.</p>
+
+    <!-- Audio Player -->
+    <div class="bg-light-subtle rounded-4 p-3 shadow-sm">
+      <div class="d-flex align-items-center">
+        <img src="assets/images/gallery/5.jpg" class="rounded me-3" style="height: 60px; width: 60px; object-fit: cover" />
+
+        <div class="flex-grow-1">
+          <div class="fw-semibold">Dreamscape Horizon</div>
+          <small class="text-muted">By SynthWaves</small>
+
+          <!-- Free Online Audio -->
+          <audio controls class="w-100 mt-2" style="height: 32px">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="card-footer border-0 d-flex gap-3">
+    <div>
+      <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+        <app-icon icon="corner-up-left" class="me-1"></app-icon>
+        Reply
+      </a>
+      <span class="btn btn-sm fs-sm btn-link text-muted" (click)="toggleLike()">
+        @if (liked) {
+        <span class="align-middle">
+          <app-icon icon="heart-filled" class="text-danger"></app-icon>
+          Liked!
+        </span>
+        } @else {
+        <span class="align-middle">
+          <app-icon icon="heart" class="text-muted"></app-icon>
+          Like
+        </span>
+        }
+      </span>
+      <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+        <app-icon icon="share" class="me-1"></app-icon>
+        Share
+      </a>
+    </div>
+  </div>
+</div>

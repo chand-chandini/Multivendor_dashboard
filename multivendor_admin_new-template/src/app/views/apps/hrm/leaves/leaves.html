@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Leaves" subTitle="HRM" />
+
+  <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 g-2">
+    @for (leave of leaveStatData; track $index) {
+    <div class="col">
+      <app-leaves-widget [leave]="leave" />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-leaves-table />
+    </div>
+  </div>
+</div>

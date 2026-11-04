@@ -1,0 +1,372 @@
+<div class="container-fluid">
+  <app-page-breadcrumb
+    title="Shop Items"
+    subTitle="Shop Management"
+  />
+
+  <ng-template #activeCell let-row>
+    <div class="form-check form-switch d-inline-block">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        [checked]="row.active_status === 1"
+        [disabled]="!permissions.canEdit()"
+        (change)="toggleActive(row, $any($event.target).checked)"
+        [attr.aria-label]="'Toggle active status for ' + row.item"
+      />
+    </div>
+  </ng-template>
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Shop Items"
+        searchPlaceholder="Search shop items..."
+        itemsName="shop items"
+        addLabel="Add Shop Item"
+        emptyMessage="No shop items added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [cellTemplates]="cellTemplates()"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ editingId() ? 'Update' : 'Add' }} Shop Item
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <div class="modal-body">
+        <div class="row g-3">
+
+          <!-- Item -->
+          <div class="col-md-6">
+            <label
+              for="item"
+              class="form-label"
+            >
+              Item
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="item"
+              formControlName="item"
+              class="form-control"
+              placeholder="e.g. Fresh Spinach"
+            />
+                @if (fieldError(form, 'item', 'Item')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'item', 'Item') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Subcategory -->
+          <div class="col-md-6">
+            <label
+              for="subcategory"
+              class="form-label"
+            >
+              Subcategory
+              <span class="text-danger">*</span>
+            </label>
+
+            <select
+              id="subcategory"
+              formControlName="subcategory"
+              class="form-select"
+            >
+              <option value="">
+                Select Subcategory
+              </option>
+
+              @for (
+                subcategory of subcategories();
+                track subcategory.id
+              ) {
+                <option
+                  [value]="subcategory.category_name"
+                >
+                  {{ subcategory.category_name }}
+                </option>
+              }
+            </select>
+                @if (fieldError(form, 'subcategory', 'Subcategory')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'subcategory', 'Subcategory') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Filter -->
+          <div class="col-md-6">
+            <label
+              for="filter"
+              class="form-label"
+            >
+              Filter
+             <span class="text-danger">*</span></label>
+
+            <select
+              id="filter"
+              formControlName="filter"
+              class="form-select"
+            >
+              <option value="">
+                Select Filter
+              </option>
+
+              @for (
+                filter of filters();
+                track filter.id
+              ) {
+                <option
+                  [value]="filter.filter_name"
+                >
+                  {{ filter.filter_name }}
+                </option>
+              }
+            </select>
+                @if (fieldError(form, 'filter', 'Filter')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'filter', 'Filter') }}</div>
+                }
+          </div>
+
+          <!-- Measurement -->
+          <div class="col-md-6">
+            <label
+              for="measurement"
+              class="form-label"
+            >
+              Measurement
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="text"
+              id="measurement"
+              formControlName="measurement"
+              class="form-control"
+              placeholder="e.g. 500 g"
+            />
+                @if (fieldError(form, 'measurement', 'Measurement')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'measurement', 'Measurement') }}</div>
+                }
+          </div>
+
+          <!-- Description -->
+          <div class="col-12">
+            <label
+              for="description"
+              class="form-label"
+            >
+              Description
+             <span class="text-danger">*</span></label>
+
+            <textarea
+              id="description"
+              formControlName="description"
+              class="form-control"
+              rows="2"
+              placeholder="Short description"
+            ></textarea>
+                @if (fieldError(form, 'description', 'Description')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'description', 'Description') }}</div>
+                }
+          </div>
+
+          <!-- Actual Price -->
+          <div class="col-md-4">
+            <label
+              for="actualPrice"
+              class="form-label"
+            >
+              Actual Price
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="number"
+              id="actualPrice"
+              formControlName="actual_price"
+              class="form-control"
+              min="0"
+              step="0.01"
+            />
+                @if (fieldError(form, 'actual_price', 'Actual Price')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'actual_price', 'Actual Price') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Selling Price -->
+          <div class="col-md-4">
+            <label
+              for="sellingPrice"
+              class="form-label"
+            >
+              Selling Price
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="number"
+              id="sellingPrice"
+              formControlName="selling_price"
+              class="form-control"
+              min="0"
+              step="0.01"
+            />
+                @if (fieldError(form, 'selling_price', 'Selling Price')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'selling_price', 'Selling Price') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Available Time -->
+          <div class="col-md-4">
+            <label
+              for="availableTime"
+              class="form-label"
+            >
+              Available Time
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="text"
+              id="availableTime"
+              formControlName="available_time"
+              class="form-control"
+              placeholder="e.g. 07:00 AM - 08:00 PM"
+            />
+                @if (fieldError(form, 'available_time', 'Available Time')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'available_time', 'Available Time') }}</div>
+                }
+          </div>
+
+          <!-- Discount Percentage -->
+          <div class="col-md-4">
+            <label
+              for="discountPercentage"
+              class="form-label"
+            >
+              Discount (%)
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="number"
+              id="discountPercentage"
+              formControlName="discount_percentage"
+              class="form-control"
+              min="0"
+              step="0.01"
+            />
+                @if (fieldError(form, 'discount_percentage', 'Discount (%)')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'discount_percentage', 'Discount (%)') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Discount Amount -->
+          <div class="col-md-4">
+            <label
+              for="discountAmount"
+              class="form-label"
+            >
+              Discount Amount
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="number"
+              id="discountAmount"
+              formControlName="discount_amount"
+              class="form-control"
+              min="0"
+              step="0.01"
+            />
+                @if (fieldError(form, 'discount_amount', 'Discount Amount')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'discount_amount', 'Discount Amount') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Shop Image -->
+          <div class="col-md-4">
+            <label
+              for="shopImage"
+              class="form-label"
+            >
+              Shop Image
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="file"
+              id="shopImage"
+              class="form-control"
+              accept="image/*"
+              (change)="onShopImageSelected($event)"
+            />
+                @if (fieldError(form, 'shop_image', 'Shop Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'shop_image', 'Shop Image') }}</div>
+                }
+
+            @if (form.controls.shop_image.value) {
+              <div class="small text-success mt-2">
+                ✓ Image selected
+              </div>
+            }
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+            ></span>
+          }
+
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

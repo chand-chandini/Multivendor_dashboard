@@ -1,0 +1,90 @@
+<div class="card shadow mb-2">
+  <div class="card-body p-3">
+    <div class="d-flex align-items-center mb-2">
+      <div>
+        <h5 class="mb-0 fw-semibold"><a class="link-reset" routerLink="/">{{ item.user.title }}</a></h5>
+        <small class="text-muted">{{ item.company }}</small>
+      </div>
+      <div class="ms-auto" ngbDropdown>
+        <a [routerLink]="[]" ngbDropdownToggle class="btn btn-icon btn-sm drop-arrow-none btn-ghost-light text-muted">
+          <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+        </a>
+        <ul ngbDropdownMenu class="dropdown-menu-end">
+          <li>
+            <a ngbDropdownItem [routerLink]="[]">
+              <app-icon icon="share" class="me-2"></app-icon>
+              Share</a
+            >
+          </li>
+          <li>
+            <a ngbDropdownItem [routerLink]="[]">
+              <app-icon icon="edit" class="me-2"></app-icon>
+              Edit</a
+            >
+          </li>
+          <li>
+            <a ngbDropdownItem [routerLink]="[]">
+              <app-icon icon="user-check" class="me-2"></app-icon>
+              Assign</a
+            >
+          </li>
+          <li>
+            <a ngbDropdownItem class="text-danger" [routerLink]="[]">
+              <app-icon icon="trash" class="me-2"></app-icon>
+              Delete</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-1"><img class="rounded-circle avatar-xs" alt="Mark Allen" [src]="item.user.image" /><span class="fw-medium text-muted fs-sm">{{ item.user.name }}</span></div>
+      @if(item.status === 'won'){
+      <div class="d-flex align-items-center gap-1">
+        <app-icon icon="calendar-clock" class="text-success"></app-icon>
+        <h5 class="fs-base mb-0 fw-medium">{{ item.date }}</h5>
+      </div>
+      } @else if (item.status === 'lost') {
+      <div class="d-flex align-items-center gap-1">
+        <app-icon icon="calendar" class="text-danger fs-lg"></app-icon>
+        <h5 class="fs-base mb-0 fw-medium">{{ item.date }}</h5>
+      </div>
+      } @else {
+      <div class="d-flex align-items-center gap-1">
+        <app-icon icon="calendar-clock"></app-icon>
+        <h5 class="fs-base mb-0 fw-medium">{{ item.date }}</h5>
+      </div>
+      }
+    </div>
+
+    <div class="mt-2">
+      <div class="d-flex justify-content-between align-items-center">
+        @if (item.status === 'won') {
+        <div class="d-flex align-items-center gap-2 fs-sm">
+          <app-icon icon="medal" class="text-success fs-lg"></app-icon>
+          {{ toPascalCase(item.status) }}
+        </div>
+        <span class="fw-semibold">{{ item.amount }}</span>
+        } @else if (item.status === 'lost') {
+        <div class="d-flex align-items-center gap-2 fs-sm">
+          <app-icon icon="x" class="text-danger fs-lg"></app-icon>
+          {{ toPascalCase(item.status) }}
+        </div>
+        <span class="fw-semibold text-danger">{{ item.amount }}</span>
+        } @else {
+        <div class="d-flex align-items-center gap-2 fs-sm">
+          <span class="d-flex align-items-center gap-1">
+            <app-icon icon="message" class="text-muted fs-lg"></app-icon>
+            {{ item.messages }}
+          </span>
+          <span class="d-flex align-items-center gap-1">
+            <app-icon icon="list-check" class="text-muted fs-lg"></app-icon>
+            {{ item.tasks }}
+          </span>
+        </div>
+        <span class="fw-semibold">{{ item.amount }}</span>
+        }
+      </div>
+    </div>
+  </div>
+</div>

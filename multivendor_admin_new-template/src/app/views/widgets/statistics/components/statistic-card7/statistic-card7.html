@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-body text-center">
+    <iconify-icon [icon]="item.icon" class="fs-36" [class]="item.className"></iconify-icon>
+    <h3 class="fw-bold mt-3 mb-1">
+      <span
+        [countUp]="item.value"
+        [countUpOptions]="{
+                     prefix: item.prefix || '',
+                     suffix: item.suffix || '',
+                     decimalPlaces: Number.isInteger(item.value) ? 0 : 2
+                  }"
+      ></span>
+    </h3>
+
+    <p class="text-muted">{{ item.title }}</p>
+    <span class="badge fs-12" [class]="item.change > 0 ? 'badge-soft-success' : 'badge-soft-danger'">
+      @if(item.change > 0){
+      <iconify-icon icon="tabler:arrow-badge-up"></iconify-icon>
+      } @else{ <iconify-icon icon="tabler:arrow-badge-down"></iconify-icon> }{{ item.change }}%</span
+    >
+  </div>
+</div>

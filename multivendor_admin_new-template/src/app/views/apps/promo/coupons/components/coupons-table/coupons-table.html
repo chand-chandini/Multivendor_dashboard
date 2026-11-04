@@ -1,0 +1,251 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <!-- Search -->
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search coupon..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Delete Selected -->
+      @if (hasSelection) {
+      <button (click)="deleteSelected()" class="btn btn-danger">Delete</button>
+      }
+    </div>
+
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <!-- Status Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Coupon Status</option>
+          <option value="active">Active</option>
+          <option value="expired">Expired</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="disabled">Disabled</option>
+        </select>
+        <app-icon icon="circle-check" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Type Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterType" (ngModelChange)="tableService.setFilter('discount.type', filterType)" class="form-select form-control my-1 my-md-0">
+          <option value="">Coupon Type</option>
+          <option value="percentage">Percentage</option>
+          <option value="fixed">Fixed Amount</option>
+          <option value="free-shipping">Free Shipping</option>
+        </select>
+        <app-icon icon="tag" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Records Per Page -->
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="8">8</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="d-flex gap-1">
+      <button class="btn btn-danger" (click)="openModal(content)"><app-icon icon="plus" class="me-1"></app-icon> Add Coupon</button>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+      <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+        <tr class="text-uppercase fs-xxs">
+          <th class="ps-3" style="width: 1%">
+            <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+          </th>
+          <th sortable="code" (sort)="tableService.setSort($event.column, $event.direction)">Coupon Code</th>
+          <th sortable="discount.type" (sort)="tableService.setSort($event.column, $event.direction)">Discount Type</th>
+          <th sortable="discount.value" (sort)="tableService.setSort($event.column, $event.direction)">Discount Value</th>
+          <th sortable="startDate" (sort)="tableService.setSort($event.column, $event.direction)">Start Date</th>
+          <th sortable="expiryDate" (sort)="tableService.setSort($event.column, $event.direction)">Expiry Date</th>
+          <th sortable="usageLimit" (sort)="tableService.setSort($event.column, $event.direction)">Usage Limit</th>
+          <th sortable="used" (sort)="tableService.setSort($event.column, $event.direction)">Used</th>
+          <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+          <th class="text-center" style="width: 1%">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @if ((total$ | async)! > 0) { @for (item of (couponData$ | async)!; track $index) {
+        <tr>
+          <td class="ps-3">
+            <input [checked]="selectedIds.has(item.code)" (change)="toggleSingleSelection(item)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+          </td>
+          <td>
+            <h5 class="fs-sm mb-0">
+              <a [routerLink]="[]" class="link-reset">{{ item.code }}</a>
+            </h5>
+            <small class="text-muted">{{ item.details }}</small>
+          </td>
+          <td>
+            <span
+              class="badge badge-label fs-xs"
+              [class]="
+                item.discount.type === 'percentage'
+                  ? 'badge-soft-primary'
+                  : item.discount.type === 'fixed'
+                  ? 'badge-soft-secondary'
+                  : 'badge-soft-info'
+              "
+            >
+              {{ toPascalCase(item.discount.type) }}
+            </span>
+          </td>
+          <td>{{ item.discount.type === 'percentage' ? (item.discount.value ?? 0) + '%' : item.discount.type === 'fixed' ? '$' + (item.discount.value ?? 0) : '-' }}</td>
+
+          <td>{{ item.startDate }}</td>
+          <td>{{ item.expiryDate }}</td>
+          <td>{{ item.usageLimit }}</td>
+          <td>{{ item.used }}</td>
+          <td
+            class="fw-semibold"
+            [class]="
+              item.status === 'active'
+                ? 'text-success'
+                : item.status === 'upcoming'
+                ? 'text-warning'
+                : item.status === 'expired'
+                ? 'text-danger'
+                : 'text-secondary'
+            "
+          >
+            <app-icon icon="circle-filled" class="fs-sm me-1"></app-icon>
+            {{ toPascalCase(item.status) }}
+          </td>
+          <td>
+            <div class="d-flex justify-content-center gap-1">
+              <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                <app-icon icon="eye" class="fs-lg"></app-icon>
+              </a>
+              <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                <app-icon icon="edit" class="fs-lg"></app-icon>
+              </a>
+              <a [routerLink]="[]" (click)="tableService.deleteItem(item)" class="btn btn-default btn-icon btn-sm">
+                <app-icon icon="trash" class="fs-lg"></app-icon>
+              </a>
+            </div>
+          </td>
+        </tr>
+        }} @else {
+        <tr class="no-results">
+          <td colspan="12" class="text-center text-muted py-3">No leads found.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="coupons" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+  <!-- /.card-footer -->
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header bg-light">
+    <h5 class="modal-title fw-semibold" id="addCouponModalLabel"><app-icon icon="ticket" class="me-2 text-primary"></app-icon> Add New Coupon</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <form id="addCouponForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <!-- Coupon Code -->
+        <div class="col-md-6">
+          <label class="form-label">Coupon Code <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="coupon_code" placeholder="e.g., SAVE20" required />
+        </div>
+
+        <!-- Coupon Type -->
+        <div class="col-md-6">
+          <label class="form-label">Coupon Type <span class="text-danger">*</span></label>
+          <select class="form-select" name="coupon_type" required>
+            <option value="">Select Type</option>
+            <option value="percentage">Percentage</option>
+            <option value="fixed">Fixed Amount</option>
+            <option value="free-shipping">Free Shipping</option>
+          </select>
+        </div>
+
+        <!-- Discount Value -->
+        <div class="col-md-6">
+          <label class="form-label">Discount Value <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" name="discount_value" placeholder="e.g., 20 or 50" required />
+        </div>
+
+        <!-- Minimum Order -->
+        <div class="col-md-6">
+          <label class="form-label">Minimum Order Value</label>
+          <input type="number" class="form-control" name="min_order" placeholder="e.g., 100" />
+        </div>
+
+        <!-- Start Date -->
+        <div class="col-md-6">
+          <label class="form-label">Start Date <span class="text-danger">*</span></label>
+          <input type="text" mwlFlatpickr [options]="flatPickrOptions" class="form-control" name="start_date" placeholder="Select start date" required />
+        </div>
+
+        <!-- End Date -->
+        <div class="col-md-6">
+          <label class="form-label">End Date <span class="text-danger">*</span></label>
+          <input type="text" mwlFlatpickr [options]="flatPickrOptions" class="form-control" name="end_date" placeholder="Select end date" required />
+        </div>
+
+        <!-- Usage Limit -->
+        <div class="col-md-6">
+          <label class="form-label">Usage Limit</label>
+          <input type="number" class="form-control" name="usage_limit" placeholder="e.g., 1000" />
+        </div>
+
+        <!-- Per User Limit -->
+        <div class="col-md-6">
+          <label class="form-label">Per User Limit</label>
+          <input type="number" class="form-control" name="user_limit" placeholder="e.g., 5" />
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="2" placeholder="Brief description of the offer"></textarea>
+        </div>
+
+        <!-- Toggle Options -->
+        <div class="col-12">
+          <div class="d-flex flex-wrap gap-3 mt-2">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isActive" checked />
+              <label class="form-check-label" for="isActive">Active</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isFeatured" />
+              <label class="form-check-label" for="isFeatured">Featured Coupon</label>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isFreeShipping" />
+              <label class="form-check-label" for="isFreeShipping">Free Shipping</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.modal-body -->
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary"><app-icon icon="plus" class="me-1"></app-icon> Add Coupon</button>
+    </div>
+  </form>
+</ng-template>

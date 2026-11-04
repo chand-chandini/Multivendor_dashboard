@@ -1,0 +1,71 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Project Status Breakdown</h4>
+    <div ngbDropdown class="ms-auto" placement="bottom-end">
+      <a ngbDropdownToggle [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none">
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="eye" class="me-2"></app-icon> View All Status Details </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="filter-2" class="me-2"></app-icon> Filter by Status </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="calendar" class="me-2"></app-icon> Change Date Range </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Export Breakdown </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="refresh" class="me-2"></app-icon> Reset Status View </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body pt-0">
+    <app-apexchart [getOptions]="statusChart" class="apex-charts" />
+
+    <div class="row mt-2">
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-center p-1">
+          <div>
+            <app-icon icon="circle-filled" class="fs-12 align-middle me-1 text-secondary"></app-icon>
+            <span class="align-middle fw-semibold"> Completed</span>
+          </div>
+          <span class="fw-semibold text-muted float-end"><app-icon icon="chevron-down" class="text-danger"></app-icon> 965</span>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-1">
+          <div>
+            <app-icon icon="circle-filled" class="fs-12 align-middle me-1 text-warning"></app-icon>
+            <span class="align-middle fw-semibold"> In Progress</span>
+          </div>
+          <span class="fw-semibold text-muted float-end"><app-icon icon="chevron-up" class="text-success"></app-icon> 75</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-flex justify-content-between align-items-center p-1">
+          <div>
+            <app-icon icon="circle-filled" class="fs-12 align-middle me-1 text-secondary"></app-icon>
+            <span class="align-middle fw-semibold"> Yet to Start</span>
+          </div>
+          <span class="fw-semibold text-muted float-end"><app-icon icon="chevron-up" class="text-success"></app-icon> 102</span>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-1">
+          <div>
+            <app-icon icon="circle-filled" class="fs-12 align-middle me-1 text-danger"></app-icon>
+            <span class="align-middle fw-semibold"> Cancelled</span>
+          </div>
+          <span class="fw-semibold text-muted float-end"><app-icon icon="chevron-down" class="text-danger"></app-icon> 96</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

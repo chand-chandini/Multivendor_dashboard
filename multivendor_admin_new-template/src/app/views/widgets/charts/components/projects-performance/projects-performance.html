@@ -1,0 +1,54 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Projects Performance Overview</h4>
+    <div ngbDropdown class="ms-auto" placement="bottom-end">
+      <a ngbDropdownToggle [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none">
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="chart-histogram" class="me-2"></app-icon> View Detailed Report </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="filter-2" class="me-2"></app-icon> Filter by Project </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="calendar" class="me-2"></app-icon> Select Date Range </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Export as CSV </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="refresh" class="me-2"></app-icon> Reset Analytics </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row text-center g-2">
+      @for (item of performanceData; track $index) {
+      <div class="col">
+        <div class="border bg-light-subtle border-dashed border-light p-2 rounded">
+          <h4>
+            <span
+              [countUp]="item.value"
+              [countUpOptions]="{
+                    prefix: item.prefix || '',
+                    suffix: item.suffix || '',
+                    decimalPlaces: Number.isInteger(item.value) ? 0 : 2
+                  }"
+            ></span>
+          </h4>
+          <p class="mb-0 text-muted">{{ item.title }}</p>
+        </div>
+      </div>
+      }
+    </div>
+    <div dir="ltr">
+      <app-apexchart [getOptions]="dashProjectsOverviewChart" class="apex-charts" />
+    </div>
+  </div>
+</div>

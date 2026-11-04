@@ -1,0 +1,321 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Categories" subTitle="Masters" />
+
+  <div class="row">
+    <div class="col-12">
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="activeTab"
+        class="nav-tabs nav-bordered mb-3"
+      >
+        <li ngbNavItem="categories">
+          <a ngbNavLink>Categories</a>
+          <ng-template ngbNavContent>
+            <app-data-table
+              title="Categories"
+              searchPlaceholder="Search categories..."
+              itemsName="categories"
+              addLabel="Add Category"
+              emptyMessage="No categories added yet."
+              [rows]="categories()"
+              [columns]="categoryColumns"
+              [actions]="actions"
+              [loading]="loading()"
+              (add)="openAdd('category')"
+              (action)="onAction($event, 'category')"
+            />
+          </ng-template>
+        </li>
+
+        <li ngbNavItem="subcategories">
+          <a ngbNavLink>Sub Categories</a>
+          <ng-template ngbNavContent>
+            <app-data-table
+              title="Sub Categories"
+              searchPlaceholder="Search sub categories..."
+              itemsName="sub categories"
+              addLabel="Add Sub Category"
+              emptyMessage="No sub categories added yet."
+              [rows]="subCategories()"
+              [columns]="subCategoryColumns"
+              [actions]="actions"
+              [loading]="loading()"
+              (add)="openAdd('subcategory')"
+              (action)="onAction($event, 'subcategory')"
+            />
+          </ng-template>
+        </li>
+
+        <li ngbNavItem="mainfilters">
+          <a ngbNavLink>Main Filters</a>
+          <ng-template ngbNavContent>
+            <app-data-table
+              title="Main Filters"
+              searchPlaceholder="Search main filters..."
+              itemsName="main filters"
+              addLabel="Add Main Filter"
+              emptyMessage="No main filters added yet."
+              [rows]="mainFilters()"
+              [columns]="mainFilterColumns"
+              [actions]="actions"
+              [loading]="loading()"
+              (add)="openAdd('mainfilter')"
+              (action)="onAction($event, 'mainfilter')"
+            />
+          </ng-template>
+        </li>
+      </ul>
+
+      <div [ngbNavOutlet]="nav"></div>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT MODAL -->
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ editingId() ? 'Edit' : 'Add' }}
+        {{
+          editingSection() === 'category'
+            ? 'Category'
+            : editingSection() === 'subcategory'
+              ? 'Sub Category'
+              : 'Main Filter'
+        }}
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body">
+        <!-- CATEGORY -->
+        @if (editingSection() === 'category') {
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">
+              Category Name <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              id="categoryName"
+              formControlName="category_name"
+              class="form-control"
+              placeholder="Enter category name"
+            />
+                @if (fieldError(form, 'category_name', 'Category Name')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'category_name', 'Category Name') }}</div>
+                }
+
+          </div>
+
+          <!-- CATEGORY IMAGE -->
+          <div class="mb-3">
+            <label for="categoryImage" class="form-label">Image <span class="text-danger">*</span></label>
+
+            <div class="d-flex align-items-center gap-3">
+              <div class="input-group">
+                <label
+                  for="categoryImage"
+                  class="input-group-text"
+                  style="cursor: pointer"
+                >
+                  Choose File
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="existingImageName() || 'No file chosen'"
+                  readonly
+                  aria-label="Current category image filename"
+                />
+              </div>
+
+              <input
+                type="file"
+                id="categoryImage"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
+                (change)="onImageSelected($event)"
+                hidden
+              />
+                @if (fieldError(form, 'category_image', 'Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'category_image', 'Image') }}</div>
+                }
+
+              @if (imagePreview()) {
+                <img
+                  [src]="imagePreview()"
+                  [alt]="existingImageName() || 'Selected image'"
+                  width="55"
+                  height="55"
+                  class="rounded border"
+                  style="object-fit: cover; flex-shrink: 0"
+                />
+              }
+            </div>
+          </div>
+        }
+
+        <!-- SUB CATEGORY -->
+        @if (editingSection() === 'subcategory') {
+          <div class="mb-3">
+            <label for="parentId" class="form-label">
+              Category <span class="text-danger">*</span>
+            </label>
+            <select
+              id="parentId"
+              formControlName="parent_id"
+              class="form-select"
+            >
+              <option [ngValue]="null">Select category</option>
+              @for (category of categories(); track category.id) {
+                <option [ngValue]="category.id">
+                  {{ category.category_name }}
+                </option>
+              }
+            </select>
+                @if (fieldError(form, 'parent_id', 'Category')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'parent_id', 'Category') }}</div>
+                }
+
+          </div>
+
+          <div class="mb-3">
+            <label for="subCategoryName" class="form-label">
+              Sub Category <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              id="subCategoryName"
+              formControlName="category_name"
+              class="form-control"
+              placeholder="Enter sub category name"
+            />
+                @if (fieldError(form, 'category_name', 'Sub Category')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'category_name', 'Sub Category') }}</div>
+                }
+
+          </div>
+
+          <!-- SUB CATEGORY IMAGE -->
+          <div class="mb-3">
+            <label for="subCategoryImage" class="form-label">Image <span class="text-danger">*</span></label>
+
+            <div class="d-flex align-items-center gap-3">
+              <div class="input-group">
+                <label
+                  for="subCategoryImage"
+                  class="input-group-text"
+                  style="cursor: pointer"
+                >
+                  Choose File
+                </label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="existingImageName() || 'No file chosen'"
+                  readonly
+                  aria-label="Current subcategory image filename"
+                />
+              </div>
+
+              <input
+                type="file"
+                id="subCategoryImage"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
+                (change)="onImageSelected($event)"
+                hidden
+              />
+                @if (fieldError(form, 'category_image', 'Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'category_image', 'Image') }}</div>
+                }
+
+              @if (imagePreview()) {
+                <img
+                  [src]="imagePreview()"
+                  [alt]="existingImageName() || 'Selected image'"
+                  width="55"
+                  height="55"
+                  class="rounded border"
+                  style="object-fit: cover; flex-shrink: 0"
+                />
+              }
+            </div>
+          </div>
+        }
+
+        <!-- MAIN FILTER -->
+        @if (editingSection() === 'mainfilter') {
+          <div class="mb-3">
+            <label for="filterCategory" class="form-label">
+              Category <span class="text-danger">*</span>
+            </label>
+            <select
+              id="filterCategory"
+              formControlName="parent_id"
+              class="form-select"
+            >
+              <option [ngValue]="null">Select category</option>
+              @for (category of categories(); track category.id) {
+                <option [ngValue]="category.id">
+                  {{ category.category_name }}
+                </option>
+              }
+            </select>
+                @if (fieldError(form, 'parent_id', 'Category')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'parent_id', 'Category') }}</div>
+                }
+
+          </div>
+
+          <div class="mb-3">
+            <label for="filterName" class="form-label">
+              Main Filter <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              id="filterName"
+              formControlName="filter_name"
+              class="form-control"
+              placeholder="Enter main filter"
+            />
+                @if (fieldError(form, 'filter_name', 'Main Filter')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'filter_name', 'Main Filter') }}</div>
+                }
+
+          </div>
+        }
+      </div>
+
+      <!-- MODAL FOOTER -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+            ></span>
+          }
+          {{ editingId() ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

@@ -1,0 +1,202 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Customers" subTitle="Masters" />
+
+  <!-- Customer Filters -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Customer Filters</h5>
+        </div>
+
+        <div class="card-body">
+          <div class="row g-3 align-items-end">
+
+            <!-- Location -->
+            <div class="col-md-4">
+              <label for="customerLocation" class="form-label">Location</label>
+              <select id="customerLocation" class="form-select" [(ngModel)]="selectedLocation">
+                <option [ngValue]="null">All Locations</option>
+                @for (location of locations(); track location.id) {
+                  <option [ngValue]="location.id">{{ location.city }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Customer Search -->
+            <div class="col-md-5">
+              <label for="customerSearch" class="form-label">Customer</label>
+              <input
+                id="customerSearch"
+                type="text"
+                class="form-control"
+                [(ngModel)]="searchText"
+                placeholder="Search by name, phone number or email"
+              />
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-md-3">
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-primary" (click)="applyFilters()">Search</button>
+                <button type="button" class="btn btn-light" (click)="clearFilters()">Clear</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customers Table -->
+  <div class="row">
+    <div class="col-12">
+
+      <ng-template #activeCell let-row>
+        <div class="form-check form-switch d-inline-block">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            [checked]="row.active_status === 1"
+            [disabled]="!permissions.canEdit()"
+            (change)="toggleActive(row, $any($event.target).checked)"
+            [attr.aria-label]="'Toggle active status for ' + row.customer_name"
+          />
+        </div>
+      </ng-template>
+
+      <app-data-table
+        title="Customers"
+        searchPlaceholder="Search customers..."
+        itemsName="customers"
+        emptyMessage="No customers found."
+        [rows]="filteredRows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        [cellTemplates]="cellTemplates()"
+        (action)="onAction($event)"
+      />
+
+    </div>
+  </div>
+
+  <!-- Customer Details Modal -->
+  <ng-template #detailsModal let-modal>
+
+    <!-- HIGHLIGHTED TOP BAR -->
+    <div class="modal-header border-0 pb-3" style="background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 0.5rem 0.5rem 0 0;">
+      <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+        <i class="bi bi-person-circle text-primary"></i> Customer Details
+      </h5>
+      <button type="button" class="btn-close shadow-none" (click)="modal.dismiss()"></button>
+    </div>
+
+    <div class="modal-body">
+      @if (detailsLoading()) {
+        <div class="text-center text-muted py-4">
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          Loading customer...
+        </div>
+      } @else if (selected(); as customer) {
+        
+        <!-- Basic Info -->
+        <div class="row g-3 mb-4">
+          
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-primary fw-bold mb-2 fs-xs border-bottom border-primary-subtle pb-1">Name</h6>
+            <p class="mb-0 fw-bold">{{ customer.customer_name || '-' }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-primary fw-bold mb-2 fs-xs border-bottom border-primary-subtle pb-1">Mobile</h6>
+            <p class="mb-0">{{ customer.mobile_number || '-' }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-primary fw-bold mb-2 fs-xs border-bottom border-primary-subtle pb-1">Email</h6>
+            <p class="mb-0">{{ customer.email || '-' }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-primary fw-bold mb-2 fs-xs border-bottom border-primary-subtle pb-1">Location</h6>
+            <p class="mb-0">{{ customer.location || '-' }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-primary fw-bold mb-2 fs-xs border-bottom border-primary-subtle pb-1">Gender</h6>
+            <p class="mb-0">{{ customer.gender || '-' }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-primary fw-bold mb-2 fs-xs border-bottom border-primary-subtle pb-1">Date of Birth</h6>
+            <p class="mb-0">{{ customer.date_of_birth || '-' }}</p>
+          </div>
+        </div>
+
+        <!-- Order Summary Block -->
+        <div class="card bg-light border-0 mb-4 shadow-sm">
+          <div class="card-body">
+            <h6 class="text-uppercase text-primary fw-bold mb-3 fs-xs border-bottom border-primary-subtle pb-2">Order Summary</h6>
+            <div class="row text-center">
+              
+              <div class="col-3 border-end">
+                <h4 class="mb-1 fw-bold text-success">{{ customer.completed_orders || 0 }}</h4>
+                <small class="text-muted text-uppercase fs-xxs fw-semibold">Completed</small>
+              </div>
+              
+              <div class="col-3 border-end">
+                <h4 class="mb-1 fw-bold text-warning">{{ customer.pending_orders || 0 }}</h4>
+                <small class="text-muted text-uppercase fs-xxs fw-semibold">Pending</small>
+              </div>
+              
+              <div class="col-3 border-end">
+                <h4 class="mb-1 fw-bold text-danger">{{ customer.rejected_orders || 0 }}</h4>
+                <small class="text-muted text-uppercase fs-xxs fw-semibold">Rejected</small>
+              </div>
+
+              <div class="col-3">
+                <h4 class="mb-1 fw-bold text-primary">{{ customer.total_orders || 0 }}</h4>
+                <small class="text-muted text-uppercase fs-xxs fw-semibold">Total</small>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Addresses -->
+        <h6 class="text-uppercase text-primary fw-bold mb-2 fs-xs border-bottom border-primary-subtle pb-2">Addresses</h6>
+        <div class="table-responsive">
+          <table class="table table-custom table-centered mb-0">
+            <thead class="bg-light bg-opacity-25 thead-sm">
+              <tr class="text-uppercase fs-xxs">
+                <th>Label</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Pincode</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (address of customer.addresses || []; track $index) {
+                <tr>
+                  <td>{{ address.address_label || '-' }}</td>
+                  <td>{{ address.address_line1 || address.address || '-' }}</td>
+                  <td>{{ address.city || '-' }}</td>
+                  <td>{{ address.pincode || '-' }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="text-center text-muted py-3">No saved addresses.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+    <!-- REMOVED: The footer block entirely -->
+  </ng-template>
+
+</div>

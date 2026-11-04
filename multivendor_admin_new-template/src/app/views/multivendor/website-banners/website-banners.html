@@ -1,0 +1,218 @@
+<div class="container-fluid">
+
+  <app-page-breadcrumb
+    title="Banners"
+    subTitle="Website Management" />
+
+  <!-- Location Search -->
+  <div class="row mb-3">
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-body">
+
+          <div class="row align-items-end">
+
+            <!-- Location -->
+            <div class="col-md-5">
+
+              <label
+                for="bannerLocationFilter"
+                class="form-label">
+                Location
+              </label>
+
+              <select
+                id="bannerLocationFilter"
+                class="form-select"
+                (change)="onLocationChange($event)">
+
+                <option value="">
+                  All Locations
+                </option>
+
+                @for (location of locations(); track location.id) {
+                  <option [value]="location.id">
+                    {{ location.city }}
+                  </option>
+                }
+
+              </select>
+
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-md-auto mt-3 mt-md-0">
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="searchByLocation()">
+
+                <i class="ri-search-line me-1"></i>
+                Search
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Banners Table -->
+  <div class="row">
+    <div class="col-12">
+
+      <app-data-table
+        title="Banners"
+        searchPlaceholder="Search banners..."
+        itemsName="banners"
+        addLabel="Add Banner"
+        emptyMessage="No banners added yet."
+        [rows]="filteredRows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+
+    </div>
+  </div>
+
+  <!-- Add / Edit Banner Modal -->
+  <ng-template #formModal let-modal>
+
+    <div class="modal-header">
+
+      <h5 class="modal-title">
+        {{ editingId() ? 'Update Banner' : 'Add Banner' }}
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss()">
+      </button>
+
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()">
+
+      <div class="modal-body">
+
+        <!-- Location Dropdown -->
+        <div class="mb-3">
+
+          <label
+            for="websitebannerslocation"
+            class="form-label">
+            Location
+           <span class="text-danger">*</span></label>
+
+          <select
+            id="websitebannerslocation"
+            formControlName="location_id"
+            class="form-select">
+
+            <option value="">
+              Select Location
+            </option>
+
+            @for (location of locations(); track location.id) {
+              <option [value]="location.id">
+                {{ location.city }}
+              </option>
+            }
+
+          </select>
+                @if (fieldError(form, 'location_id', 'Location')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'location_id', 'Location') }}</div>
+                }
+
+        </div>
+
+        <!-- Banner Image -->
+        <div class="mb-3">
+
+          <label
+            for="websitebannersbannerimage"
+            class="form-label">
+            Banner Image
+           <span class="text-danger">*</span></label>
+
+          <input
+            type="file"
+            id="websitebannersbannerimage"
+            class="form-control"
+            accept="image/*"
+            (change)="onBannerImageSelected($event)"
+          />
+                @if (fieldError(form, 'banner_image', 'Banner Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'banner_image', 'Banner Image') }}</div>
+                }
+
+          <small class="text-muted">
+            Select an image from your computer.
+          </small>
+
+          @if (form.controls.banner_image.value) {
+
+            <div class="mt-3 text-center">
+
+              <img
+                [src]="form.controls.banner_image.value"
+                alt="Banner preview"
+                class="img-fluid rounded border"
+                style="max-height: 180px; max-width: 100%; object-fit: contain;"
+              />
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving()">
+
+          @if (saving()) {
+
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status">
+            </span>
+
+          }
+
+          {{ editingId() ? 'Update' : 'Save' }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </ng-template>
+
+</div>

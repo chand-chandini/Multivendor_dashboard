@@ -1,0 +1,48 @@
+<div class="card card-h-100">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col-6">
+        <h5 class="text-muted fs-sm text-uppercase text-truncate" [title]="item.title">{{ item.title }}</h5>
+        <div class="d-flex align-items-center gap-2 my-3">
+          <div class="avatar-md flex-shrink-0">
+            <span class="avatar-title text-bg-light rounded-circle fs-22">
+              <app-icon [icon]="item.icon"></app-icon>
+            </span>
+          </div>
+          <h3 class="mb-0 fw-bold">
+            <span
+              [countUp]="item.value"
+              [countUpOptions]="{
+                prefix: item.prefix || '',
+                suffix: item.suffix || '',
+                decimalPlaces: Number.isInteger(item.value) ? 0 : 2
+              }"
+            ></span>
+          </h3>
+        </div>
+        <p class="mb-0 text-muted">
+          <span
+            class="me-2"
+            [class]="{
+              'text-success': item.change > 0,
+              'text-danger': item.change < 0
+            }"
+            >{{ item.change }}% @if(item.change > 0){
+            <app-icon icon="trending-up" class="text-success"></app-icon>
+            } @else{ <app-icon icon="trending-down" class="text-danger"></app-icon>
+            }
+          </span>
+          <span class="text-nowrap"> {{ item.label }}</span>
+        </p>
+      </div>
+
+      <div class="col-6">
+        <div [class]="index == 1 ? 'd-flex justify-content-end' : 'text-end'">
+          @if (item.chartOptions) {
+          <app-apexchart [getOptions]="item.chartOptions" />
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

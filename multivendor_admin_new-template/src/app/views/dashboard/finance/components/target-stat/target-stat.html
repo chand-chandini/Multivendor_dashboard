@@ -1,0 +1,14 @@
+<div
+  class="card border-0 rounded-3 text-white"
+  [ngStyle]="{
+    'background-image': 'url(' + target.image + ')',
+    'background-size': 'cover'
+  }"
+>
+  <div class="card-body bg-gradient {{ target.className }} bg-opacity-90 rounded-3">
+    <iconify-icon [icon]="target.icon" class="fs-36"></iconify-icon>
+    <p class="text-white text-opacity-75 mb-1 text-uppercase">Goal</p>
+    <h3 class="fw-semibold mb-2 fs-20">{{ target.title }}</h3>
+    <h4 class="fw-medium fs-16 mb-1">{{target.prefix}}<span [countUp]="target.value"></span></h4>
+  </div>
+</div>

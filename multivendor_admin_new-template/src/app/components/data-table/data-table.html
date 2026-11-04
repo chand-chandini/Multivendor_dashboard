@@ -1,0 +1,117 @@
+<div class="card">
+  <div class="card-header border-light d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <div class="d-flex align-items-center gap-2">
+      @if (title()) {
+        <h5 class="card-title mb-0 me-2">{{ title() }}</h5>
+      }
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" [placeholder]="searchPlaceholder()" />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0" aria-label="Records per page">
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="25">25</option>
+          <option [ngValue]="50">50</option>
+          <option [ngValue]="100">100</option>
+        </select>
+      </div>
+
+      <ng-content select="[toolbar]"></ng-content>
+
+      @if (canAdd) {
+        <a [routerLink]="[]" class="btn btn-primary" (click)="add.emit()">
+          <app-icon icon="plus" class="me-1 fs-sm"></app-icon>
+          {{ addLabel() }}
+        </a>
+      }
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-custom table-centered table-hover w-100 mb-0">
+      <thead class="bg-light bg-opacity-25 thead-sm">
+        <tr class="text-uppercase fs-xxs">
+          @for (column of columns(); track column.key) {
+            @if (column.sortable === false) {
+              <th [style.width]="column.width" [class]="'text-' + (column.align || 'start')">{{ column.label }}</th>
+            } @else {
+              <th [sortable]="column.key" (sort)="onSort($event.column, $event.direction)" [style.width]="column.width" [class]="'text-' + (column.align || 'start')">{{ column.label }}</th>
+            }
+          }
+          @if (visibleActionsExist) {
+            <th class="text-center" style="width: 1%">Actions</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading()) {
+          <tr>
+            <td [attr.colspan]="visibleColumnCount" class="text-center text-muted py-4">
+              <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Loading...
+            </td>
+          </tr>
+        } @else {
+          @for (row of tableService.items$ | async; track $index) {
+            <tr>
+              @for (column of columns(); track column.key) {
+                <td [class]="'text-' + (column.align || 'start')">
+                  @if (templateFor(column)) {
+                    <ng-container *ngTemplateOutlet="templateFor(column)!; context: { $implicit: row, column: column }"></ng-container>
+                  } @else if (column.type === 'badge') {
+                    <span [class]="badgeClass(row, column)">{{ display(row, column) }}</span>
+                   } @else if (column.type === 'image') {
+  @if (value(row, column)) {
+<img [src]="getImageUrl(value(row, column))" [alt]="column.label" class="rounded avatar-sm object-fit-cover" />  } @else {
+    <span class="text-muted">-</span>
+  }
+} @else if (column.type === 'switch') {
+  <div class="form-check form-switch d-inline-flex justify-content-center">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      [checked]="isTruthy(value(row, column))"
+      [attr.aria-label]="column.label"
+      (change)="onSwitchChange(row, column, $event)"
+    />
+  </div>
+} @else {
+  {{ display(row, column) }}
+}
+                </td>
+              }
+
+              @if (visibleActionsExist) {
+                <td>
+                  <div class="d-flex align-items-center justify-content-center gap-1">
+                    @for (item of actions(); track item.key) {
+                      @if (isActionVisible(item, row)) {
+                        <a [routerLink]="[]" [class]="'btn btn-default btn-icon btn-sm ' + (item.className || '')" [title]="item.label" (click)="action.emit({ key: item.key, row: row })">
+                          <app-icon [icon]="item.icon" class="fs-lg"></app-icon>
+                        </a>
+                      }
+                    }
+                  </div>
+                </td>
+              }
+            </tr>
+          } @empty {
+            <tr class="no-results">
+              <td [attr.colspan]="visibleColumnCount" class="text-center text-muted py-4">{{ emptyMessage() }}</td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((tableService.total$ | async)! > 0) {
+      <app-custom-pagination [itemsName]="itemsName()" [showingRange]="tableService.showingRange" [collectionSize]="(tableService.total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

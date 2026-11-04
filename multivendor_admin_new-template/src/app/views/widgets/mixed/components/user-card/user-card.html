@@ -1,0 +1,111 @@
+<div class="card card-h-100">
+  <div class="card-body">
+    <div class="d-flex align-items-center mb-4">
+      <div class="me-3 position-relative">
+        <img [src]="item.user.image" alt="avatar" class="rounded-circle" width="72" height="72" />
+        <span class="position-absolute bottom-0 end-0 badge rounded-circle p-1 shadow-sm" [class]="item.className" title="'Rating ' + item.rating">
+          <app-icon icon="star" class="text-white"></app-icon>
+        </span>
+      </div>
+      <div>
+        <h5 class="mb-1 d-flex align-items-center">
+          <a [routerLink]="[]" class="link-reset">{{ item.user.name }}</a>
+          <img [src]="item.image" alt="flag" class="ms-2 rounded-circle" height="16" />
+        </h5>
+        <p class="text-muted mb-1">{{ item.user.role }}</p>
+        <span class="badge text-bg-light badge-label"> {{ item.position }} </span>
+      </div>
+      <div class="ms-auto">
+        <div ngbDropdown placement="bottom-end">
+          <a ngbDropdownToggle [routerLink]="[]" class="btn btn-icon btn-ghost-light text-muted drop-arrow-none">
+            <app-icon icon="dots-vertical" class="fs-xl"></app-icon>
+          </a>
+          <ul ngbDropdownMenu class="dropdown-menu-end">
+            <li>
+              <a ngbDropdownItem [routerLink]="[]">
+                <app-icon icon="share" class="me-2"></app-icon>
+                Share
+              </a>
+            </li>
+            <li>
+              <a ngbDropdownItem [routerLink]="[]">
+                <app-icon icon="edit" class="me-2"></app-icon>
+                Edit
+              </a>
+            </li>
+            <li>
+              <a ngbDropdownItem [routerLink]="[]">
+                <app-icon icon="ban" class="me-2"></app-icon>
+                Block
+              </a>
+            </li>
+            <li>
+              <a ngbDropdownItem class="text-danger" [routerLink]="[]">
+                <app-icon icon="trash" class="me-2"></app-icon>
+                Delete
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ul class="list-unstyled text-muted mb-4">
+      <li class="mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar-xs avatar-img-size fs-24">
+            <span class="avatar-title text-bg-light fs-sm rounded-circle">
+              <app-icon icon="mail"></app-icon>
+            </span>
+          </div>
+          <h5 class="fs-base mb-0 fw-medium">
+            <a [routerLink]="[]" class="link-reset">{{ item.email }}</a>
+          </h5>
+        </div>
+      </li>
+      <li class="mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar-xs avatar-img-size fs-24">
+            <span class="avatar-title text-bg-light fs-sm rounded-circle">
+              <app-icon icon="phone"></app-icon>
+            </span>
+          </div>
+          <h5 class="fs-base mb-0 fw-medium">
+            <a [routerLink]="[]" class="link-reset">{{ item.phone }}</a>
+          </h5>
+        </div>
+      </li>
+      <li class="mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar-xs avatar-img-size fs-24">
+            <span class="avatar-title text-bg-light fs-sm rounded-circle">
+              <app-icon icon="map-pin"></app-icon>
+            </span>
+          </div>
+          <h5 class="fs-base mb-0 fw-medium">{{ item.location }}</h5>
+        </div>
+      </li>
+      <li>
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar-xs avatar-img-size fs-24">
+            <span class="avatar-title text-bg-light fs-sm rounded-circle">
+              <app-icon icon="link"></app-icon>
+            </span>
+          </div>
+          <h5 class="fs-base mb-0 fw-medium">
+            <a [routerLink]="[]">{{ item.website }}</a>
+          </h5>
+        </div>
+      </li>
+    </ul>
+
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="text-muted fs-xs">
+        <app-icon icon="refresh" class="me-1"></app-icon>
+        {{ item.updatedText }}
+      </span>
+      <a [routerLink]="[]" class="btn btn-soft-primary btn-sm rounded-pill">View Profile</a>
+    </div>
+  </div>
+  <!-- end card-body-->
+</div>

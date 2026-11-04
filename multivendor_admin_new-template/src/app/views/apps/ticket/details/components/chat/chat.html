@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-title">Chat</h4>
+  </div>
+
+  <ngx-simplebar class="card-body py-0" style="height: 380px" id="chat-container" #scrollRef>
+    @for (msg of messageData; track $index) {
+    <div class="d-flex align-items-start gap-2 my-3 chat-item" [class]="msg.user === currentUser ? 'text-end justify-content-end' : ''">
+      @if (msg.user !== currentUser) {
+      <img [src]="msg.user.image" class="avatar-md rounded-circle" alt="User" />
+      }
+      <div>
+        <div class="chat-message py-2 px-3 rounded" [class]="msg.user === currentUser ? 'bg-info-subtle' : 'bg-warning-subtle'">{{ msg.message }}</div>
+
+        <div class="text-muted fs-xs mt-1"><app-icon icon="clock"></app-icon> {{ msg.time }}</div>
+      </div>
+      @if (msg.user === currentUser) {
+      <img [src]="msg.user.image" class="avatar-md rounded-circle" alt="User" />
+      }
+    </div>
+    }
+  </ngx-simplebar>
+
+  <div class="card-footer bg-body-secondary border-top border-dashed border-bottom-0">
+    <div class="d-flex gap-2">
+      <div class="app-search flex-grow-1">
+        <input type="text" class="form-control bg-light-subtle border-light" placeholder="Enter message..." />
+        <app-icon icon="message" class="app-search-icon text-muted"></app-icon>
+      </div>
+      <a [routerLink]="[]" class="btn btn-primary btn-icon"><app-icon icon="send-2" class="fs-xl"></app-icon></a>
+    </div>
+  </div>
+</div>

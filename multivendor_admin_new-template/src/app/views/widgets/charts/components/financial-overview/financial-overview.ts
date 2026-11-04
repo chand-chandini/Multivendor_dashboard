@@ -1,0 +1,20 @@
+import { Apexchart } from '@/app/components/apexchart/apexchart'
+import { Icon } from '@/app/components/icon/icon'
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { RouterLink } from '@angular/router'
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
+import { CountUpDirective } from 'ngx-countup'
+import { financialOverviewChart, overviewData } from '../../data'
+
+@Component({
+  selector: 'app-financial-overview',
+  imports: [NgbDropdownModule, Icon, RouterLink, Apexchart, CountUpDirective],
+  templateUrl: './financial-overview.html',
+  styles: ``,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+export class FinancialOverview {
+  overviewData = overviewData
+  Number = Number
+  financialOverviewChart = financialOverviewChart
+}

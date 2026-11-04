@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="card-title">Sortable with Icons with Labels</h4>
+  </div>
+
+  <div class="card-body">
+    <p class="text-muted">
+      Use
+      <code>nested-sortable</code>
+      class with the list-group class to create a nested list with sortable items where icons are placed inside list-group-item.
+    </p>
+    <div cdkDropList [cdkDropListData]="sections" class="list-group border-dashed" (cdkDropListDropped)="drop($event)">
+      @for (section of sections; track $index) {
+      <div cdkDrag class="list-group-item">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <app-icon [icon]="section.icon" class="fs-4 text-primary"></app-icon>
+            <h5 class="mb-0 fw-semibold">{{ section.title }}</h5>
+          </div>
+          <span class="badge" [class]="'bg-' + section.label.variant + '-subtle text-' + section.label.variant"> {{ section.label.text }} </span>
+        </div>
+
+        @if (section.children) {
+        <div cdkDropList [cdkDropListData]="section.children" class="list-group nested-sortable border-0" (cdkDropListDropped)="drop($event)">
+          @for (child of section.children; track $index) {
+          <div cdkDrag class="list-group-item">
+            <app-icon [icon]="child.icon" class="fs-sm me-2 text-muted"></app-icon>
+            {{ child.title }}
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,344 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Payments" subTitle="Payments" />
+
+  <!-- Filters -->
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Filters</h5>
+        </div>
+
+    <div class="card-body">
+      <form [formGroup]="filters">
+        <div class="row g-3 align-items-end">
+
+          <!-- Payment Gateway -->
+          <div class="col-md-3">
+            <label for="paymentGateway" class="form-label">
+              Payment Gateway
+            </label>
+
+            <select
+              id="paymentGateway"
+              formControlName="payment_gateway"
+              class="form-select"
+            >
+              <option [ngValue]="null">
+                All gateways
+              </option>
+
+              <option value="razorpay">Razorpay</option>
+              <option value="stripe">Stripe</option>
+              <option value="cod">COD</option>
+              <option value="wallet">Wallet</option>
+            </select>
+          </div>
+
+          <!-- Payment Status -->
+          <div class="col-md-3">
+            <label for="paymentStatus" class="form-label">
+              Payment Status
+            </label>
+
+            <select
+              id="paymentStatus"
+              formControlName="payment_status"
+              class="form-select"
+            >
+              <option [ngValue]="null">
+                All statuses
+              </option>
+
+              <option [ngValue]="0">Pending</option>
+              <option [ngValue]="1">Success</option>
+              <option [ngValue]="2">Failed</option>
+              <option [ngValue]="3">Refunded</option>
+            </select>
+          </div>
+
+          <!-- From Date -->
+          <div class="col-md-2">
+            <label for="paymentFromDate" class="form-label">
+              From Date
+            </label>
+
+            <input
+              id="paymentFromDate"
+              type="date"
+              formControlName="from_date"
+              class="form-control"
+            />
+          </div>
+
+          <!-- To Date -->
+          <div class="col-md-2">
+            <label for="paymentToDate" class="form-label">
+              To Date
+            </label>
+
+            <input
+              id="paymentToDate"
+              type="date"
+              formControlName="to_date"
+              class="form-control"
+            />
+          </div>
+
+          <!-- Buttons -->
+          <div class="col-md-2 d-flex gap-2">
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="loading()"
+              (click)="load()"
+            >
+              Apply
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-light"
+              [disabled]="loading()"
+              (click)="resetFilters()"
+            >
+              Reset
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <!-- Summary Cards -->
+
+  <div class="row">
+
+<!-- Total Payments -->
+<div class="col-md-4">
+  <div class="card">
+    <div class="card-body">
+      <p class="text-muted mb-1 fs-xs text-uppercase">
+        Total Payments
+      </p>
+
+      <h4 class="mb-0">
+        {{ totalPayments() }}
+      </h4>
+    </div>
+  </div>
+</div>
+
+<!-- Successful Payments -->
+<div class="col-md-4">
+  <div class="card">
+    <div class="card-body">
+      <p class="text-muted mb-1 fs-xs text-uppercase">
+        Successful Payments
+      </p>
+
+      <h4 class="mb-0">
+        {{ successfulPayments() }}
+      </h4>
+    </div>
+  </div>
+</div>
+
+<!-- Total Amount -->
+<div class="col-md-4">
+  <div class="card">
+    <div class="card-body">
+      <p class="text-muted mb-1 fs-xs text-uppercase">
+        Total Amount
+      </p>
+
+      <h4 class="mb-0">
+        {{ totalAmountLabel() }}
+      </h4>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <!-- Payments Table -->
+
+  <div class="row">
+    <div class="col-12">
+
+  <app-data-table
+    title="Payments"
+    searchPlaceholder="Search payments..."
+    itemsName="payment records"
+    emptyMessage="No payments recorded yet."
+    [rows]="rows()"
+    [columns]="columns"
+    [actions]="actions"
+    [loading]="loading()"
+    (action)="onAction($event)"
+  />
+
+</div>
+
+  </div>
+
+</div>
+
+<!-- Payment Details Modal -->
+
+<ng-template #paymentDetailsModal let-modal>
+
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Payment Details
+    </h5>
+
+<button
+  type="button"
+  class="btn-close"
+  aria-label="Close"
+  (click)="modal.dismiss()"
+></button>
+
+  </div>
+
+  <div class="modal-body">
+
+@if (selectedPayment(); as payment) {
+
+  <div class="row g-3">
+
+    <!-- Payment ID -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Payment ID
+      </div>
+
+      <div class="fw-semibold">
+        {{ payment.id || '-' }}
+      </div>
+    </div>
+
+    <!-- Order ID -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Order ID
+      </div>
+
+      <div class="fw-semibold">
+        {{ payment.order_id || '-' }}
+      </div>
+    </div>
+
+    <!-- Payment Gateway -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Payment Gateway
+      </div>
+
+      <div class="fw-semibold">
+        {{ payment.payment_gateway || '-' }}
+      </div>
+    </div>
+
+    <!-- Payment Status -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Payment Status
+      </div>
+
+      <div class="fw-semibold">
+        {{ payment.payment_status_label || '-' }}
+      </div>
+    </div>
+
+    <!-- Gateway Payment ID -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Gateway Payment ID
+      </div>
+
+      <div class="fw-semibold text-break">
+        {{ payment.gateway_payment_id || '-' }}
+      </div>
+    </div>
+
+    <!-- Gateway Order ID -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Gateway Order ID
+      </div>
+
+      <div class="fw-semibold text-break">
+        {{ payment.gateway_order_id || '-' }}
+      </div>
+    </div>
+
+    <!-- Amount -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Amount
+      </div>
+
+      <div class="fs-4 fw-semibold">
+        ₹{{ payment.amount || 0 }}
+      </div>
+    </div>
+
+    <!-- Currency -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Currency
+      </div>
+
+      <div class="fw-semibold">
+        {{ payment.currency || '-' }}
+      </div>
+    </div>
+
+    <!-- Paid At -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Paid At
+      </div>
+
+      <div class="fw-semibold">
+        {{ payment.paid_at || '-' }}
+      </div>
+    </div>
+
+    <!-- Created At -->
+    <div class="col-md-6">
+      <div class="text-muted small mb-1">
+        Created At
+      </div>
+
+      <div class="fw-semibold">
+        {{ payment.i_ts || '-' }}
+      </div>
+    </div>
+
+  </div>
+
+}
+
+  </div>
+
+  <div class="modal-footer">
+
+<button
+  type="button"
+  class="btn btn-light"
+  (click)="modal.dismiss()"
+>
+  Close
+</button>
+
+  </div>
+
+</ng-template>

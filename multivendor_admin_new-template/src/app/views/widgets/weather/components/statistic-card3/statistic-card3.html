@@ -1,0 +1,35 @@
+<div class="card overflow-hidden">
+  <div class="position-relative" style="height: 200px; background: url('assets/images/stock/small-6.jpg') center/cover">
+    <div class="position-absolute top-0 start-0 bg-dark text-white text-center px-3 py-2 rounded-end-3 mt-3">
+      <div class="fw-bold">OCT</div>
+      <div class="fw-bold fs-5">21</div>
+    </div>
+
+    <div class="position-absolute bottom-0 start-0 text-white p-3">
+      <div class="fs-5">Cloudy</div>
+      <h2 class="fw-bold">69°</h2>
+    </div>
+
+    <ul ngbNav [(activeId)]="activeTab" class="nav nav-tabs border-0 position-absolute bottom-0 end-0 p-2">
+      <li [ngbNavItem]="'today'">
+        <button ngbNavLink class="bg-transparent text-white fw-semibold border-0 border-bottom border-white rounded-0">Today</button>
+      </li>
+
+      <li [ngbNavItem]="'week'">
+        <button ngbNavLink class="bg-transparent text-white-50 fw-semibold border-0 rounded-0">Week</button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="p-3">
+    <div class="row text-center">
+      @for (item of hourlyWeatherData; track $index) {
+      <div class="col">
+        <div class="fw-semibold text-muted">{{ item.time }}</div>
+        <iconify-icon [icon]="item.icon" class="fs-2 my-1 d-flex justify-content-center"> </iconify-icon>
+        <div class="fw-semibold">{{ item.temperature }}</div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

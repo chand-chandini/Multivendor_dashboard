@@ -1,0 +1,212 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Todo List" subTitle="Apps"></app-page-breadcrumb>
+
+  <div class="outlook-box gap-1">
+    <ng-template #sidebar let-offcanvas>
+      <app-todo-sidebar />
+    </ng-template>
+
+    <app-todo-sidebar class="d-none d-lg-block outlook-left-menu outlook-left-menu-lg" />
+
+    <div class="card h-100 mb-0 rounded-start-0 flex-grow-1 border-start-0">
+      <div class="card-header d-lg-none d-flex gap-2">
+        <button class="btn btn-default btn-icon" type="button" (click)="openSidebar(sidebar)">
+          <app-icon icon="menu-4" class="fs-lg"></app-icon>
+        </button>
+
+        <div class="app-search">
+          <input type="text" class="form-control" placeholder="Search here..." />
+          <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+        </div>
+      </div>
+
+      <div class="card-header card-bg justify-content-between">
+        <h4 class="card-title">Tasks</h4>
+        <div class="app-search">
+          <input type="text" class="form-control" placeholder="Search here..." />
+          <app-icon icon="search" class="app-search-icon text-muted"> </app-icon>
+        </div>
+      </div>
+
+      <ngx-simplebar class="card-body p-0" style="height: calc(100% - 100px)">
+        <div cdkDropList (cdkDropListDropped)="drop($event)" class="nested-sortable-handle">
+          @for( task of tasks; track task.id) {
+          <div cdkDrag class="border-bottom py-2 px-3 d-flex gap-2 align-items-center">
+            <app-icon icon="grip-horizontal" class="align-middle sort-handle"></app-icon>
+            <input type="checkbox" class="form-check-input rounded-circle mt-0 fs-16" [id]="'task' + task.id" />
+            <a [routerLink]="[]" (click)="openTaskModal(taskmodal)" class="link-reset fw-medium"> {{ task.title }}</a>
+
+            <div class="d-flex align-items-center gap-3 flex-wrap justify-content-md-end ms-auto">
+              <div class="avatar-group avatar-group-sm flex-shrink-0">
+                @for(assignees of task.assignee; track assignees.name) {
+                <div class="avatar" ngbTooltip="{{ assignees.name }}" tooltipClass="tooltip-secondary" [title]="assignees.name">
+                  <img [src]="assignees.image" alt="" class="rounded-circle fs-24 avatar-img-size" />
+                </div>
+                }
+              </div>
+
+              <div class="flex-shrink-0">
+                <span
+                  class="badge"
+                  [class]="
+                    task.status === 'new' || task.status === 'pending'
+                      ? 'badge-outline-warning'
+                      : task.status === 'in-progress'
+                      ? 'badge-outline-success'
+                      : task.status === 'scheduled'
+                      ? 'badge-outline-primary'
+                      : 'badge-outline-danger'
+                  "
+                >
+                  {{ toPascalCase(task.status) }}
+                </span>
+              </div>
+
+              <ul class="list-inline fs-13 text-end flex-shrink-0 mb-0">
+                <li class="list-inline-item">
+                  <app-icon icon="calendar" class="text-muted fs-16 me-2 align-middle"></app-icon>
+                  <span class="fw-semibold">{{ task.due }}</span>
+                </li>
+                <li class="list-inline-item ms-1">
+                  <app-icon icon="list-details" class="text-muted fs-16 me-2 align-middle"></app-icon>
+                  <span class="fw-medium">{{ task.tasks.done }}/{{ task.tasks.total }}</span>
+                </li>
+                <li class="list-inline-item ms-1">
+                  <app-icon icon="messages" class="text-muted fs-16 me-2 align-middle"></app-icon>
+                  <span class="fw-medium">{{ task.comments }}</span>
+                </li>
+              </ul>
+
+              <div class="flex-shrink-0">
+                <span
+                  class="badge p-1"
+                  [class]="
+                    task.priority === 'high'
+                      ? 'badge-soft-danger'
+                      : task.priority === 'medium'
+                      ? 'badge-soft-warning'
+                      : task.priority === 'low'
+                      ? 'badge-soft-success'
+                      : 'badge-soft-primary'
+                  "
+                >
+                  {{ toPascalCase(task.priority) }}
+                </span>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+
+        <div class="d-flex align-items-center justify-content-center gap-2 p-3">
+          <strong>Loading...</strong>
+          <div class="spinner-border spinner-border-sm text-danger" role="status" aria-hidden="true"></div>
+        </div>
+      </ngx-simplebar>
+    </div>
+  </div>
+</div>
+
+<ng-template #taskmodal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="taskDetailsModalLabel">Finalize Product Roadmap for Launch</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <div class="modal-body pb-0">
+    <div class="d-flex align-items-center mb-4">
+      <div class="avatar me-2" ngbTooltip="Assigned by Alex Johnson">
+        <img src="assets/images/users/user-8.jpg" alt="" class="rounded-circle avatar-img-size" style="width: 40px; height: 40px" />
+      </div>
+      <div>
+        <span class="fw-semibold">Assigned by:</span>
+        Alex Johnson
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="text-uppercase d-block fw-semibold fs-xs text-muted mb-1">Status</label>
+        <span class="badge badge-outline-success">In Progress</span>
+      </div>
+      <div class="col-md-4">
+        <label class="text-uppercase d-block fw-semibold fs-xs text-muted mb-1">Priority</label>
+        <span class="badge badge-soft-primary p-1">Medium</span>
+      </div>
+      <div class="col-md-4">
+        <label class="text-uppercase d-block fw-semibold fs-xs text-muted mb-1">Due Date</label>
+        <span class="fw-semibold">Tomorrow</span>
+      </div>
+      <div class="col-md-4">
+        <label class="text-uppercase d-block fw-semibold fs-xs text-muted mb-1">Progress</label>
+        <span class="fw-medium">5/10</span>
+      </div>
+      <div class="col-md-4">
+        <label class="text-uppercase d-block fw-semibold fs-xs text-muted mb-1">Assigned To</label>
+        <div class="avatar-group avatar-group-sm">
+          <div class="avatar" ngbTooltip="Maria 💻">
+            <img src="assets/images/users/user-5.jpg" alt="" class="rounded-circle fs-24 avatar-img-size" />
+          </div>
+          <div class="avatar" ngbTooltip="James">
+            <img src="assets/images/users/user-6.jpg" alt="" class="rounded-circle fs-24 avatar-img-size" />
+          </div>
+          <div class="avatar" ngbTooltip="Sophia 🚀">
+            <img src="assets/images/users/user-7.jpg" alt="" class="rounded-circle fs-24 avatar-img-size" />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label class="text-uppercase d-block fw-semibold fs-xs text-muted mb-1">Description</label>
+        <p class="mb-0">Preparing and finalizing the product roadmap for the upcoming launch with clear milestones and dependencies.</p>
+      </div>
+
+      <!-- Comments -->
+      <div class="col-12">
+        <div class="bg-light-subtle mx-n3 p-3 border-top border-bottom border-dashed">
+          <div class="d-flex align-items-start">
+            <img class="me-2 avatar-sm rounded-circle" src="assets/images/users/user-5.jpg" alt="Generic placeholder image" />
+            <div class="w-100 fs-sm">
+              <h6 class="mt-0 mb-1">
+                <a [routerLink]="[]" class="link-reset">Ethan Reynolds</a>
+                <small class="text-muted fw-normal float-end">20 minutes ago</small>
+              </h6>
+              Loved your recent project! Really curious to see how you implemented the animations.
+              <br />
+              <a [routerLink]="[]" class="text-muted font-13 d-inline-block mt-2">
+                <app-icon icon="corner-up-left"></app-icon>
+                Reply
+              </a>
+
+              <div class="d-flex align-items-start mt-3">
+                <a class="pe-2" [routerLink]="[]">
+                  <img src="assets/images/users/user-6.jpg" class="avatar-sm rounded-circle" alt="Generic placeholder image" />
+                </a>
+                <div class="w-100">
+                  <h6 class="mt-0 mb-1">
+                    <a [routerLink]="[]" class="link-reset">Mia Thompson</a>
+                    <small class="text-muted fw-normal float-end">12 minutes ago</small>
+                  </h6>
+                  I created something similar in Angular last month — would love to swap tips!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start mt-3">
+            <a class="pe-2" [routerLink]="[]">
+              <img src="assets/images/users/user-3.jpg" class="rounded-circle" alt="Generic placeholder image" height="31" />
+            </a>
+            <div class="w-100">
+              <input type="text" id="simpleinput" class="form-control form-control-sm" placeholder="Add a comment..." />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer border-top-0">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Close</button>
+    <button type="button" class="btn btn-primary">Mark as Complete</button>
+  </div>
+</ng-template>

@@ -1,0 +1,242 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <!-- Search -->
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search income..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Add New Income -->
+      <button class="btn btn-primary" (click)="openIncomeModal(content)"><app-icon icon="plus" class="me-1"></app-icon> Add Income</button>
+
+      <!-- Delete Selected -->
+      @if (hasSelection) {
+      <button (click)="deleteSelected()" class="btn btn-danger">Delete</button>
+      }
+    </div>
+
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <!-- Source Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterCategory" (ngModelChange)="tableService.setFilter('category', filterCategory)" class="form-select form-control my-1 my-md-0">
+          <option value="">Source</option>
+          <option value="Sales">Sales</option>
+          <option value="Services">Services</option>
+          <option value="Consulting">Consulting</option>
+          <option value="Investments">Investments</option>
+          <option value="Affiliate">Affiliate</option>
+          <option value="Other">Other</option>
+        </select>
+        <app-icon icon="briefcase" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Status</option>
+          <option value="received">Received</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Failed</option>
+          <option value="refunded">Refunded</option>
+        </select>
+        <app-icon icon="circle-check" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Records Per Page -->
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="8">8</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+        <thead class="bg-light align-middle bg-opacity-25 thead-sm text-nowrap">
+          <tr class="text-uppercase fs-xxs">
+            <th class="ps-3" style="width: 1%">
+              <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+            </th>
+            <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">ID</th>
+            <th>Income Title</th>
+            <th sortable="category" (sort)="tableService.setSort($event.column, $event.direction)">Source</th>
+            <th>Payment Type</th>
+            <th sortable="amount" (sort)="tableService.setSort($event.column, $event.direction)">Amount</th>
+            <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+            <th sortable="date" (sort)="tableService.setSort($event.column, $event.direction)">Date</th>
+            <th sortable="receivedBy.name" (sort)="tableService.setSort($event.column, $event.direction)">Received By</th>
+            <th class="text-center" style="width: 1%">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for (income of (incomeData$ | async); track $index) {
+          <tr>
+            <td class="ps-3">
+              <input [checked]="selectedIds.has(income.id)" (change)="toggleSingleSelection(income)" class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" />
+            </td>
+            <td><a [routerLink]="[]" class="fw-semibold link-reset">{{ income.id }}</a></td>
+            <td>{{ income.title }}</td>
+            <td data-column="income-source">{{ income.category }}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <img [src]="income.paymentMethod.image" [alt]="income.paymentMethod.name || income.paymentMethod.number" class="me-2" height="26" />
+                <span> {{ income.paymentMethod.type === 'card' ? income.paymentMethod.number : income.paymentMethod.name }} </span>
+              </div>
+            </td>
+            <td>{{ income.amount }}</td>
+            <td>
+              <span
+                class="badge badge-label"
+                [class]="
+                                income.status === 'received' ? 'bg-success-subtle text-success' :
+                                income.status === 'pending' ? 'bg-warning-subtle text-warning' :
+                                 'bg-danger-subtle text-danger'
+                            "
+              >
+                {{ toPascalCase(income.status) }}
+              </span>
+            </td>
+            <td>{{ income.date }} <small class="text-muted">{{ income.time }}</small></td>
+            <td>
+              <div class="d-flex gap-2 align-items-center">
+                <img [src]="income.receivedBy.image" [alt]="income.receivedBy.name" class="avatar-xs rounded-circle" />
+                <span>{{ income.receivedBy.name }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-center gap-1">
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="eye" class="fs-lg"></app-icon>
+                </a>
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="edit" class="fs-lg"></app-icon>
+                </a>
+                <a [routerLink]="[]" (click)="tableService.deleteItem(income)" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="trash" class="fs-lg"></app-icon>
+                </a>
+              </div>
+            </td>
+          </tr>
+          } } @else {
+          <tr class="no-results">
+            <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <!-- end table responsive-->
+  </div>
+  <!-- end card-body-->
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="Income Records" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title fw-semibold" id="incomeModalLabel">Add New Income</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <form id="incomeForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <!-- Income Title -->
+        <div class="col-md-6">
+          <label for="incomeTitle" class="form-label">Income Title <span class="text-danger">*</span></label>
+          <input type="text" id="incomeTitle" class="form-control" placeholder="Enter income title" required />
+        </div>
+
+        <!-- Amount -->
+        <div class="col-md-6">
+          <label for="incomeAmount" class="form-label">Amount ($) <span class="text-danger">*</span></label>
+          <input type="number" step="0.01" id="incomeAmount" class="form-control" placeholder="Enter amount" required />
+        </div>
+
+        <!-- Source -->
+        <div class="col-md-6">
+          <label for="incomeSource" class="form-label">Income Source <span class="text-danger">*</span></label>
+          <select id="incomeSource" class="form-select" required>
+            <option value="">Select source</option>
+            <option value="Sales">Sales</option>
+            <option value="Services">Services</option>
+            <option value="Consulting">Consulting</option>
+            <option value="Investments">Investments</option>
+            <option value="Affiliate">Affiliate</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Payment Type -->
+        <div class="col-md-6">
+          <label for="incomePayment" class="form-label">Payment Type</label>
+          <select id="incomePayment" class="form-select">
+            <option value="">Select payment type</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Cash">Cash</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="PayPal">PayPal</option>
+          </select>
+        </div>
+
+        <!-- Client Name -->
+        <div class="col-md-6">
+          <label for="incomeClient" class="form-label">Client Name</label>
+          <input type="text" id="incomeClient" class="form-control" placeholder="Enter client or company name" />
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-6">
+          <label for="incomeStatus" class="form-label">Status</label>
+          <select id="incomeStatus" class="form-select">
+            <option value="received" selected>Received</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+            <option value="refunded">Refunded</option>
+          </select>
+        </div>
+
+        <!-- Date -->
+        <div class="col-md-6">
+          <label for="incomeDate" class="form-label">Date & Time</label>
+          <input type="text" mwlFlatpickr [options]="flatPickrOptions" id="incomeDate" class="form-control" />
+        </div>
+
+        <!-- Received By -->
+        <div class="col-md-6">
+          <label for="incomeReceivedBy" class="form-label">Received By</label>
+          <div class="d-flex align-items-center gap-2">
+            <img src="assets/images/users/user-5.jpg" alt="user" class="avatar-xs rounded-circle" />
+            <input type="text" id="incomeReceivedBy" class="form-control" placeholder="Enter receiver name" />
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="col-12">
+          <label for="incomeNotes" class="form-label">Notes</label>
+          <textarea id="incomeNotes" class="form-control" rows="3" placeholder="Optional remarks or description"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer border-top">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary"><app-icon icon="device-floppy" class="me-1"></app-icon> Save Income</button>
+    </div>
+  </form>
+</ng-template>

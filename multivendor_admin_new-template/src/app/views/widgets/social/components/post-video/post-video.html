@@ -1,0 +1,73 @@
+<div class="card">
+  <div class="card-body pb-2">
+    <div class="d-flex align-items-center mb-2">
+      <img class="me-2 avatar-sm rounded-circle" src="assets/images/users/user-1.jpg" alt="Profile photo of Anika Roy" />
+      <div class="w-100">
+        <h5 class="m-0">
+          <a [routerLink]="[]" class="link-reset">{{username}}</a>
+        </h5>
+        <p class="text-muted mb-0">
+          <small>Posted 2 hours ago</small>
+        </p>
+      </div>
+      <div ngbDropdown class="ms-auto" placement="bottom-end">
+        <a [routerLink]="[]" class="text-muted drop-arrow-none card-drop p-0" ngbDropdownToggle>
+          <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+        </a>
+        <div ngbDropdownMenu class="dropdown-menu-end">
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="edit" class="me-2"></app-icon>
+            Edit Post
+          </a>
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="trash" class="me-2"></app-icon>
+            Delete Post
+          </a>
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="share" class="me-2"></app-icon>
+            Share
+          </a>
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="pin" class="me-2"></app-icon>
+            Pin to Top
+          </a>
+          <a ngbDropdownItem [routerLink]="[]">
+            <app-icon icon="flag" class="me-2"></app-icon>
+            Report Post
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p>Sharing a couple of timelapses from my recent Iceland trip. Let me know which one you like most!</p>
+
+    <div class="ratio ratio-16x9 rounded overflow-hidden">
+      <iframe src="https://player.vimeo.com/video/1084537" allowfullscreen></iframe>
+    </div>
+
+    <div class="mt-2">
+      <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+        <app-icon icon="corner-up-left" class="me-1"></app-icon>
+        Reply
+      </a>
+
+      <span class="btn btn-sm fs-sm btn-link text-muted" (click)="toggleLike()">
+        @if (liked) {
+        <span class="align-middle">
+          <app-icon icon="heart-filled" class="text-danger"></app-icon>
+          Liked!
+        </span>
+        } @else {
+        <span class="align-middle">
+          <app-icon icon="heart" class="text-muted"></app-icon>
+          Like
+        </span>
+        }
+      </span>
+      <a [routerLink]="[]" class="btn btn-sm fs-sm btn-link text-muted">
+        <app-icon icon="share" class="me-1"></app-icon>
+        Share
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Top Selling Products</h4>
+    <div>
+      <a [routerLink]="[]" class="btn btn-sm btn-default me-1"><app-icon icon="cloud-upload" class="me-1"></app-icon> Export</a>
+      <a [routerLink]="[]" class="btn btn-sm btn-light"><app-icon icon="download" class="me-1"></app-icon> Import</a>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-hover w-100 mb-0">
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for(item of (productData$ | async); track $index){
+          <tr>
+            <td style="width: 60px">
+              <img [src]="item.image" alt="product-pic" height="36" />
+            </td>
+            <td>
+              <h5 class="m-0 fs-base">{{ item.name }}</h5>
+              <span class="text-muted fs-xs">By: {{ item.brand }}</span>
+            </td>
+            <td>
+              <h5 class="m-0 fs-base">{{ item.price }}</h5>
+              <span class="text-muted fs-xs">Price</span>
+            </td>
+            <td>
+              <h5 class="m-0 fs-base">{{ item.quantity }}</h5>
+              <span class="text-muted fs-xs">Quantity</span>
+            </td>
+            <td>
+              <h5 class="m-0 fs-base">{{ item.amount }}</h5>
+              <span class="text-muted fs-xs">Amount</span>
+            </td>
+            <td>
+              <span
+                class="badge px-2 py-1 rounded-pill fs-12"
+                [class]="
+                  item.status === 'in-stock'
+                    ? 'bg-success-subtle text-success'
+                    : item.status === 'low-stock'
+                    ? 'bg-warning-subtle text-warning'
+                    : 'bg-danger-subtle text-danger'
+                "
+              >
+                {{ toPascalCase(item.status) }}
+              </span>
+            </td>
+          </tr>
+          }}@else {
+          <tr class="no-results">
+            <td colspan="8" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="products" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

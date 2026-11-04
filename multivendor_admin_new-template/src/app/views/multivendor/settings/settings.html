@@ -1,0 +1,317 @@
+<div class="container-fluid">
+  <app-page-breadcrumb
+    title="Settings"
+    subTitle="Payment Settings"
+  />
+
+  @if (!canEdit) {
+    <div class="alert alert-info">
+      You have view-only access to payment settings.
+    </div>
+  }
+
+  <div class="row">
+    <div class="col-12">
+
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="activeTab"
+        class="nav-tabs nav-bordered mb-3"
+      >
+        <li ngbNavItem="gateway">
+          <a ngbNavLink>Payments</a>
+
+          <ng-template ngbNavContent>
+
+            <!-- Payment Modes -->
+            <div class="card">
+              <div class="card-header border-light">
+                <h5 class="card-title mb-0">
+                  Accepted Payment Modes
+                </h5>
+              </div>
+
+              <div class="card-body">
+                <div class="row g-3">
+
+                  <!-- Cash on Delivery -->
+                  <div class="col-md-6">
+                    <div
+                      class="d-flex align-items-start gap-2 p-3 rounded border border-success-subtle bg-success-subtle bg-opacity-25 h-100"
+                    >
+                      <div class="form-check form-switch mt-1">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          role="switch"
+                          id="codMode"
+                          [checked]="paymentModes().cod_enabled"
+                          [disabled]="!canEdit || savingModes()"
+                          (change)="onCodToggle($event)"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          for="codMode"
+                          class="form-label mb-0 fw-semibold"
+                        >
+                          Cash on Delivery
+                        </label>
+
+                        <span class="text-muted fs-xs d-block">
+                          {{
+                            paymentModes().cod_enabled
+                              ? 'Customers can pay in cash when the order arrives.'
+                              : 'Switched off — customers must pay online.'
+                          }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Online Payment -->
+                  <div class="col-md-6">
+                    <div
+                      [class]="
+                        'd-flex align-items-start gap-2 p-3 rounded border h-100 ' +
+                        (
+                          paymentModes().online_enabled
+                            ? 'border-info-subtle bg-info-subtle bg-opacity-25'
+                            : 'border-light bg-light bg-opacity-50'
+                        )
+                      "
+                    >
+                      <div class="form-check form-switch mt-1">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          role="switch"
+                          id="onlineMode"
+                          [checked]="paymentModes().online_enabled"
+                          [disabled]="!canEdit || savingGateway()"
+                          (change)="onOnlineToggle($event)"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          for="onlineMode"
+                          class="form-label mb-0 fw-semibold"
+                        >
+                          Online Payment
+                        </label>
+
+                        <span class="text-muted fs-xs d-block">
+                          @if (paymentModes().online_enabled) {
+                            Card, UPI and netbanking are live.
+                          } @else if (paymentModes().online_configured) {
+                            Keys are saved — switch this on to go live.
+                          } @else {
+                            Add your gateway API key and secret below to unlock this.
+                          }
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  @if (showGatewayPrompt()) {
+                    <div class="col-12">
+                      <div class="alert alert-warning mb-0">
+                        <strong>Razorpay keys needed.</strong>
+                        Enter your API key and secret below and save.
+                      </div>
+                    </div>
+                  }
+
+                  <div class="col-12">
+                    <div class="form-text">
+                      Your store always keeps at least one payment mode.
+                      Switching off the last one turns Cash on Delivery back
+                      on automatically.
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Gateway -->
+            <form
+              [formGroup]="gatewayForm"
+              (ngSubmit)="saveGateway()"
+            >
+              <div class="card">
+                <div class="card-header border-light">
+                  <h5 class="card-title mb-0">
+                    Payment Gateway
+                  </h5>
+                </div>
+
+                <div class="card-body">
+                  <div class="row g-3">
+
+                    <!-- Gateway -->
+                    <div class="col-md-4">
+                      <label
+                        for="gatewayName"
+                        class="form-label"
+                      >
+                        Gateway
+                       <span class="text-danger">*</span></label>
+
+                      <select
+                        id="gatewayName"
+                        formControlName="gateway_name"
+                        class="form-select"
+                        [attr.disabled]="canEdit ? null : true"
+                      >
+                        <option value="razorpay">
+                          Razorpay
+                        </option>
+
+                        <option value="stripe">
+                          Stripe
+                        </option>
+
+                        <option value="payu">
+                          PayU
+                        </option>
+
+                        <option value="cashfree">
+                          Cashfree
+                        </option>
+                      </select>
+                @if (fieldError(gatewayForm, 'gateway_name', 'Gateway')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(gatewayForm, 'gateway_name', 'Gateway') }}</div>
+                }
+                    </div>
+
+                    <!-- API Key -->
+                    <div class="col-md-4">
+                      <label
+                        for="apiKey"
+                        class="form-label"
+                      >
+                        API Key
+                       <span class="text-danger">*</span></label>
+
+                      <input
+                        type="text"
+                        id="apiKey"
+                        formControlName="api_key"
+                        class="form-control"
+                        [readonly]="!canEdit"
+                      />
+                @if (fieldError(gatewayForm, 'api_key', 'API Key')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(gatewayForm, 'api_key', 'API Key') }}</div>
+                }
+                    </div>
+
+                    <!-- API Secret -->
+                    <div class="col-md-4">
+                      <label
+                        for="apiSecret"
+                        class="form-label"
+                      >
+                        API Secret
+                       <span class="text-danger">*</span></label>
+
+                      <input
+                        type="password"
+                        id="apiSecret"
+                        formControlName="api_secret"
+                        class="form-control"
+                        autocomplete="off"
+                        [readonly]="!canEdit"
+                      />
+                @if (fieldError(gatewayForm, 'api_secret', 'API Secret')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(gatewayForm, 'api_secret', 'API Secret') }}</div>
+                }
+                    </div>
+
+                    <!-- Webhook Secret -->
+                    <div class="col-md-8">
+                      <label
+                        for="webhookSecret"
+                        class="form-label"
+                      >
+                        Webhook Secret
+                       <span class="text-danger">*</span></label>
+
+                      <input
+                        type="password"
+                        id="webhookSecret"
+                        formControlName="webhook_secret"
+                        class="form-control"
+                        autocomplete="off"
+                        [readonly]="!canEdit"
+                      />
+                @if (fieldError(gatewayForm, 'webhook_secret', 'Webhook Secret')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(gatewayForm, 'webhook_secret', 'Webhook Secret') }}</div>
+                }
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-4">
+                      <label
+                        for="gatewayActive"
+                        class="form-label"
+                      >
+                        Status
+                       <span class="text-danger">*</span></label>
+
+                      <select
+                        id="gatewayActive"
+                        formControlName="is_active"
+                        class="form-select"
+                        [attr.disabled]="canEdit ? null : true"
+                      >
+                        <option [ngValue]="1">
+                          Active
+                        </option>
+
+                        <option [ngValue]="0">
+                          Inactive
+                        </option>
+                      </select>
+                @if (fieldError(gatewayForm, 'is_active', 'Status')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(gatewayForm, 'is_active', 'Status') }}</div>
+                }
+                    </div>
+
+                  </div>
+                </div>
+
+                @if (canEdit) {
+                  <div class="card-footer border-0 text-end">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="savingGateway()"
+                    >
+                      @if (savingGateway()) {
+                        <span
+                          class="spinner-border spinner-border-sm me-1"
+                          role="status"
+                        ></span>
+                      }
+
+                      Save Gateway
+                    </button>
+                  </div>
+                }
+
+              </div>
+            </form>
+
+          </ng-template>
+        </li>
+      </ul>
+
+      <div [ngbNavOutlet]="nav"></div>
+
+    </div>
+  </div>
+</div>

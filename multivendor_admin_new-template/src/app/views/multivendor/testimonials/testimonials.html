@@ -1,0 +1,92 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Testimonials" subTitle="Website Management" />
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Testimonials"
+        searchPlaceholder="Search testimonials..."
+        itemsName="testimonials"
+        addLabel="Add Testimonial"
+        emptyMessage="No testimonials added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">{{ editingId() ? 'Update' : 'Add' }} Testimonial</h5>
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body">
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label for="testimonialscustomername" class="form-label">Customer Name <span class="text-danger">*</span></label>
+            <input type="text" id="testimonialscustomername" formControlName="customer_name" class="form-control" placeholder="e.g. Priya Sharma" />
+                @if (fieldError(form, 'customer_name', 'Customer Name')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'customer_name', 'Customer Name') }}</div>
+                }
+
+          </div>
+          <div class="col-md-6">
+            <label for="testimonialsdesignation" class="form-label">Designation <span class="text-danger">*</span></label>
+            <input type="text" id="testimonialsdesignation" formControlName="designation" class="form-control" placeholder="e.g. Regular customer" />
+                @if (fieldError(form, 'designation', 'Designation')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'designation', 'Designation') }}</div>
+                }
+          </div>
+          <div class="col-md-12">
+            <label for="testimonialsmessage" class="form-label">Message <span class="text-danger">*</span></label>
+            <textarea id="testimonialsmessage" formControlName="message" class="form-control" rows="2"></textarea>
+                @if (fieldError(form, 'message', 'Message')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'message', 'Message') }}</div>
+                }
+          </div>
+          <div class="col-md-4">
+            <label for="testimonialsrating" class="form-label">Rating (0-5) <span class="text-danger">*</span></label>
+            <input type="number" id="testimonialsrating" formControlName="rating" class="form-control" min="0" max="5" step="0.1" />
+                @if (fieldError(form, 'rating', 'Rating (0-5)')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'rating', 'Rating (0-5)') }}</div>
+                }
+          </div>
+          <div class="col-md-4">
+            <label for="testimonialsdisplayorder" class="form-label">Display Order <span class="text-danger">*</span></label>
+            <input type="number" id="testimonialsdisplayorder" formControlName="display_order" class="form-control" min="0" />
+                @if (fieldError(form, 'display_order', 'Display Order')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'display_order', 'Display Order') }}</div>
+                }
+          </div>
+          <div class="col-md-4">
+            <label for="testimonialsstatus" class="form-label">Status <span class="text-danger">*</span></label>
+            <select id="testimonialsstatus" formControlName="status" class="form-select">
+              <option [ngValue]="1">Active</option>
+              <option [ngValue]="0">Inactive</option>
+            </select>
+                @if (fieldError(form, 'status', 'Status')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'status', 'Status') }}</div>
+                }
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          }
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

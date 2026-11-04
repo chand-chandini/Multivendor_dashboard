@@ -1,0 +1,64 @@
+<div class="card">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Location By Session</h4>
+    <div ngbDropdown class="ms-auto">
+      <a [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none" ngbDropdownToggle>
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="world" class="me-2"></app-icon> Show Top Countries </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="map-pin" class="me-2"></app-icon> View City Breakdown </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="calendar" class="me-2"></app-icon> Compare Date Range </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Download Report </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="trash" class="me-2"></app-icon> Clear Filters </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <app-vector-map [options]="getSessionByCountryOptions()" height="203px" />
+
+    <div class="mt-3">
+      <div class="table-responsive mb-n1">
+        <table class="table table-nowrap table-borderless table-centered mb-0">
+          <thead class="bg-light bg-opacity-50 thead-sm">
+            <tr>
+              <th>Country</th>
+              <th>Sessions</th>
+              <th>Users</th>
+              <th>Perc.</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(item of countryData; track $index){
+            <tr>
+              <td>
+                <img [src]="item.country.image" alt="user-image" class="me-1 rounded-circle" height="18" />
+                <span class="align-middle ms-1">{{ item.country.name }}</span>
+              </td>
+              <td>{{ item.sessions }}</td>
+              <td>{{ item.users }}</td>
+              <td>{{ item.percentage }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <!-- end table-responsive-->
+    </div>
+  </div>
+  <!-- end card-body-->
+</div>

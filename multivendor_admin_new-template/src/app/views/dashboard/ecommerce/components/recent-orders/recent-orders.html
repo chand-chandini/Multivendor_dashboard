@@ -1,0 +1,65 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Recent Orders <span class="text-muted fs-base fw-normal">(186.25k Transactions)</span></h4>
+    <div>
+      <a [routerLink]="[]" class="btn btn-sm btn-default me-1"> <app-icon icon="cloud-upload" class="me-1"></app-icon> Export </a>
+      <a [routerLink]="[]" class="btn btn-sm btn-light"> <app-icon icon="download" class="me-1"></app-icon> Import </a>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-hover w-100 mb-0">
+        <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+          <tr class="text-uppercase table-nowrap fs-xxs">
+            <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">#ID</th>
+            <th sortable="customer.name" (sort)="tableService.setSort($event.column, $event.direction)">Customer</th>
+            <th sortable="date" (sort)="tableService.setSort($event.column, $event.direction)">Date</th>
+            <th sortable="amount" (sort)="tableService.setSort($event.column, $event.direction)">Amount</th>
+            <th sortable="payment" (sort)="tableService.setSort($event.column, $event.direction)">Payment</th>
+            <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for(item of (orderData$ | async); track $index){
+          <tr>
+            <td>{{ item.id }}</td>
+            <td>
+              <h5 class="m-0 fs-base">{{ item.customer.name }}</h5>
+              <span class="text-muted fs-xs">{{ item.customer.email }}</span>
+            </td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.amount }}</td>
+            <td>{{ item.payment }}</td>
+            <td>
+              <span
+                class="badge"
+                [class]="
+                  item.status === 'completed'
+                    ? 'bg-success-subtle text-success'
+                    : item.status === 'pending'
+                    ? 'bg-warning-subtle text-warning'
+                    : 'bg-danger-subtle text-danger'
+                "
+              >
+                {{ toPascalCase(item.status) }}
+              </span>
+            </td>
+          </tr>
+          }}@else {
+          <tr class="no-results">
+            <td colspan="8" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="orders" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

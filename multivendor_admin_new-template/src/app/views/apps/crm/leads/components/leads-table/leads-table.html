@@ -1,0 +1,216 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search leads..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <button class="btn btn-primary" (click)="openModal(content)">
+        <app-icon icon="plus" class="me-1"></app-icon>
+        New Leads
+      </button>
+
+      @if (hasSelection) {
+      <button class="btn btn-danger" (click)="deleteSelected()">Delete</button>
+      }
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Status</option>
+          <option value="in-progress">In Progress</option>
+          <option value="proposal-sent">Proposal Sent</option>
+          <option value="follow-up">Follow Up</option>
+          <option value="pending">Pending</option>
+          <option value="negotiation">Negotiation</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <app-icon icon="arrows-shuffle" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <div class="app-search">
+        <select [(ngModel)]="filterAmountRange" (ngModelChange)="tableService.setFilter('amount', filterAmountRange)" class="form-select form-control my-1 my-md-0">
+          <option value="">Amount Range</option>
+          <option value="0-100000">$0 - $100000</option>
+          <option value="100001-250000">$100001 - $250000</option>
+          <option value="250001-500000">$250001 - $500000</option>
+          <option value="500000+">$500000+</option>
+        </select>
+        <app-icon icon="currency-dollar" class="app-search-icon text-muted"></app-icon>
+      </div>
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="8">8</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+        <thead class="bg-light align-middle bg-opacity-25 thead-sm text-nowrap">
+          <tr class="text-uppercase fs-xxs">
+            <th class="ps-3" style="width: 1%">
+              <input [(ngModel)]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+            </th>
+            <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">Lead ID</th>
+            <th>Customer</th>
+            <th>Company</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th sortable="amount" (sort)="tableService.setSort($event.column, $event.direction)">Amount (USD)</th>
+            <th>Tags</th>
+            <th>Assigned</th>
+            <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+            <th sortable="createdDate" (sort)="tableService.setSort($event.column, $event.direction)">Created</th>
+            <th class="text-center" style="width: 1%">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for (lead of (leadData$ | async); track $index) {
+          <tr>
+            <td class="ps-3">
+              <input [checked]="selectedIds.has(lead.id)" (change)="toggleSingleSelection(lead)" class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" />
+            </td>
+            <td><a [routerLink]="[]" class="fw-semibold link-reset">{{ lead.id }}</a></td>
+            <td>{{ lead.customer }}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm border flex-shrink-0 border-dashed rounded-circle me-2 justify-content-center d-flex align-items-center">
+                  <img [src]="lead.image" [alt]="lead.company" height="20" />
+                </div>
+                <a [routerLink]="[]" class="link-reset">{{ lead.company }}</a>
+              </div>
+            </td>
+            <td>{{ lead.email }}</td>
+            <td>{{ lead.phone }}</td>
+            <td>{{ lead.amount }}</td>
+            <td>
+              <span class="badge badge-label {{lead.tag.className}}"> {{ lead.tag.label }} </span>
+            </td>
+            <td>
+              <img [src]="lead.assigned.image" [alt]="lead.assigned.name" class="avatar-xs rounded-circle" [ngbTooltip]="lead.assigned.name" placement="top" />
+            </td>
+            <td>
+              <span
+                class="badge"
+                [class]="
+                                lead.status === 'in-progress' ? 'bg-success-subtle text-success' :
+                                lead.status === 'proposal-sent' ? 'bg-primary-subtle text-primary' :
+                                 lead.status === 'follow-up' ? 'bg-info-subtle text-info' :
+                                  lead.status === 'pending' ? 'bg-warning-subtle text-warning' :
+                                   lead.status === 'negotiation' ? 'bg-secondary-subtle text-secondary' :
+                                 'bg-danger-subtle text-danger'
+                            "
+              >
+                {{ toPascalCase(lead.status) }}
+              </span>
+            </td>
+            <td>{{ lead.createdDate }}</td>
+            <td>
+              <div class="d-flex align-items-center justify-content-center gap-1">
+                <button class="btn btn-default btn-icon btn-sm rounded">
+                  <app-icon icon="eye" class="fs-lg"></app-icon>
+                </button>
+                <button class="btn btn-default btn-icon btn-sm rounded">
+                  <app-icon icon="edit" class="fs-lg"></app-icon>
+                </button>
+                <button (click)="tableService.deleteItem(lead)" class="btn btn-default btn-icon btn-sm rounded">
+                  <app-icon icon="trash" class="fs-lg"></app-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+          } } @else {
+          <tr class="no-results">
+            <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="Leads" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="addLeadModalLabel">Add New Lead</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <form id="leadForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="leadName" class="form-label">Lead Name</label>
+          <input type="text" class="form-control" id="leadName" placeholder="Enter lead name" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="companyName" class="form-label">Company</label>
+          <input type="text" class="form-control" id="companyName" placeholder="Enter company name" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter email" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="tel" class="form-control" id="phone" placeholder="+1 234-567-8910" />
+        </div>
+
+        <div class="col-md-6">
+          <label for="amount" class="form-label">Amount (USD)</label>
+          <input type="number" class="form-control" id="amount" placeholder="e.g. 50000" />
+        </div>
+
+        <div class="col-md-6">
+          <label for="Leadstatus" class="form-label">Status</label>
+          <select class="form-select" id="Leadstatus">
+            <option value="">Select status</option>
+            <option>In Progress</option>
+            <option>Proposal Sent</option>
+            <option>Follow Up</option>
+            <option>Pending</option>
+            <option>Negotiation</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label for="assignedTo" class="form-label">Assign To</label>
+          <select class="form-select" id="assignedTo">
+            <option value="">Select user</option>
+            <option value="1">Emily Carter</option>
+            <option value="2">Rohan Iyer</option>
+            <option value="3">Sara Kim</option>
+            <option value="4">Kevin Nguyen</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save Lead</button>
+    </div>
+  </form>
+</ng-template>

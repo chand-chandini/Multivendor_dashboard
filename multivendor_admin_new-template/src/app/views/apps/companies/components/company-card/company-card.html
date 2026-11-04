@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="card-body">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div class="d-flex align-items-center gap-3">
+        <img [src]="company.image" [alt]="company.name" width="50" height="50" class="rounded" />
+        <div>
+          <h4 class="mb-1 fw-bold">{{ company.name }}</h4>
+          <a [href]="company.website" class="text-muted small" target="_blank">{{ company.website }}</a>
+        </div>
+      </div>
+      <button class="btn btn-outline-danger btn-sm"><app-icon icon="heart" class="me-1"></app-icon> Follow</button>
+    </div>
+
+    <!-- Badges -->
+    <div class="mb-3 d-flex flex-wrap gap-2">
+      <span class="badge bg-primary-subtle text-primary px-2 py-1 rounded-pill">{{ company.location }}</span>
+      <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">{{ company.industry }}</span>
+      <span class="badge bg-info-subtle text-info px-2 py-1 rounded-pill">Founded: {{ company.founded }}</span>
+    </div>
+
+    <!-- Description -->
+    <p class="text-muted mb-4">{{ company.description }}</p>
+
+    <!-- Stats -->
+    <div class="row text-center mb-4">
+      <div class="col-6 col-md-3">
+        <h5 class="mb-0 fw-bold">{{ company.employees }}</h5>
+        <small class="text-muted">Employees</small>
+      </div>
+      <div class="col-6 col-md-3">
+        <h5 class="mb-0 fw-bold">{{ company.revenue }}</h5>
+        <small class="text-muted">Revenue</small>
+      </div>
+      <div class="col-6 col-md-3">
+        <h5 class="mb-0 fw-bold">{{ company.ceo }}</h5>
+        <small class="text-muted">CEO</small>
+      </div>
+      <div class="col-6 col-md-3">
+        <h5 class="mb-0 fw-bold">{{ company.ticker }}</h5>
+        <small class="text-muted">{{ company.exchange }}</small>
+      </div>
+    </div>
+
+    <!-- Rating -->
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="text-warning align-self-center fs-lg mt-1">
+        <app-rating [rate]="company.rating" />
+      </div>
+      <a [routerLink]="[]" class="btn btn-primary btn-sm">Visit Company Profile</a>
+    </div>
+  </div>
+</div>

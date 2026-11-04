@@ -1,0 +1,237 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <!-- Search -->
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search records..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Add New Attendance -->
+      <button class="btn btn-primary" (click)="openModal(content)">
+        <app-icon icon="plus" class="me-1"></app-icon>
+        Add Record
+      </button>
+
+      <!-- Delete Selected -->
+      @if (hasSelection) {
+      <button (click)="deleteSelected()" class="btn btn-danger">Delete</button>
+      }
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <!-- Status Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Status</option>
+          <option value="present">Present</option>
+          <option value="late">Late</option>
+          <option value="half-day">Half Day</option>
+          <option value="on-leave">On Leave</option>
+          <option value="absent">Absent</option>
+        </select>
+        <app-icon icon="user-check" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Shift Type Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterCategory" (ngModelChange)="tableService.setFilter('shiftType', filterCategory)" class="form-select form-control my-1 my-md-0">
+          <option value="">Shift Type</option>
+          <option value="Day Shift">Day Shift</option>
+          <option value="Night Shift">Night Shift</option>
+          <option value="Mid Shift">Mid Shift</option>
+        </select>
+        <app-icon icon="clock" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Records Per Page -->
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-hover w-100 mb-0">
+        <thead class="bg-light align-middle bg-opacity-25 thead-sm text-nowrap">
+          <tr class="text-uppercase fs-xxs">
+            <th class="ps-3" sortable="date" (sort)="tableService.setSort($event.column, $event.direction)">Date</th>
+            <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+            <th sortable="shiftType" (sort)="tableService.setSort($event.column, $event.direction)">Shift Type</th>
+            <th sortable="clockIn" (sort)="tableService.setSort($event.column, $event.direction)">Clock In</th>
+            <th sortable="clockOut" (sort)="tableService.setSort($event.column, $event.direction)">Clock Out</th>
+            <th sortable="production" (sort)="tableService.setSort($event.column, $event.direction)">Production</th>
+            <th sortable="breakTime" (sort)="tableService.setSort($event.column, $event.direction)">Break</th>
+            <th sortable="overtime" (sort)="tableService.setSort($event.column, $event.direction)">Overtime</th>
+            <th>Progress</th>
+            <th sortable="totalHours" (sort)="tableService.setSort($event.column, $event.direction)">Total Hours</th>
+            <th sortable="leaveType" (sort)="tableService.setSort($event.column, $event.direction)">Leave Type</th>
+            <th sortable="approval" (sort)="tableService.setSort($event.column, $event.direction)">Approval</th>
+            <th sortable="user.name" (sort)="tableService.setSort($event.column, $event.direction)">Approval By</th>
+          </tr>
+        </thead>
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for (item of (attendanceData$ | async); track $index) {
+          <tr>
+            <td class="ps-3">{{ item.date }}</td>
+            <td>
+              <span
+                class="badge"
+                [class]="
+                  item.status === 'half-day'
+                    ? 'bg-warning-subtle text-warning'
+                    : item.status === 'late'
+                    ? 'bg-warning-subtle text-warning'
+                    : item.status === 'absent'
+                    ? 'bg-danger-subtle text-danger'
+                    : item.status === 'on-leave'
+                    ? 'bg-info-subtle text-info'
+                    : 'bg-success-subtle text-success'
+                "
+              >
+                {{ toPascalCase(item.status) }}
+              </span>
+            </td>
+            <td>{{ item.shiftType }}</td>
+            <td>{{ item.clockIn }}</td>
+            <td>{{ item.clockOut }}</td>
+            <td>{{ item.production }}</td>
+            <td>{{ item.breakTime }}</td>
+            <td>{{ item.overtime }}</td>
+            <td>
+              <ngb-progressbar
+                class="progress-sm"
+                [value]="item.progress"
+                [type]="
+                  item.progress >= 85 ? 'success' : item.progress >= 40 ? 'warning' : 'danger'
+                "
+              >
+              </ngb-progressbar>
+            </td>
+            <td>{{ item.totalHours }}</td>
+            <td>{{ item.leaveType }}</td>
+            <td>
+              <span
+                class="badge"
+                [class]="
+                  item.approval === 'pending'
+                    ? 'bg-warning-subtle text-warning'
+                    : item.approval === 'rejected'
+                    ? 'bg-danger-subtle text-danger'
+                    : 'bg-success-subtle text-success'
+                "
+              >
+                {{ toPascalCase(item.approval) }}
+              </span>
+            </td>
+            <td>{{ item.user.name }}</td>
+          </tr>
+          } } @else {
+          <tr class="no-results">
+            <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- end card-body-->
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="records" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="addAttendanceLabel">Add New Attendance Record</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <form id="addAttendanceForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="attendance-date" class="form-label">Date</label>
+          <input type="date" class="form-control" mwlFlatpickr [options]="flatPickrOptions" id="attendance-date" required />
+        </div>
+
+        <div class="col-md-4">
+          <label for="shift-type" class="form-label">Shift Type</label>
+          <select id="shift-type" class="form-select" required>
+            <option value="">Select Shift</option>
+            <option>Day Shift</option>
+            <option>Night Shift</option>
+            <option>Mid Shift</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="atte-status" class="form-label">Status</label>
+          <select id="atte-status" class="form-select" required>
+            <option value="">Select Status</option>
+            <option>Present</option>
+            <option>Late</option>
+            <option>Half Day</option>
+            <option>On Leave</option>
+            <option>Absent</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="clock-in" class="form-label">Clock In</label>
+          <input type="time" id="clock-in" mwlFlatpickr [options]="launchTimeOptions" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+          <label for="clock-out" class="form-label">Clock Out</label>
+          <input type="time" id="clock-out" mwlFlatpickr [options]="launchTimeOptions" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+          <label for="leave-type" class="form-label">Leave Type</label>
+          <select id="leave-type" class="form-select">
+            <option value="">None</option>
+            <option>Sick Leave</option>
+            <option>Casual Leave</option>
+            <option>Paid Leave</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="approval" class="form-label">Approval Status</label>
+          <select id="approval" class="form-select">
+            <option>Approved</option>
+            <option>Pending</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="approval-by" class="form-label">Approved By</label>
+          <input type="text" id="approval-by" class="form-control" placeholder="e.g. Maria Smith" />
+        </div>
+
+        <div class="col-md-12">
+          <label for="remarks" class="form-label">Remarks</label>
+          <textarea id="remarks" class="form-control" rows="3" placeholder="Optional remarks"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary"><app-icon icon="device-floppy" class="me-1"></app-icon> Save Record</button>
+    </div>
+  </form>
+</ng-template>

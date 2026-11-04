@@ -1,0 +1,15 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Tickets" subTitle="Support"></app-page-breadcrumb>
+  <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 g-2">
+    @for (ticket of ticketCardData; track $index) {
+    <div class="col">
+      <app-ticket-widget [ticket]="ticket" />
+    </div>
+    }
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-ticket-table />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="About Us" subTitle="Pages" />
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body position-relative">
+          <div class="position-absolute top-0 end-0" style="max-width: 350px">
+            <img src="assets/images/auth-card-bg.svg" class="auth-card-bg-img" alt="auth-card-bg" />
+          </div>
+          <div class="row bg-light bg-opacity-50">
+            <div class="col-lg-8 mx-auto py-5 text-center">
+              <!-- Pre Info Text -->
+              <span class="fw-semibold text-muted fst-italic">Trusted by 1M+ AI innovators worldwide</span>
+
+              <!-- Avatar Group -->
+              <div class="avatar-group avatar-group-sm justify-content-center mt-3">
+                <div class="avatar">
+                  <img src="assets/images/users/user-7.jpg" alt="Dr. Ava Lee – AI Researcher" class="avatar-sm rounded-circle" />
+                </div>
+                <div class="avatar">
+                  <img src="assets/images/users/user-8.jpg" alt="Ethan King – Data Scientist" class="avatar-sm rounded-circle" />
+                </div>
+                <div class="avatar">
+                  <img src="assets/images/users/user-9.jpg" alt="Lucas White – ML Engineer" class="avatar-sm rounded-circle" />
+                </div>
+                <div class="avatar">
+                  <img src="assets/images/users/user-1.jpg" alt="Sophia Chen – Robotics Expert" class="avatar-sm rounded-circle" />
+                </div>
+                <div class="avatar">
+                  <img src="assets/images/users/user-2.jpg" alt="Raj Patel – AI Strategist" class="avatar-sm rounded-circle" />
+                </div>
+              </div>
+
+              <!-- Hero Title -->
+              <h1 class="my-4 fs-36 fw-bold lh-base">
+                Accelerate Innovation with the
+                <span class="text-primary">AI Control Panel</span>
+                –
+                <span class="fst-italic text-muted">Smart. Scalable. Built for the Future.</span>
+              </h1>
+
+              <!-- Hero Description -->
+              <p class="mb-4 fs-sm text-muted lh-lg">Design, deploy, and manage machine learning models faster than ever. Our AI Control Panel empowers teams to collaborate, monitor, and scale securely with intuitive dashboards and cutting-edge analytics.</p>
+
+              <!-- Call to Action Buttons -->
+              <div class="d-flex gap-1 gap-sm-2 flex-wrap justify-content-center">
+                <a class="btn btn-light py-2 fw-semibold" [routerLink]="[]" target="_blank">
+                  <app-icon icon="phone-ringing" class="fs-xl me-2"></app-icon>
+                  Get a Demo
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <app-service />
+
+          <app-team />
+
+          <app-branch />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,215 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search deals..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      @if (hasSelection) {
+      <button class="btn btn-danger" (click)="deleteSelected()">Delete</button>
+      }
+
+      <button class="btn btn-primary" (click)="openEstimationModal(content)">
+        <app-icon icon="plus" class="me-1"></app-icon>
+        New Estimation
+      </button>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Status</option>
+          <option value="approved">Approved</option>
+          <option value="pending">Pending</option>
+          <option value="declined">Declined</option>
+          <option value="sent">Sent</option>
+          <option value="in-review">In Review</option>
+        </select>
+        <app-icon icon="arrows-shuffle" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <div class="app-search">
+        <select [(ngModel)]="filterBudgetRange" (ngModelChange)="tableService.setFilter('value', filterBudgetRange)" class="form-select form-control my-1 my-md-0">
+          <option value="">Value Range</option>
+          <option value="0-5000">$0 - $5,000</option>
+          <option value="5001-10000">$5,001 - $10,000</option>
+          <option value="10001-20000">$10,001 - $20,000</option>
+          <option value="20001-50000">$20,001 - $50,000</option>
+          <option value="50000+">$50,000+</option>
+        </select>
+        <app-icon icon="currency-dollar" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="8">8</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+      <thead class="bg-light align-middle bg-opacity-25 thead-sm text-nowrap">
+        <tr class="text-uppercase fs-xxs">
+          <th class="ps-3" style="width: 1%">
+            <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+          </th>
+          <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">Estimate ID</th>
+          <th>Project</th>
+          <th>Client</th>
+          <th sortable="value" (sort)="tableService.setSort($event.column, $event.direction)">Estimated Value</th>
+          <th>Estimated By</th>
+          <th sortable="createdDate" (sort)="tableService.setSort($event.column, $event.direction)">Created</th>
+          <th sortable="closeDate" (sort)="tableService.setSort($event.column, $event.direction)">Expected Close</th>
+          <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+          <th class="text-center" style="width: 1%">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody class="text-nowrap">
+        @if ((total$ | async)! > 0) { @for (estimation of (estimateData$ | async); track $index; let i = $index) {
+        <tr>
+          <td class="ps-3">
+            <input (change)="toggleSingleSelection(i)" [checked]="selectedIds.has(i)" class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" />
+          </td>
+
+          <td>
+            <a [routerLink]="[]" class="fw-semibold link-reset">{{ estimation.id }}</a>
+          </td>
+          <td>{{ estimation.project }}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="avatar-sm border flex-shrink-0 border-dashed rounded-circle me-2 justify-content-center d-flex align-items-center">
+                <img [src]="estimation.client.image" [alt]="estimation.client.name" height="20" />
+              </div>
+              <a [routerLink]="[]" class="link-reset">{{ estimation.client.name }}</a>
+            </div>
+          </td>
+          <td>{{ estimation.value }}</td>
+          <td>
+            <div class="d-flex gap-2 align-items-center">
+              <img [src]="estimation.estimatedBy.image" [alt]="estimation.estimatedBy.name" class="avatar-xs rounded-circle" />
+              <a [routerLink]="[]" class="link-reset">{{ estimation.estimatedBy.name }}</a>
+            </div>
+          </td>
+          <td>{{ estimation.createdDate }} <small class="text-muted">{{ estimation.createdTime }}</small></td>
+          <td>{{ estimation.closeDate }} <small class="text-muted"> {{ estimation.closeTime }}</small></td>
+          <td>
+            <span
+              class="badge badge-label fs-xs"
+              [class]="
+                            estimation.status === 'declined'
+                            ? 'bg-danger-subtle text-danger'
+                            : estimation.status === 'in-review'
+                            ? 'bg-info-subtle text-info'
+                            : estimation.status === 'approved'
+                            ? 'bg-success-subtle text-success'
+                            : estimation.status === 'pending'
+                            ? 'bg-warning-subtle text-warning'
+                            : 'bg-secondary-subtle text-secondary'
+                        "
+              >{{ toPascalCase(estimation.status) }}</span
+            >
+          </td>
+          <td>
+            <div class="d-flex align-items-center justify-content-center gap-1">
+              <button class="btn btn-default btn-icon btn-sm rounded">
+                <app-icon icon="eye" class="fs-lg"></app-icon>
+              </button>
+              <button class="btn btn-default btn-icon btn-sm rounded">
+                <app-icon icon="edit" class="fs-lg"></app-icon>
+              </button>
+              <button (click)="tableService.deleteItem(estimation)" class="btn btn-default btn-icon btn-sm rounded">
+                <app-icon icon="trash" class="fs-lg"></app-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        } } @else {
+        <tr class="no-results">
+          <td colspan="9" class="text-center text-muted py-3">Nothing found.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="estimations" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="createEstimationModalLabel">Create New Estimation</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <form id="createEstimationForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="estimationTitle" class="form-label">Project Name</label>
+          <input type="text" class="form-control" id="estimationTitle" placeholder="Enter project name" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="clientName" class="form-label">Client</label>
+          <input type="text" class="form-control" id="clientName" placeholder="Enter client name" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="estimatedValue" class="form-label">Estimated Value (USD)</label>
+          <input type="number" class="form-control" id="estimatedValue" placeholder="e.g. 25000" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="estimator" class="form-label">Estimated By</label>
+          <input type="text" class="form-control" id="estimator" placeholder="Enter team member name" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="estimationStatus" class="form-label">Status</label>
+          <select class="form-select" id="estimationStatus" required>
+            <option value="">Select status</option>
+            <option value="approved">Approved</option>
+            <option value="in-review">In Review</option>
+            <option value="pending">Pending</option>
+            <option value="declined">Declined</option>
+            <option value="sent">Sent</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label for="estimationTags" class="form-label">Tags</label>
+          <input type="text" class="form-control" id="estimationTags" placeholder="e.g. CRM, Mobile, API" />
+        </div>
+
+        <div class="col-md-6">
+          <label for="createdDate" class="form-label">Created Date</label>
+          <input type="date" class="form-control" mwlFlatpickr [options]="flatPickrOptions" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="expectedCloseDate" class="form-label">Expected Close</label>
+          <input type="date" class="form-control" mwlFlatpickr [options]="flatPickrOptions" required />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save Estimation</button>
+    </div>
+  </form>
+</ng-template>

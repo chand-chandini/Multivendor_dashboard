@@ -1,0 +1,60 @@
+<div class="card card-h-100">
+  <div class="card-header border-0 justify-content-between">
+    <h4 class="card-title">Total Balance</h4>
+    <div ngbDropdown class="ms-auto">
+      <a [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none" ngbDropdownToggle>
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="wallet" class="me-2"></app-icon> Add Funds </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="cash-banknote-move-back" class="me-2"></app-icon> Withdraw Funds </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="transaction-dollar" class="me-2"></app-icon> Transaction History </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="lock" class="me-2"></app-icon> Freeze Account </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body pt-0">
+    <h2 class="fw-bold" id="user-balance-data">
+      <span id="user-balance-number">{{ showBalance ? '$76,852.36' : '$*********' }}</span>
+      <span>
+        <a [routerLink]="[]" (click)="toggleBalance()">
+          @if (!showBalance) {
+          <app-icon icon="eye" class="text-warning fs-xxl ms-1"></app-icon>
+          } @else {
+          <app-icon icon="eye-off" class="text-muted fs-xxl ms-1"></app-icon>
+          }
+        </a>
+      </span>
+    </h2>
+
+    <div class="p-2 bg-light bg-opacity-50 rounded mt-3 gap-2 d-flex align-items-center">
+      <img src="assets/images/debit-card.png" alt="" height="36" class="rounded me-1" />
+      <div>
+        <p class="mb-0 fw-semibold">$<span [countUp]="59258.25" [countUpOptions]="{ decimalPlaces: 2 }"></span></p>
+        <p class="text-muted fs-12 mb-0">**** **** **** 3698</p>
+      </div>
+      <a [routerLink]="[]" class="btn btn-link fw-medium text-reset ms-auto text-decoration-underline link-offset-2">Details</a>
+    </div>
+
+    <div class="row g-2 mt-3">
+      <div class="col">
+        <a [routerLink]="[]" class="btn btn-secondary bg-gradient w-100"><iconify-icon icon="tabler:coin" class="me-1"></iconify-icon> Transfer</a>
+      </div>
+      <div class="col">
+        <a [routerLink]="[]" class="btn btn-info bg-gradient w-100"><iconify-icon icon="tabler:coin" class="me-1"></iconify-icon> Request</a>
+      </div>
+    </div>
+  </div>
+</div>

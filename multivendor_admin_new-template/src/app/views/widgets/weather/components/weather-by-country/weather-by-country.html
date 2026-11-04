@@ -1,0 +1,51 @@
+<div class="card">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Weather by Country</h4>
+
+    <div ngbDropdown class="ms-auto" placement="bottom-end">
+      <a ngbDropdownToggle [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none">
+        <iconify-icon icon="tabler:dots-vertical" class="fs-lg"></iconify-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <iconify-icon icon="tabler:report" class="me-2"></iconify-icon> View Full Weather Report </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <iconify-icon icon="tabler:download" class="me-2"></iconify-icon> Export Data </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <iconify-icon icon="tabler:filter" class="me-2"></iconify-icon> Filter Countries </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <iconify-icon icon="tabler:trash" class="me-2"></iconify-icon> Remove Widget </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body py-2 px-0">
+    <ngx-simplebar class="px-3" style="height: 415px">
+      @for (item of countryWeatherData; track $index) {
+      <div class="row align-items-center g-0 py-2">
+        <div class="col-4 d-flex align-items-center">
+          <img [src]="item.country.image" class="me-2 rounded-circle" height="26" />
+          <span class="fw-semibold fs-16">{{ item.country.name }}</span>
+        </div>
+
+        <div class="col-4 text-end text-muted">
+          <div class="fw-semibold">
+            {{ item.temperature }}
+            <span class="text-muted fs-12">(Feels {{ item.feelsLike }})</span>
+          </div>
+          <div class="fw-semibold fs-12"><iconify-icon icon="tabler:droplet"></iconify-icon> {{ item.humidity }} | <iconify-icon icon="tabler:wind"></iconify-icon> {{ item.wind }}</div>
+        </div>
+
+        <div class="col-4 fw-semibold text-end" [class]="item.className"><iconify-icon [icon]="item.icon"></iconify-icon> {{ item.status }}</div>
+      </div>
+      }
+    </ngx-simplebar>
+  </div>
+</div>

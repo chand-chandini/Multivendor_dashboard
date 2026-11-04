@@ -1,0 +1,79 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Calendar" subTitle="Apps"></app-page-breadcrumb>
+
+  <div class="d-flex gap-1">
+    <div class="card d-none d-lg-flex rounded-end-0">
+      <div class="card-body">
+        <button class="btn btn-primary w-100 btn-new-event" (click)="openModal()">
+          <app-icon icon="plus" class="me-2 align-middle"></app-icon>
+          Create New Event
+        </button>
+
+        <div id="external-events">
+          <p class="text-muted mt-2 fst-italic fs-xs mb-3">Drag and drop your event or click in the calendar</p>
+
+          @for (event of externalEventData; track i; let i = $index) {
+          <div class="external-event fc-event fw-semibold {{ event.className }}" [attr.data-class]="event.className">
+            <app-icon icon="circle-filled" class="me-2"></app-icon>
+            {{ event.title }}
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="card rounded-start-0 flex-grow-1 border-start-0">
+      <div class="d-lg-none d-inline-flex card-header">
+        <button class="btn btn-primary btn-new-event" (click)="openModal()">
+          <app-icon icon="plus" class="me-2 align-middle"></app-icon>
+          Create New Event
+        </button>
+      </div>
+
+      <div class="card-body">
+        <ngx-simplebar style="height: 100%">
+          <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+        </ngx-simplebar>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #eventModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Create / Edit Event</h5>
+    <button type="button" class="btn-close" (click)="modalRef.close()"></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-2">
+      <label class="form-label">Event Name</label>
+      <input class="form-control" placeholder="Insert Event Name" [(ngModel)]="currentEventTitle" />
+      <div class="invalid-feedback">Please provide a valid event name</div>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label">Category</label>
+      <select [(ngModel)]="currentEventVariant" class="form-select">
+        <option value="" disabled>Select a category</option>
+        <option value="bg-primary-subtle text-primary">Primary</option>
+        <option value="bg-secondary-subtle text-secondary">Secondary</option>
+        <option value="bg-success-subtle text-success">Success</option>
+        <option value="bg-danger-subtle text-danger">Danger</option>
+        <option value="bg-info-subtle text-info">Info</option>
+        <option value="bg-warning-subtle text-warning">Warning</option>
+        <option value="bg-dark-subtle text-dark">Dark</option>
+      </select>
+
+      <div class="invalid-feedback">Please select a valid event category</div>
+    </div>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      @if (currentEditingEvent) {
+      <button type="button" class="btn btn-danger" (click)="deleteEvent()">Delete</button>
+      }
+
+      <button type="button" class="btn btn-light ms-auto" (click)="modalRef.close()">Close</button>
+
+      <button type="submit" class="btn btn-primary" (click)="saveEvent()">Save</button>
+    </div>
+  </div>
+</ng-template>

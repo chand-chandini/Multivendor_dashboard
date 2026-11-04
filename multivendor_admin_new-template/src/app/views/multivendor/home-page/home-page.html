@@ -1,0 +1,191 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Home Page" subTitle="Website Management" />
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Home Page"
+        searchPlaceholder="Search home sections..."
+        itemsName="home sections"
+        addLabel="Add Home Section"
+        emptyMessage="No home sections added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <ng-template #formModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ editingId() ? 'Update' : 'Add' }} Home Section
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body">
+        <div class="row g-3">
+
+          <!-- Home Page Image -->
+          <div class="col-md-12">
+            <label for="homepageimage" class="form-label">
+              Home Page Image
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="file"
+              id="homepageimage"
+              class="form-control"
+              accept="image/*"
+              (change)="onHomeImageSelected($event)"
+            />
+                @if (fieldError(form, 'image', 'Home Page Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'image', 'Home Page Image') }}</div>
+                }
+
+            @if (form.controls.image.value) {
+              <div class="mt-3">
+                <img
+                  [src]="form.controls.image.value"
+                  alt="Home Section preview"
+                  class="img-fluid rounded border"
+                  style="max-height: 160px; max-width: 100%;"
+                />
+              </div>
+            }
+          </div>
+
+          <!-- Section Key -->
+          <div class="col-md-6">
+            <label for="homepagesectionkey" class="form-label">
+              Section Key
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="homepagesectionkey"
+              formControlName="section_key"
+              class="form-control"
+              placeholder="e.g. hero"
+            />
+                @if (fieldError(form, 'section_key', 'Section Key')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'section_key', 'Section Key') }}</div>
+                }
+
+
+          </div>
+
+          <!-- Heading -->
+          <div class="col-md-6">
+            <label for="homepageheading" class="form-label">
+              Heading
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="text"
+              id="homepageheading"
+              formControlName="heading"
+              class="form-control"
+              placeholder="Enter heading"
+            />
+                @if (fieldError(form, 'heading', 'Heading')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'heading', 'Heading') }}</div>
+                }
+          </div>
+
+          <!-- Subheading -->
+          <div class="col-md-12">
+            <label for="homepagesubheading" class="form-label">
+              Subheading
+             <span class="text-danger">*</span></label>
+
+            <textarea
+              id="homepagesubheading"
+              formControlName="subheading"
+              class="form-control"
+              rows="2"
+              placeholder="Enter subheading"
+            ></textarea>
+                @if (fieldError(form, 'subheading', 'Subheading')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'subheading', 'Subheading') }}</div>
+                }
+          </div>
+
+          <!-- Display Order -->
+          <div class="col-md-6">
+            <label for="homepagedisplayorder" class="form-label">
+              Display Order
+             <span class="text-danger">*</span></label>
+
+            <input
+              type="number"
+              id="homepagedisplayorder"
+              formControlName="display_order"
+              class="form-control"
+              min="0"
+            />
+                @if (fieldError(form, 'display_order', 'Display Order')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'display_order', 'Display Order') }}</div>
+                }
+          </div>
+
+          <!-- Status -->
+          <div class="col-md-6">
+            <label for="homepagestatus" class="form-label">
+              Status
+             <span class="text-danger">*</span></label>
+
+            <select
+              id="homepagestatus"
+              formControlName="status"
+              class="form-select"
+            >
+              <option [ngValue]="1">Active</option>
+              <option [ngValue]="0">Inactive</option>
+            </select>
+                @if (fieldError(form, 'status', 'Status')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'status', 'Status') }}</div>
+                }
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+            ></span>
+          }
+
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-template>
+</div>

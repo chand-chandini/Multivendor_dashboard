@@ -1,0 +1,15 @@
+<div class="card text-center p-3 mb-0">
+  <p class="mb-1" [class]="lead.className ? lead.className : 'text-muted'">{{ lead.title }}</p>
+
+  <h4 class="mb-0 {{lead.className}}">
+    <span
+      [countUp]="lead.value"
+      [countUpOptions]="{
+          suffix: lead.suffix ? ' ' + lead.suffix : '',
+          decimalPlaces: (lead.value % 1 !== 0) ? 2 : 0
+        }"
+    >
+      0
+    </span>
+  </h4>
+</div>

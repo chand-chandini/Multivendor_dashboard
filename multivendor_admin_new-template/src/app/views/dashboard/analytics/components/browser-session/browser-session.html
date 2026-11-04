@@ -1,0 +1,47 @@
+<div class="card">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Sessions by Browser</h4>
+
+    <div ngbDropdown class="ms-auto">
+      <a [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none" ngbDropdownToggle>
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="report" class="me-2"></app-icon> View Browser Report </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Export Session Data </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="filter-2" class="me-2"></app-icon> Filter Browsers </a>
+        </li>
+        <li><hr class="dropdown-divider" /></li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="trash" class="me-2"></app-icon> Remove Widget </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body py-2 px-0">
+    <ngx-simplebar class="px-2" style="height: 364px">
+      @for( browser of browserData; track $index) {
+      <div class="d-flex justify-content-between align-items-center p-2">
+        <div>
+          <img [src]="browser.image" alt="user-image" class="me-1" height="26" />
+          <span class="align-middle fw-semibold fs-md ms-1">{{ browser.name }}</span>
+        </div>
+        <span class="fw-semibold text-muted float-end">{{ browser.usage }}%</span>
+        <span class="fw-semibold text-muted float-end">
+          @if(browser.change >= 0){
+          <app-icon icon="arrow-up" class="text-success"></app-icon>
+          }@else {
+          <app-icon icon="arrow-down" class="text-danger"></app-icon>
+          } {{ browser.change }}%
+        </span>
+      </div>
+      }
+    </ngx-simplebar>
+  </div>
+</div>

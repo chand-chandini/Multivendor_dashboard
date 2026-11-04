@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <div class="avatar avatar-lg flex-shrink-0">
+        <span
+          class="avatar-title border border-3 bg-opacity-75 text-white rounded-circle fs-24"
+          [class]="[
+                  'border-' + item.variant,
+                  'bg-' + item.variant
+                ]"
+        >
+          <iconify-icon [icon]="item.icon"></iconify-icon>
+        </span>
+      </div>
+      <div class="text-end">
+        <h4 class="mb-0">{{ item.value }}</h4>
+        <p class="mb-0 text-muted">{{ item.title }}</p>
+      </div>
+    </div>
+    <div class="mt-4">
+      <div class="d-flex justify-content-between mb-1">
+        <span class="text-muted fs-xs fw-semibold"> {{ item.progress.label }}</span>
+        <span class="text-muted">{{ item.progress.value }}%</span>
+      </div>
+      <ngb-progressbar [type]="item.variant" [value]="item.progress.value" style="height: 6px" />
+    </div>
+  </div>
+</div>

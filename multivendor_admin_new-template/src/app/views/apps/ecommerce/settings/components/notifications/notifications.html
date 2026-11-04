@@ -1,0 +1,106 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Notifications" subTitle="Marketing" />
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Notifications"
+        searchPlaceholder="Search notifications..."
+        itemsName="notifications"
+        addLabel="Add Notification"
+        emptyMessage="No notifications added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+<ng-template #formModal let-modal> <div class="modal-header"> <h5 class="modal-title">
+{{ editingId() ? 'Update Notification' : 'Add Notification' }} </h5>
+
+  <button
+    type="button"
+    class="btn-close"
+    (click)="modal.dismiss()"
+  ></button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="modal-body">
+    <div class="row g-3">
+
+      <!-- Title -->
+      <div class="col-12">
+        <label for="notificationTitle" class="form-label">
+          Title <span class="text-danger">*</span>
+        </label>
+
+        <input
+          type="text"
+          id="notificationTitle"
+          formControlName="title"
+          class="form-control"
+          placeholder="Enter notification title"
+        />
+                @if (fieldError(form, 'title', 'Title')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'title', 'Title') }}</div>
+                }
+
+
+      </div>
+
+      <!-- Description -->
+      <div class="col-12">
+        <label for="notificationDescription" class="form-label">
+          Description <span class="text-danger">*</span>
+        </label>
+
+        <textarea
+          id="notificationDescription"
+          formControlName="description"
+          class="form-control"
+          rows="5"
+          placeholder="Enter notification description"
+        ></textarea>
+                @if (fieldError(form, 'description', 'Description')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'description', 'Description') }}</div>
+                }
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.dismiss()"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="saving()"
+    >
+      @if (saving()) {
+        <span
+          class="spinner-border spinner-border-sm me-1"
+          role="status"
+        ></span>
+      }
+
+      {{ editingId() ? 'Update Notification' : 'Add Notification' }}
+    </button>
+  </div>
+</form>
+
+  </ng-template>
+</div>

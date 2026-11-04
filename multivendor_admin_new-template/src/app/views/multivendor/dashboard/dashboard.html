@@ -1,0 +1,78 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Dashboard" subTitle="Overview" />
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <h4 class="mb-1 fw-semibold">Welcome back, {{ auth.userName() }} 👋</h4>
+            <p class="text-muted mb-0">Signed in as {{ auth.adminType() }}{{ auth.tenant()?.name ? ' · ' + auth.tenant()?.name : '' }}</p>
+          </div>
+          <a routerLink="/appusers/myprofile" class="btn btn-default">
+            <app-icon icon="user-circle" class="me-1"></app-icon>
+            My Profile
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    @for (stat of stats(); track stat.title) {
+      <div class="col-xxl-3 col-md-6">
+        <div class="card card-h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h5 class="text-body-secondary fw-semibold fs-base text-uppercase">{{ stat.title }}</h5>
+                <h3 class="my-3 py-1 fw-semibold">
+                  @if (loading()) {
+                    <span class="placeholder col-4 rounded"></span>
+                  } @else {
+                    <span [countUp]="stat.value" [countUpOptions]="{ decimalPlaces: 0 }"></span>
+                  }
+                </h3>
+                <a [routerLink]="stat.link" class="mb-0 text-muted text-decoration-underline link-offset-3">View all</a>
+              </div>
+              <div class="avatar-md flex-shrink-0">
+                <span class="avatar-title bg-primary-subtle rounded-circle fs-22">
+                  <app-icon [icon]="stat.icon" class="text-primary"></app-icon>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      @if (!loading()) {
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body text-center text-muted py-4">No dashboard metrics available for your permissions.</div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header border-light">
+          <h5 class="card-title mb-0">Your Modules</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-2">
+            @for (item of shortcuts(); track item.path) {
+              <div class="col-xxl-2 col-lg-3 col-sm-4 col-6">
+                <a [routerLink]="item.path" class="btn btn-default w-100 text-truncate">{{ item.title }}</a>
+              </div>
+            } @empty {
+              <div class="col-12 text-muted text-center py-3">No modules assigned to your account.</div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

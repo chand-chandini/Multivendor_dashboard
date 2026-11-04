@@ -1,0 +1,189 @@
+ <div class="container-fluid">
+  <app-page-breadcrumb title="Locations" subTitle="Masters" />
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Locations"
+        searchPlaceholder="Search locations..."
+        itemsName="locations"
+        addLabel="Add Location"
+        emptyMessage="No locations added yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+        (statusChange)="onStatusChange($event)"
+      />
+    </div>
+  </div>
+
+<ng-template #formModal let-modal> <div class="modal-header"> <h5 class="modal-title">
+{{ editingId() ? 'Update Location' : 'Add Location' }} </h5>
+
+  <button
+    type="button"
+    class="btn-close"
+    (click)="modal.dismiss()"
+  ></button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="modal-body">
+    <div class="row g-3">
+      <!-- Image -->
+      <div class="col-12">
+        <label for="locationImage" class="form-label">
+          Image
+         <span class="text-danger">*</span></label>
+
+        <div class="d-flex align-items-center gap-3">
+          <div class="input-group">
+            <label
+              for="locationImage"
+              class="input-group-text"
+              style="cursor: pointer"
+            >
+              Choose File
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [value]="existingImageName() || 'No file chosen'"
+              readonly
+              aria-label="Selected location image filename"
+            />
+          </div>
+
+          <input
+            type="file"
+            id="locationImage"
+            accept="image/png,image/jpeg,image/jpg,image/webp"
+            (change)="onImageSelected($event)"
+            hidden
+          />
+                @if (fieldError(form, 'location_image', 'Image')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'location_image', 'Image') }}</div>
+                }
+
+          @if (imagePreview()) {
+            <img
+              [src]="imagePreview()"
+              [alt]="existingImageName() || 'Location image preview'"
+              width="55"
+              height="55"
+              class="rounded border"
+              style="object-fit: cover; flex-shrink: 0"
+            />
+          }
+        </div>
+      </div>
+
+      <!-- Location Name -->
+      <div class="col-md-6">
+        <label for="city" class="form-label">
+          Location Name <span class="text-danger">*</span>
+        </label>
+
+        <input
+          type="text"
+          id="city"
+          formControlName="city"
+          class="form-control"
+          placeholder="e.g. Hyderabad"
+        />
+                @if (fieldError(form, 'city', 'Location Name')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'city', 'Location Name') }}</div>
+                }
+
+
+      </div>
+
+      <!-- Latitude -->
+      <div class="col-md-6">
+        <label for="latitude" class="form-label">
+          Latitude
+         <span class="text-danger">*</span></label>
+
+        <input
+          type="text"
+          id="latitude"
+          formControlName="latitude"
+          class="form-control"
+          placeholder="e.g. 17.3850"
+        />
+                @if (fieldError(form, 'latitude', 'Latitude')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'latitude', 'Latitude') }}</div>
+                }
+      </div>
+
+      <!-- Longitude -->
+      <div class="col-md-6">
+        <label for="longitude" class="form-label">
+          Longitude
+         <span class="text-danger">*</span></label>
+
+        <input
+          type="text"
+          id="longitude"
+          formControlName="longitude"
+          class="form-control"
+          placeholder="e.g. 78.4867"
+        />
+                @if (fieldError(form, 'longitude', 'Longitude')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'longitude', 'Longitude') }}</div>
+                }
+      </div>
+
+      <!-- Max Delivery Service -->
+      <div class="col-md-6">
+        <label for="serviceKm" class="form-label">
+          Max Delivery Service
+         <span class="text-danger">*</span></label>
+
+        <input
+          type="number"
+          id="serviceKm"
+          formControlName="max_delivery_service_km"
+          class="form-control"
+          min="0"
+          placeholder="e.g. 10"
+        />
+                @if (fieldError(form, 'max_delivery_service_km', 'Max Delivery Service')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'max_delivery_service_km', 'Max Delivery Service') }}</div>
+                }
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.dismiss()"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="saving()"
+    >
+      @if (saving()) {
+        <span
+          class="spinner-border spinner-border-sm me-1"
+          role="status"
+        ></span>
+      }
+
+      {{ editingId() ? 'Update Location' : 'Add Location' }}
+    </button>
+  </div>
+</form>
+
+  </ng-template>
+</div>

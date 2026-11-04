@@ -1,0 +1,63 @@
+<div class="card">
+  <div class="card-body p-0">
+    <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 g-0 text-center align-items-center">
+      @for (item of projectStatData; track $index) {
+      <div class="col border-end border-light border-dashed">
+        <div class="mt-3 mt-md-0 p-3">
+          <h5 class="text-muted fs-13 text-uppercase" title="Number of Orders">{{ item.title }}</h5>
+
+          <div class="d-flex align-items-center justify-content-center gap-2 my-3">
+            <div class="avatar-sm flex-shrink-0">
+              <span class="avatar-title rounded-circle fs-22 {{ item.className }}">
+                <app-icon [icon]="item.icon"></app-icon>
+              </span>
+            </div>
+
+            <h3 class="mb-0 fw-bold">
+              <span
+                [countUp]="item.value"
+                [countUpOptions]="{
+                  prefix: item.prefix || '',
+                  suffix: item.suffix || '',
+                  decimalPlaces: Number.isInteger(item.value) ? 0 : 2
+                }"
+              ></span>
+            </h3>
+          </div>
+
+          <p class="mb-0 text-muted">
+            <span class="me-2" [class]="item.change < 0 ? 'text-danger' : 'text-success'">
+              @if (item.change < 0){
+              <app-icon icon="chevron-down"></app-icon>
+              } @else{
+              <app-icon icon="chevron-up"></app-icon>
+              } {{ item.change }}%
+            </span>
+            <span class="text-nowrap">Since last month</span>
+          </p>
+        </div>
+      </div>
+      }
+
+      <div class="col">
+        <div class="mt-3 mt-md-0 p-3">
+          <h5 class="text-muted fs-13 text-uppercase" title="Number of Orders">Today's Hours</h5>
+
+          <div class="d-flex align-items-center justify-content-center gap-2 my-3">
+            <div class="avatar-sm flex-shrink-0">
+              <span class="avatar-title bg-info-subtle text-info rounded-circle fs-22">
+                <app-icon icon="clock"></app-icon>
+              </span>
+            </div>
+
+            <h3 class="mb-0 fw-bold">
+              <span>{{ time() }}</span>
+            </h3>
+          </div>
+
+          <button type="button" class="btn btn-sm btn-info time-tracker-btn fw-semibold w-100" [class]="isRunning() ? 'btn-danger' : 'btn-info'" (click)="toggleTracker()">{{ isRunning() ? 'Stop Tracker' : 'Start Tracker' }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

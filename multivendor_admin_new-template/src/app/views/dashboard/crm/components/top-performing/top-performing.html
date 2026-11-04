@@ -1,0 +1,52 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <h4 class="card-title">Top Performing</h4>
+
+    <div class="d-flex align-items-center gap-2">
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-custom table-nowrap table-centered table-select table-hover w-100 mb-0">
+      <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+        <tr class="text-uppercase fs-xxs">
+          <th>User</th>
+          <th sortable="leads" (sort)="tableService.setSort($event.column, $event.direction)">Leads</th>
+          <th sortable="deals" (sort)="tableService.setSort($event.column, $event.direction)">Deals</th>
+          <th sortable="tasks" (sort)="tableService.setSort($event.column, $event.direction)">Tasks</th>
+          <th>•••</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if ((total$ | async)! > 0) { @for(item of (saleExecutiveData$ | async ); track $index){
+        <tr>
+          <td>
+            <h5 class="fs-14 mb-0 fw-normal">{{ item.user.name }}</h5>
+            <span class="text-muted fs-12">{{ item.user.designation }}</span>
+          </td>
+          <td>{{ item.leads }}</td>
+          <td>{{ item.deals }}</td>
+          <td>{{ item.tasks }}</td>
+          <td>
+            <a [routerLink]="[]" class="text-muted fs-20"> <app-icon icon="eye"></app-icon></a>
+          </td>
+        </tr>
+        }} @else {
+        <tr class="no-results">
+          <td colspan="8" class="text-center text-muted py-3">Nothing found.</td>
+        </tr>
+        }
+      </tbody>
+      <!-- end tbody -->
+    </table>
+  </div>
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="deals" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

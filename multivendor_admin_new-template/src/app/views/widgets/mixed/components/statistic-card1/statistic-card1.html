@@ -1,0 +1,21 @@
+<div
+  class="card border-0 rounded-3 text-white"
+  [ngStyle]="{
+    'background-image': 'url(' + item.image + ')',
+    'background-size': 'cover'
+  }"
+>
+  <div class="card-body bg-gradient bg-opacity-90 rounded-3" [class]="item.className">
+    <iconify-icon [icon]="item.icon" class="fs-36"></iconify-icon>
+    <p class="text-white text-opacity-75 mb-1 text-uppercase">{{item.label}}</p>
+    <h3 class="fw-semibold mb-2 fs-20">{{item.title}}</h3>
+    <h4 class="fw-medium fs-16 mb-1">
+      <span
+        [countUp]="item.value"
+        [countUpOptions]="{
+                 prefix: item.prefix || '',            
+                  }"
+      ></span>
+    </h4>
+  </div>
+</div>

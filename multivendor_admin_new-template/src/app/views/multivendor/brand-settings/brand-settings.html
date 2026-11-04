@@ -1,0 +1,221 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Brand Settings" subTitle="Website Management" />
+
+@if (!canEdit) { <div class="alert alert-info">You have read-only access to brand settings.</div>
+}
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Brand</h5>
+        </div>
+
+    <div class="card-body">
+      @if (loading()) {
+        <div class="text-center text-muted py-4">
+          <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          Loading brand settings...
+        </div>
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <div class="row g-3">
+
+            <!-- Brand Name -->
+            <div class="col-md-6">
+              <label for="bsBrandName" class="form-label">
+                Brand Name <span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="bsBrandName"
+                formControlName="tenant_name"
+                class="form-control"
+                [readonly]="!canEdit"
+              />
+                @if (fieldError(form, 'tenant_name', 'Brand Name')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'tenant_name', 'Brand Name') }}</div>
+                }
+
+
+            </div>
+
+            <!-- Website Title -->
+            <div class="col-md-6">
+              <label for="bsWebsiteTitle" class="form-label">
+                Website Title
+               <span class="text-danger">*</span></label>
+
+              <input
+                type="text"
+                id="bsWebsiteTitle"
+                formControlName="website_title"
+                class="form-control"
+                [readonly]="!canEdit"
+                placeholder="Shown as the public site title"
+              />
+                @if (fieldError(form, 'website_title', 'Website Title')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'website_title', 'Website Title') }}</div>
+                }
+            </div>
+
+            <!-- Tagline -->
+            <div class="col-12">
+              <label for="bsTagline" class="form-label">
+                Tagline
+               <span class="text-danger">*</span></label>
+
+              <input
+                type="text"
+                id="bsTagline"
+                formControlName="tagline"
+                class="form-control"
+                [readonly]="!canEdit"
+                placeholder="A short line under the brand name"
+              />
+                @if (fieldError(form, 'tagline', 'Tagline')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'tagline', 'Tagline') }}</div>
+                }
+            </div>
+
+            <!-- Website Logo -->
+            <div class="col-md-6">
+              <label for="bsLogo" class="form-label">
+                Website Logo
+               <span class="text-danger">*</span></label>
+
+              <input
+                type="file"
+                id="bsLogo"
+                class="form-control"
+                accept="image/*"
+                (change)="onLogoSelected($event)"
+                [disabled]="!canEdit"
+              />
+                @if (fieldError(form, 'logo_light', 'Website Logo')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'logo_light', 'Website Logo') }}</div>
+                }
+
+              @if (form.controls.logo_light.value) {
+                <div class="mt-3">
+                  <small class="text-muted d-block mb-2">
+                    Logo Preview
+                  </small>
+
+                  <div class="border rounded p-2 d-inline-block">
+                    <img
+                      [src]="form.controls.logo_light.value"
+                      alt="Website Logo"
+                      style="max-width: 200px; max-height: 80px; object-fit: contain;"
+                    />
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Website Favicon -->
+            <div class="col-md-6">
+              <label for="bsFavicon" class="form-label">
+                Website Favicon
+               <span class="text-danger">*</span></label>
+
+              <input
+                type="file"
+                id="bsFavicon"
+                class="form-control"
+                accept="image/*"
+                (change)="onFaviconSelected($event)"
+                [disabled]="!canEdit"
+              />
+                @if (fieldError(form, 'favicon', 'Website Favicon')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'favicon', 'Website Favicon') }}</div>
+                }
+
+              @if (form.controls.favicon.value) {
+                <div class="mt-3">
+                  <small class="text-muted d-block mb-2">
+                    Favicon Preview
+                  </small>
+
+                  <div class="border rounded p-2 d-inline-block">
+                    <img
+                      [src]="form.controls.favicon.value"
+                      alt="Website Favicon"
+                      style="width: 48px; height: 48px; object-fit: contain;"
+                    />
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Contact Email -->
+            <div class="col-md-6">
+              <label for="bsEmail" class="form-label">
+                Contact Email
+               <span class="text-danger">*</span></label>
+
+              <input
+                type="email"
+                id="bsEmail"
+                formControlName="support_email"
+                class="form-control"
+                [readonly]="!canEdit"
+              />
+                @if (fieldError(form, 'support_email', 'Contact Email')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'support_email', 'Contact Email') }}</div>
+                }
+
+
+            </div>
+
+            <!-- Contact Phone -->
+            <div class="col-md-6">
+              <label for="bsPhone" class="form-label">
+                Contact Phone
+               <span class="text-danger">*</span></label>
+
+              <input
+                type="tel"
+                id="bsPhone"
+                formControlName="support_phone"
+                class="form-control"
+                [readonly]="!canEdit"
+              />
+                @if (fieldError(form, 'support_phone', 'Contact Phone')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'support_phone', 'Contact Phone') }}</div>
+                }
+            </div>
+
+          </div>
+
+          <div class="mt-3 d-flex align-items-center gap-2">
+            @if (canEdit) {
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="saving()"
+              >
+                @if (saving()) {
+                  <span
+                    class="spinner-border spinner-border-sm me-1"
+                    role="status"
+                  ></span>
+                }
+
+                Save Brand Settings
+              </button>
+            }
+
+            <span class="text-muted fs-xs">
+              Logo and favicon are stored as part of the website branding.
+            </span>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="card card-h-100">
+  <div class="card-header border-dashed card-tabs">
+    <div class="flex-grow-1">
+      <h4 class="card-title">Sales Report <span class="text-muted fs-base fw-normal">(25822 Orders)</span></h4>
+    </div>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-tabs nav-justified card-header-tabs nav-bordered">
+      <li [ngbNavItem]="1" class="nav-item">
+        <button ngbNavLink class="nav-link">
+          <span class="d-md-none d-block">1D</span>
+          <span class="d-none d-md-block">Today</span>
+        </button>
+      </li>
+
+      <li [ngbNavItem]="2" class="nav-item">
+        <button ngbNavLink class="nav-link">
+          <span class="d-md-none d-block">1M</span>
+          <span class="d-none d-md-block">Monthly</span>
+        </button>
+      </li>
+
+      <li [ngbNavItem]="3" class="nav-item">
+        <button ngbNavLink class="nav-link">
+          <span class="d-md-none d-block">1Y</span>
+          <span class="d-none d-md-block">Annual</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body p-0">
+    <div class="bg-light bg-opacity-25 border-bottom border-dashed">
+      <div class="row text-center">
+        @for (item of salesReportData; track $index) {
+        <div class="col-sm-4">
+          <p class="text-muted mt-3 mb-1">{{ item.title }}</p>
+          <h4 class="mb-3">
+            <app-icon [icon]="item.icon" class="text-success me-1"></app-icon>
+            <span
+              ><span
+                [countUp]="item.value"
+                [countUpOptions]="{
+                 prefix: item.prefix || '',
+                   suffix: item.suffix || '',
+                    decimalPlaces: Number.isInteger(item.value) ? 0 : 2
+                  }"
+              ></span
+            ></span>
+          </h4>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="p-3 pt-1">
+      <div class="dash-item-overlay d-none d-md-block" dir="ltr">
+        <h5>Today's Earning: $8,975.30</h5>
+        <p class="text-muted mb-0 mt-2">Property PS007 is not receiving hits. Either your site is not receiving any sessions.</p>
+      </div>
+      <div dir="ltr">
+        <app-apexchart [getOptions]="salesReportChart" class="apex-charts" />
+      </div>
+    </div>
+  </div>
+</div>

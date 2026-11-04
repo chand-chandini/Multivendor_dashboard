@@ -1,0 +1,304 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Payroll" subTitle="HRM" />
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header border-light justify-content-between">
+          <div class="d-flex gap-2">
+            <!-- Search -->
+            <div class="app-search">
+              <input [(ngModel)]="tableService.searchTerm" type="text" class="form-control" placeholder="Search payroll records..." />
+              <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Add New Payroll -->
+            <button class="btn btn-primary" (click)="openModal(content)">
+              <app-icon icon="plus" class="me-1"></app-icon>
+              New Payroll
+            </button>
+
+            <!-- Delete Selected -->
+            @if (hasSelection) {
+            <button (click)="deleteSelected()" class="btn btn-danger">Delete</button>
+            }
+          </div>
+
+          <div class="d-flex align-items-center gap-2">
+            <span class="me-2 fw-semibold">Filter By:</span>
+
+            <!-- Department Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterCategory" (ngModelChange)="tableService.setFilter('department', filterCategory)" class="form-select form-control my-1 my-md-0">
+                <option value="">Department</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Finance">Finance</option>
+                <option value="IT">IT</option>
+                <option value="Operations">Operations</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Design">Design</option>
+                <option value="Sales">Sales</option>
+                <option value="Customer Support">Customer Support</option>
+                <option value="Research & Development">Research & Development</option>
+              </select>
+              <app-icon icon="layout" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Pay Status Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+                <option value="">Status</option>
+                <option value="paid">Paid</option>
+                <option value="processing">Processing</option>
+                <option value="on-hold">On Hold</option>
+                <option value="pending-review">Pending Review</option>
+              </select>
+              <app-icon icon="arrows-shuffle" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Pay Period Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterPeriod" (ngModelChange)="tableService.setFilter('date', filterPeriod)" class="form-select form-control my-1 my-md-0">
+                <option value="">Pay Period</option>
+                <option value="Oct 2025">October 2025</option>
+                <option value="Sep 2025">September 2025</option>
+                <option value="Aug 2025">August 2025</option>
+                <option value="Jul 2025">July 2025</option>
+              </select>
+              <app-icon icon="calendar" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Records Per Page -->
+            <div>
+              <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10" selected>10</option>
+                <option [ngValue]="15">15</option>
+                <option [ngValue]="20">20</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+            <thead class="bg-light bg-opacity-25 thead-sm">
+              <tr class="text-uppercase fs-xxs">
+                <th scope="col" style="width: 1%">
+                  <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" id="checkAll" value="option" />
+                </th>
+                <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">Employee ID</th>
+                <th sortable="employee.name" (sort)="tableService.setSort($event.column, $event.direction)">Employee Name</th>
+                <th sortable="department" (sort)="tableService.setSort($event.column, $event.direction)">Department</th>
+                <th sortable="designation" (sort)="tableService.setSort($event.column, $event.direction)">Designation</th>
+                <th sortable="date" (sort)="tableService.setSort($event.column, $event.direction)">Pay Period</th>
+                <th sortable="salary" (sort)="tableService.setSort($event.column, $event.direction)">Base Salary</th>
+                <th sortable="allowance" (sort)="tableService.setSort($event.column, $event.direction)">Allowances</th>
+                <th sortable="actualSalary" (sort)="tableService.setSort($event.column, $event.direction)">Actual Salary</th>
+                <th sortable="deductions" (sort)="tableService.setSort($event.column, $event.direction)">Deductions</th>
+                <th sortable="netPay" (sort)="tableService.setSort($event.column, $event.direction)">Net Pay</th>
+                <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @if ((total$ | async)! > 0) { @for (item of (payrollData$ | async); track $index) {
+              <tr>
+                <td>
+                  <input [checked]="selectedIds.has(item.id)" (change)="toggleSingleSelection(item)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+                </td>
+
+                <td>{{ item.id }}</td>
+
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="avatar avatar-sm">
+                      <img [src]="item.employee.image" class="img-fluid rounded-circle" alt="" />
+                    </div>
+                    <div>
+                      <h5 class="mb-0 lh-base fs-base">
+                        <a [routerLink]="[]" class="link-reset">{{ item.employee.name }}</a>
+                      </h5>
+                      <p class="text-muted fs-xs mb-0">{{ item.employee.email }}</p>
+                    </div>
+                  </div>
+                </td>
+
+                <td>{{ item.department }}</td>
+                <td>{{ item.designation }}</td>
+                <td>{{ item.date }}</td>
+
+                <td>{{ item.salary }}</td>
+                <td>{{ item.allowance }}</td>
+                <td><strong>{{ item.actualSalary }}</strong></td>
+                <td>{{ item.deductions }}</td>
+                <td><strong>{{ item.netPay }}</strong></td>
+
+                <td>
+                  <span
+                    class="badge"
+                    [class]="
+                                    item.status === 'processing'
+                                        ? 'bg-warning-subtle text-warning'
+                                        : item.status === 'on-hold'
+                                        ? 'bg-danger-subtle text-danger'
+                                        : 'bg-success-subtle text-success'
+                                "
+                  >
+                    {{ toPascalCase(item.status) }}
+                  </span>
+                </td>
+
+                <td class="text-center">
+                  <div class="d-flex justify-content-center gap-1">
+                    <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="eye" class="fs-lg"></app-icon>
+                    </a>
+                    <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="edit" class="fs-lg"></app-icon>
+                    </a>
+                    <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm" (click)="tableService.deleteItem(item)">
+                      <app-icon icon="trash" class="fs-lg"></app-icon>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              } } @else {
+              <tr class="no-results">
+                <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer border-0">
+          @if ((total$ | async)! > 0) {
+          <app-custom-pagination itemsName="records" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+          }
+        </div>
+      </div>
+    </div>
+    <!-- end col -->
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header border-bottom">
+    <h5 class="modal-title fw-semibold" id="addPayrollModalLabel"><app-icon icon="plus" class="me-1"></app-icon> Add Payroll Record</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <form id="addPayrollForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <!-- Employee Name -->
+        <div class="col-md-6">
+          <label for="employeeName" class="form-label"> Employee Name <span class="text-danger">*</span> </label>
+          <select id="employeeName" class="form-select" required>
+            <option value="">Select Employee</option>
+            <option value="1">Samantha Green</option>
+            <option value="2">David Lee</option>
+            <option value="3">Maria Smith</option>
+            <option value="4">Michael Adams</option>
+            <option value="5">Olivia Brown</option>
+            <option value="6">Daniel Carter</option>
+            <option value="7">Emily Davis</option>
+            <option value="8">James Walker</option>
+            <option value="9">Sophia Martinez</option>
+            <option value="10">Henry Clark</option>
+          </select>
+        </div>
+
+        <!-- Department -->
+        <div class="col-md-6">
+          <label for="department" class="form-label"> Department <span class="text-danger">*</span> </label>
+          <select id="department" class="form-select" required>
+            <option value="">Select Department</option>
+            <option>Human Resources</option>
+            <option>Finance</option>
+            <option>IT</option>
+            <option>Operations</option>
+            <option>Marketing</option>
+            <option>Design</option>
+            <option>Sales</option>
+            <option>Customer Support</option>
+            <option>Research & Development</option>
+          </select>
+        </div>
+
+        <!-- Role / Position -->
+        <div class="col-md-6">
+          <label for="role" class="form-label"> Role / Position <span class="text-danger">*</span> </label>
+          <input type="text" id="role" class="form-control" placeholder="Enter position title" required />
+        </div>
+
+        <!-- Pay Period -->
+        <div class="col-md-6">
+          <label for="payPeriod" class="form-label"> Pay Period <span class="text-danger">*</span> </label>
+          <select id="payPeriod" class="form-select" required>
+            <option value="">Select Period</option>
+            <option>October 2025</option>
+            <option>September 2025</option>
+            <option>August 2025</option>
+            <option>July 2025</option>
+          </select>
+        </div>
+
+        <!-- Base Salary -->
+        <div class="col-md-6">
+          <label for="baseSalary" class="form-label"> Base Salary ($) <span class="text-danger">*</span> </label>
+          <input type="number" id="baseSalary" class="form-control" placeholder="e.g., 5000" min="0" required />
+        </div>
+
+        <!-- Allowances -->
+        <div class="col-md-6">
+          <label for="allowances" class="form-label">Allowances ($)</label>
+          <input type="number" id="allowances" class="form-control" placeholder="e.g., 300" min="0" />
+        </div>
+
+        <!-- Total Earnings (auto-calculated) -->
+        <div class="col-md-6">
+          <label for="totalEarnings" class="form-label">Total Earnings ($)</label>
+          <input type="number" id="totalEarnings" class="form-control" placeholder="Auto-calculated" readonly />
+        </div>
+
+        <!-- Deductions -->
+        <div class="col-md-6">
+          <label for="deductions" class="form-label">Deductions ($)</label>
+          <input type="number" id="deductions" class="form-control" placeholder="e.g., 100" min="0" />
+        </div>
+
+        <!-- Net Pay (auto-calculated) -->
+        <div class="col-md-6">
+          <label for="netPay" class="form-label">Net Pay ($)</label>
+          <input type="number" id="netPay" class="form-control" placeholder="Auto-calculated" readonly />
+        </div>
+
+        <!-- Pay Status -->
+        <div class="col-md-6">
+          <label for="pay-status" class="form-label"> Pay Status <span class="text-danger">*</span> </label>
+          <select id="pay-status" class="form-select" required>
+            <option value="">Select Status</option>
+            <option value="paid">Paid</option>
+            <option value="processing">Processing</option>
+            <option value="on-hold">On Hold</option>
+            <option value="pending-review">Pending Review</option>
+          </select>
+        </div>
+
+        <!-- Remarks -->
+        <div class="col-12">
+          <label for="remarks" class="form-label">Remarks</label>
+          <textarea id="remarks" class="form-control" rows="2" placeholder="Optional remarks or notes"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer border-top">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary"><app-icon icon="device-floppy" class="me-1"></app-icon> Save Payroll</button>
+    </div>
+  </form>
+</ng-template>

@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Deals" subTitle="CRM" />
+
+  <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 g-2">
+    @for (item of dealStatData; track $index) {
+    <div class="col">
+      <app-deals-widget [item]="item" />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-deals-table />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-body text-center">
+    <!-- Icon and Title -->
+    <h1 class="mb-2">🏆</h1>
+    <h4 class="mb-1 fw-semibold">Congratulations, {{username}}! 🎉</h4>
+
+    <!-- Achievement Message -->
+    <p class="text-muted fst-italic mb-3">
+      Congratulations! You’ve reached
+      <strong>5,000 subscribers</strong>
+      ! Your community is growing fast!
+    </p>
+
+    <!-- Stats (optional) -->
+    <div class="d-flex justify-content-center mb-3">
+      <div class="me-4 text-center">
+        <h6 class="mb-0">Posts</h6>
+        <span class="fw-bold">250</span>
+      </div>
+      <div class="me-4 text-center">
+        <h6 class="mb-0">Likes</h6>
+        <span class="fw-bold">15,200</span>
+      </div>
+      <div class="text-center">
+        <h6 class="mb-0">Subscribers</h6>
+        <span class="fw-bold">5,000</span>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <button class="btn btn-sm btn-outline-success me-2">
+      <app-icon icon="share" class="me-1"></app-icon>
+      Share Achievement
+    </button>
+    <a [routerLink]="[]" class="btn btn-sm btn-primary ms-1">
+      <app-icon icon="user" class="me-1"></app-icon>
+      View Profile
+    </a>
+  </div>
+</div>

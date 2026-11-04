@@ -1,0 +1,167 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Tasks" subTitle="Apps"></app-page-breadcrumb>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header border-light justify-content-between">
+          <div class="d-flex gap-2">
+            <!-- Search -->
+            <div class="app-search">
+              <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search task..." />
+              <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            @if (hasSelection) {
+            <button class="btn btn-danger" (click)="deleteSelected()">Delete</button>
+            }
+          </div>
+
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="me-2 fw-semibold">Filter By:</span>
+
+            <!-- Task Status Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+                <option value="All">Task Status</option>
+                <option value="new">New</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="in-review">In Review</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <app-icon icon="list-check" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Priority Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterPriority" (ngModelChange)="tableService.setFilter('priority', filterPriority)" class="form-select form-control my-1 my-md-0">
+                <option value="All">Priority</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+              <app-icon icon="alert-triangle" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Records Per Page -->
+            <div>
+              <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="8">8</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="15">15</option>
+                <option [ngValue]="20">20</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-flex gap-1">
+            <a routerLink="/apps/task/create" class="btn btn-primary ms-1"> <app-icon icon="plus" class="fs-sm me-2"></app-icon> Add Task </a>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+            <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+              <tr class="text-uppercase fs-xxs">
+                <th class="ps-3" style="width: 1%">
+                  <input [(ngModel)]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+                </th>
+                <th sortable="title" (sort)="tableService.setSort($event.column, $event.direction)">Task Title</th>
+                <th sortable="assignee.name" (sort)="tableService.setSort($event.column, $event.direction)">Assigned To</th>
+                <th sortable="dueDate" (sort)="tableService.setSort($event.column, $event.direction)">Due Date</th>
+                <th sortable="completedTask" (sort)="tableService.setSort($event.column, $event.direction)">Progress</th>
+                <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+                <th sortable="priority" (sort)="tableService.setSort($event.column, $event.direction)">Priority</th>
+                <th sortable="comments" (sort)="tableService.setSort($event.column, $event.direction)">Comments</th>
+                <th class="text-center" style="width: 1%">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if ((total$ | async)! > 0) { @for (task of (taskData$ | async); track $index;let i = $index) {
+              <tr>
+                <td class="ps-3">
+                  <input (change)="toggleSingleSelection(i)" [checked]="selectedIds.has(i)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+                </td>
+
+                <td>
+                  <h5 class="fs-base mb-0">
+                    <a routerLink="/apps/task/details" class="link-reset"> {{ task.title }} </a>
+                  </h5>
+                  <p class="text-muted fs-xs mb-0">Created: {{ task.createdAtDate }} <small class="text-muted">{{ task.createdAtTime }}</small></p>
+                </td>
+
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="avatar avatar-sm">
+                      <img [src]="task.assignee.image" [alt]="task.assignee.name" class="img-fluid rounded-circle" />
+                    </div>
+                    <div>
+                      <h6 class="mb-0 fs-base fw-semibold">{{ task.assignee.name }}</h6>
+                      <p class="text-muted fs-xs mb-0">+{{ task.assignee.members }} members</p>
+                    </div>
+                  </div>
+                </td>
+
+                <td><app-icon icon="calendar" class="text-muted me-1"></app-icon> {{ task.dueDate }}</td>
+
+                <td><app-icon icon="list-details" class="text-muted me-1"></app-icon> {{ task.completedTask }}/{{ task.totalTask }}</td>
+
+                <td>
+                  <span
+                    class="badge fs-xxs"
+                    [class]="
+                                    task.status === 'cancelled' ? 'badge-outline-danger' :
+                                    task.status === 'in-progress' ? 'badge-outline-success':'badge-outline-warning'
+                                "
+                  >
+                    {{ toPascalCase(task.status )}}
+                  </span>
+                </td>
+
+                <td>
+                  <span
+                    class="badge fs-xxs"
+                    [class]="
+                                        task.priority === 'high' ? 'badge-soft-danger' :
+                                        task.priority === 'medium' ? 'badge-soft-warning' :
+                                        'badge-soft-success'
+                                    "
+                    >{{ toPascalCase(task.priority )}}</span
+                  >
+                </td>
+
+                <td><app-icon icon="messages" class="text-muted fs-sm me-1"></app-icon> {{ task.comments }}</td>
+
+                <td>
+                  <div class="d-flex justify-content-center gap-1">
+                    <a routerLink="/apps/task/details" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="eye" class="fs-lg"></app-icon>
+                    </a>
+                    <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="edit" class="fs-lg"></app-icon>
+                    </a>
+                    <a [routerLink]="[]" (click)="tableService.deleteItem(task)" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="trash" class="fs-lg"></app-icon>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              }} @else {
+              <tr class="no-results">
+                <td colspan="11" class="text-center text-muted py-3">Nothing found.</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer border-0">
+          @if ((total$ | async)! > 0) {
+          <app-custom-pagination itemsName="tasks" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

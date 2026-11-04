@@ -1,0 +1,177 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Franchise List" subTitle="Franchise" />
+  
+  @if (loadError()) {
+    <div class="alert alert-danger d-flex align-items-center justify-content-between gap-2" role="alert">
+      <span>{{ loadError() }}</span>
+      <button type="button" class="btn btn-sm btn-outline-danger" [disabled]="loading()" (click)="load()">Retry</button>
+    </div>
+  }
+
+  <ng-template #loginCell let-row>
+    <div class="form-check form-switch d-inline-block">
+      <input type="checkbox" class="form-check-input" role="switch" [checked]="row.login_status === 0"
+        [disabled]="!permissions.canEdit(permissionPath) || statusBusy() !== null"
+        [attr.aria-label]="'Allow login for ' + row.franchise_name" (change)="toggleStatus(row, 'login_status', $event)" />
+    </div>
+    <small class="d-block text-muted">{{ row.login_status === 0 ? 'Allowed' : 'Blocked' }}</small>
+  </ng-template>
+
+  <ng-template #activeCell let-row>
+    <div class="form-check form-switch d-inline-block">
+      <input type="checkbox" class="form-check-input" role="switch" [checked]="row.active_status === 1"
+        [disabled]="!permissions.canEdit(permissionPath) || statusBusy() !== null"
+        [attr.aria-label]="'Activate ' + row.franchise_name" (change)="toggleStatus(row, 'active_status', $event)" />
+    </div>
+    <small class="d-block text-muted">{{ row.active_status === 1 ? 'Active' : 'Inactive' }}</small>
+  </ng-template>
+
+  <div class="row"><div class="col-12">
+    <app-data-table title="Franchise List" searchPlaceholder="Search franchises..." itemsName="franchises"
+      addLabel="Add New" [emptyMessage]="loadError() ? 'Franchise list could not be loaded.' : 'No franchises added yet.'"
+      [rows]="rows()" [columns]="columns" [actions]="actions" [loading]="loading()"
+      [permissionPath]="permissionPath" [cellTemplates]="cellTemplates()" (add)="openAdd()" (action)="onAction($event)" />
+  </div></div>
+
+  <!-- EDIT / ADD MODAL -->
+  <ng-template #formModal let-modal>
+    <div class="modal-header border-bottom">
+      <h5 class="modal-title fw-semibold">{{ editingId() === null ? 'Add Franchise' : 'Edit Franchise' }}</h5>
+      <button type="button" class="btn-close" aria-label="Close" [disabled]="saving()" (click)="modal.dismiss()"></button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="modal-body p-4"><div class="row g-3">
+        @for (field of fields; track field.key) {
+          <div class="col-md-6">
+            <label [for]="'franchise-' + field.key" class="form-label">{{ field.label }}
+              @if (field.key === 'franchise_name' || field.key === 'mobile_number' || field.key === 'commission_percentage' || (field.key === 'pwd' && editingId() === null)) {
+                <span class="text-danger">*</span>
+              }
+            </label>
+            <input [id]="'franchise-' + field.key" [type]="field.type" [formControlName]="field.key" class="form-control"
+              [attr.autocomplete]="field.key === 'pwd' ? 'new-password' : 'off'" [attr.maxlength]="field.maxLength ?? null"
+              [attr.step]="field.type === 'number' ? '0.01' : null" [attr.min]="field.type === 'number' ? 0 : null"
+              [attr.max]="field.type === 'number' ? 100 : null"
+              [attr.aria-invalid]="form.get(field.key)?.touched && form.get(field.key)?.invalid"
+              [attr.aria-describedby]="'franchise-error-' + field.key" />
+            @if (field.key === 'pwd' && editingId() !== null) {
+              <small class="text-muted">Leave blank to keep the existing password.</small>
+            }
+            @if (fieldError(form, field.key, field.label)) {
+              <div [id]="'franchise-error-' + field.key" class="text-danger fs-xs mt-1">{{ fieldError(form, field.key, field.label) }}</div>
+            }
+          </div>
+        }
+      </div></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" [disabled]="saving()" (click)="modal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving() || !permissions.can(editingId() === null ? 'add' : 'edit', permissionPath)">
+          @if (saving()) { <span class="spinner-border spinner-border-sm me-1" role="status"></span> }
+          {{ editingId() === null ? 'Save' : 'Update' }}
+        </button>
+      </div>
+    </form>
+  </ng-template>
+
+  <!-- VIEW DETAILS & PDF MODAL -->
+  <ng-template #viewModal let-modal>
+    <div class="modal-header border-bottom">
+      <h5 class="modal-title fw-semibold">Franchise Details</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    
+    <div class="modal-body p-4" id="pdf-content">
+      @if (selectedRecord(); as row) {
+        
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+          <div>
+            <h4 class="mb-1 text-primary">{{ row.franchise_name }}</h4>
+            <span class="badge bg-secondary">Code: {{ row.franchise_code || '-' }}</span>
+          </div>
+          <div class="text-end">
+            <div class="text-muted small">Commission</div>
+            <h5 class="mb-0 fw-bold">{{ row.commission_percentage }}%</h5>
+          </div>
+        </div>
+        
+        <div class="row g-3">
+          <!-- Basic Info -->
+          <div class="col-12"><h6 class="fw-bold border-bottom pb-2 text-uppercase text-muted" style="font-size: 0.8rem;">Basic Info</h6></div>
+          <div class="col-md-4">
+            <div class="text-muted small">Owner Name</div>
+            <div class="fw-semibold">{{ row.owner_name || '-' }}</div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-muted small">Phone Number</div>
+            <div class="fw-semibold">{{ row.mobile_number }}</div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-muted small">Email</div>
+            <div class="fw-semibold text-truncate" [title]="row.email || ''">{{ row.email || '-' }}</div>
+          </div>
+
+          <!-- Location -->
+          <div class="col-12 mt-4"><h6 class="fw-bold border-bottom pb-2 text-uppercase text-muted" style="font-size: 0.8rem;">Location</h6></div>
+          <div class="col-md-4">
+            <div class="text-muted small">Territory</div>
+            <div class="fw-semibold">{{ row.territory_name || '-' }}</div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-muted small">City</div>
+            <div class="fw-semibold">{{ row.city || '-' }}</div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-muted small">Area</div>
+            <div class="fw-semibold">{{ row.area || '-' }}</div>
+          </div>
+
+          <!-- Bank Details -->
+          <div class="col-12 mt-4"><h6 class="fw-bold border-bottom pb-2 text-uppercase text-muted" style="font-size: 0.8rem;">Bank Information</h6></div>
+          <div class="col-md-6">
+            <div class="text-muted small">Account Holder</div>
+            <div class="fw-semibold">{{ row.bank_account_holder || '-' }}</div>
+          </div>
+          <div class="col-md-6">
+            <div class="text-muted small">Bank Name</div>
+            <div class="fw-semibold">{{ row.bank_name || '-' }}</div>
+          </div>
+          <div class="col-md-6">
+            <div class="text-muted small">Account Number</div>
+            <div class="fw-semibold">{{ row.bank_account_number || '-' }}</div>
+          </div>
+          <div class="col-md-6">
+            <div class="text-muted small">IFSC Code</div>
+            <div class="fw-semibold">{{ row.bank_ifsc_code || '-' }}</div>
+          </div>
+          <div class="col-12 mt-2">
+            <div class="text-muted small">UPI ID</div>
+            <div class="fw-semibold">{{ row.upi_id || '-' }}</div>
+          </div>
+
+          <!-- Status -->
+          <div class="col-12 mt-4"><h6 class="fw-bold border-bottom pb-2 text-uppercase text-muted" style="font-size: 0.8rem;">Status</h6></div>
+          <div class="col-md-6">
+            <div class="text-muted small">Login</div>
+            <span class="badge" [class.bg-success]="row.login_status === 0" [class.bg-danger]="row.login_status !== 0">
+              {{ row.login_status === 0 ? 'Allowed' : 'Blocked' }}
+            </span>
+          </div>
+          <div class="col-md-6">
+            <div class="text-muted small">Active Status</div>
+            <span class="badge" [class.bg-success]="row.active_status === 1" [class.bg-danger]="row.active_status !== 1">
+              {{ row.active_status === 1 ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Close</button>
+      <button type="button" class="btn btn-primary" (click)="downloadPDF()">
+        <i class="ri-download-2-line me-1"></i> Download PDF
+      </button>
+    </div>
+  </ng-template>
+</div>

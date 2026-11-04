@@ -1,0 +1,44 @@
+<div class="card p-3 mb-0">
+  <div class="d-flex align-items-center gap-3">
+    <div
+      class="avatar-lg rounded-circle d-flex align-items-center justify-content-center"
+      [class]="
+              item.title === 'Active'
+                ? 'text-success bg-success-subtle'
+                : item.title === 'Inactive'
+                ? 'text-danger bg-danger-subtle'
+                : 'text-bg-light'
+            "
+    >
+      <app-icon [icon]="item.icon" class="fs-xxl"></app-icon>
+    </div>
+
+    <div class="flex-grow-1">
+      <p
+        class="mb-1"
+        [class]="
+                item.title === 'Active'
+                  ? 'text-success'
+                  : item.title === 'Inactive'
+                  ? 'text-danger'
+                  : 'text-muted'
+              "
+      >
+        {{ item.title }}
+      </p>
+
+      <h4
+        class="mb-0"
+        [class]="
+                item.title === 'Active'
+                  ? 'text-success'
+                  : item.title === 'Inactive'
+                  ? 'text-danger'
+                  : ''
+              "
+      >
+        {{ item.value }}
+      </h4>
+    </div>
+  </div>
+</div>

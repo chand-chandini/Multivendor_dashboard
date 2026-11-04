@@ -1,0 +1,276 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <!-- Search -->
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search leave records..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Add New Leave -->
+      <button class="btn btn-primary" (click)="openModal(content)">
+        <app-icon icon="plus" class="me-1"></app-icon>
+        Add Leave
+      </button>
+
+      <!-- Delete Selected -->
+      @if (hasSelection) {
+      <button (click)="deleteSelected()" class="btn btn-danger">Delete</button>
+      }
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <!-- Leave Type Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterType" (ngModelChange)="tableService.setFilter('leaveType', filterType)" class="form-select form-control my-1 my-md-0">
+          <option value="">Leave Type</option>
+          <option value="Sick Leave">Sick Leave</option>
+          <option value="Casual Leave">Casual Leave</option>
+          <option value="Paid Leave">Paid Leave</option>
+          <option value="Maternity Leave">Maternity Leave</option>
+          <option value="Unpaid Leave">Unpaid Leave</option>
+        </select>
+        <app-icon icon="file-text" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Status</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <app-icon icon="box" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Department Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterCategory" (ngModelChange)="tableService.setFilter('department', filterCategory)" class="form-select form-control my-1 my-md-0">
+          <option value="">Department</option>
+          <option value="HR">HR</option>
+          <option value="Finance">Finance</option>
+          <option value="IT">IT</option>
+          <option value="Design">Design</option>
+          <option value="Operations">Operations</option>
+          <option value="Marketing">Marketing</option>
+          <option value="Support">Support</option>
+        </select>
+        <app-icon icon="users" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Records Per Page -->
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-hover w-100 mb-0">
+        <thead class="bg-light align-middle bg-opacity-25 thead-sm text-nowrap">
+          <tr class="text-uppercase fs-xxs">
+            <th scope="col" style="width: 1%">
+              <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" id="checkAll" value="option" />
+            </th>
+            <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">Employee ID</th>
+            <th sortable="name" (sort)="tableService.setSort($event.column, $event.direction)">Employee</th>
+            <th sortable="department" (sort)="tableService.setSort($event.column, $event.direction)">Department</th>
+            <th sortable="dateFrom" (sort)="tableService.setSort($event.column, $event.direction)">Date From</th>
+            <th sortable="dateTo" (sort)="tableService.setSort($event.column, $event.direction)">Date To</th>
+            <th sortable="leaveType" (sort)="tableService.setSort($event.column, $event.direction)">Leave Type</th>
+            <th>Reason</th>
+            <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+            <th sortable="appliedOn" (sort)="tableService.setSort($event.column, $event.direction)">Applied On</th>
+            <th sortable="approvedBy.name" (sort)="tableService.setSort($event.column, $event.direction)">Approved By</th>
+            <th class="text-center" style="width: 1%">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for (item of (leaveData$ | async); track $index) {
+          <tr>
+            <td>
+              <input [checked]="selectedIds.has(item.id)" (change)="toggleSingleSelection(item)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+            </td>
+            <td>{{ item.id }}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm rounded-circle bg-light d-flex align-items-center justify-content-center me-2">
+                  <app-icon icon="user" class="fs-lg text-muted"></app-icon>
+                </div>
+                <span>{{ item.name }}</span>
+              </div>
+            </td>
+            <td>{{ item.department }}</td>
+            <td>{{ item.dateFrom }}</td>
+            <td>{{ item.dateTo }}</td>
+            <td>{{ item.leaveType }}</td>
+            <td>{{ item.reason }}</td>
+            <td>
+              <span
+                class="badge"
+                [class]="
+                  item.status === 'pending'
+                    ? 'bg-warning-subtle text-warning'
+                    : item.status === 'rejected'
+                    ? 'bg-danger-subtle text-danger'
+                    : 'bg-success-subtle text-success'
+                "
+              >
+                {{ toPascalCase(item.status) }}
+              </span>
+            </td>
+            <td>{{ item.appliedOn }}</td>
+            <td>{{ item.approvedBy?.name || '--' }}</td>
+            <td>
+              <div class="d-flex align-items-center justify-content-end gap-1">
+                @if(item.status === 'pending'){
+                <a [routerLink]="[]" class="btn btn-success btn-icon btn-sm rounded-circle">
+                  <app-icon icon="check" class="fs-lg"></app-icon>
+                </a>
+
+                <a [routerLink]="[]" class="btn btn-danger btn-icon btn-sm rounded-circle">
+                  <app-icon icon="x" class="fs-lg"></app-icon>
+                </a>
+                } @if(item.status !== 'pending'){
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm"><app-icon icon="eye" class="fs-lg"></app-icon></a>
+                }
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm"><app-icon icon="edit" class="fs-lg"></app-icon></a>
+                <a [routerLink]="[]" (click)="tableService.deleteItem(item)" class="btn btn-default btn-icon btn-sm"><app-icon icon="trash" class="fs-lg"></app-icon></a>
+              </div>
+            </td>
+          </tr>
+          }} @else {
+          <tr class="no-results">
+            <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- end card-body-->
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="records" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="addLeaveModalLabel">Add Leave Record</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <form id="addLeaveForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <!-- Employee ID -->
+        <div class="col-md-4">
+          <label for="employeeId" class="form-label">Employee ID</label>
+          <input type="text" id="employeeId" class="form-control" placeholder="e.g., EMP-1056" required />
+        </div>
+
+        <!-- Employee Name -->
+        <div class="col-md-4">
+          <label for="employeeName" class="form-label">Employee Name</label>
+          <input type="text" id="employeeName" class="form-control" placeholder="Enter name" required />
+        </div>
+
+        <!-- Department -->
+        <div class="col-md-4">
+          <label for="department" class="form-label">Department</label>
+          <select id="department" class="form-select" required>
+            <option value="">Select Department</option>
+            <option>HR</option>
+            <option>Finance</option>
+            <option>IT</option>
+            <option>Design</option>
+            <option>Marketing</option>
+            <option>Support</option>
+            <option>Operations</option>
+          </select>
+        </div>
+
+        <!-- Date From -->
+        <div class="col-md-4">
+          <label for="dateFrom" class="form-label">Date From</label>
+          <input type="date" class="form-control" mwlFlatpickr [options]="flatPickrOptions" id="dateFrom" required />
+        </div>
+
+        <!-- Date To -->
+        <div class="col-md-4">
+          <label for="dateTo" class="form-label">Date To</label>
+          <input type="date" class="form-control" mwlFlatpickr [options]="flatPickrOptions" id="dateTo" required />
+        </div>
+
+        <!-- Leave Type -->
+        <div class="col-md-4">
+          <label for="leaveType" class="form-label">Leave Type</label>
+          <select id="leaveType" class="form-select" required>
+            <option value="">Select Leave Type</option>
+            <option>Sick Leave</option>
+            <option>Casual Leave</option>
+            <option>Paid Leave</option>
+            <option>Maternity Leave</option>
+            <option>Unpaid Leave</option>
+          </select>
+        </div>
+
+        <!-- Reason -->
+        <div class="col-md-12">
+          <label for="reason" class="form-label">Reason</label>
+          <textarea id="reason" class="form-control" rows="3" placeholder="Enter reason" required></textarea>
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-4">
+          <label for="leave-status" class="form-label">Status</label>
+          <select id="leave-status" class="form-select" required>
+            <option value="">Select Status</option>
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+
+        <!-- Approved By -->
+        <div class="col-md-4">
+          <label for="approvedBy" class="form-label">Approved By</label>
+          <input type="text" id="approvedBy" class="form-control" placeholder="Approver name" />
+        </div>
+
+        <!-- Applied On -->
+        <div class="col-md-4">
+          <label for="appliedOn" class="form-label">Applied On</label>
+          <input type="date" class="form-control" mwlFlatpickr [options]="flatPickrOptions" id="appliedOn" />
+        </div>
+
+        <!-- Remarks -->
+        <div class="col-md-12">
+          <label for="remarks" class="form-label">Remarks</label>
+          <textarea id="remarks" class="form-control" rows="3" placeholder="Optional remarks..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary">
+        <app-icon icon="device-floppy" class="me-1"></app-icon>
+        Save Record
+      </button>
+    </div>
+  </form>
+</ng-template>

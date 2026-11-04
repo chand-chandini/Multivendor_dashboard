@@ -1,0 +1,199 @@
+<div class="container-fluid">
+  <app-page-breadcrumb
+    title="Payments"
+    subTitle="Delivery Boys"
+  />
+
+  <!-- Location Filter -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+
+        <div class="col-md-4">
+          <label class="form-label">
+            Location
+          </label>
+
+          <select
+            class="form-select"
+            [(ngModel)]="selectedLocationId"
+          >
+            <option value="">
+              All Locations
+            </option>
+
+            @for (location of locations(); track location.id) {
+              <option [value]="location.id">
+                {{ location.location_name || location.name || location.city }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="col-md-auto">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="load()"
+          >
+            Search
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Payments Table -->
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Delivery Boy Payments"
+        searchPlaceholder="Search delivery boys..."
+        itemsName="payment records"
+        emptyMessage="No delivery boy payments found."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+</div>
+
+<!-- Payment Details Modal -->
+<ng-template #paymentDetailsModal let-modal>
+
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Delivery Boy Payment Details
+    </h5>
+
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    ></button>
+  </div>
+
+  <div class="modal-body">
+
+    @if (selectedPayment(); as payment) {
+
+      <div class="row g-3">
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            Delivery Boy
+          </div>
+          <div class="fw-semibold">
+            {{ payment.delivery_partner_name || '-' }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            Phone Number
+          </div>
+          <div class="fw-semibold">
+            {{ payment.mobile_number || '-' }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            From Date
+          </div>
+          <div class="fw-semibold">
+            {{ payment.settlement_period_start || '-' }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            To Date
+          </div>
+          <div class="fw-semibold">
+            {{ payment.settlement_period_end || '-' }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            Total Orders
+          </div>
+          <div class="fw-semibold">
+            {{ payment.total_orders || 0 }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            Total Amount
+          </div>
+          <div class="fw-semibold">
+            ₹{{ payment.total_amount || 0 }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            Amount Per Order
+          </div>
+          <div class="fw-semibold">
+            ₹{{ payment.amount_per_order || 0 }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            Net Pay
+          </div>
+          <div class="fw-semibold">
+            ₹{{ payment.net_pay || 0 }}
+          </div>
+        </div>
+
+        <div class="col-12">
+          <hr class="my-2">
+        </div>
+
+        <div class="col-md-6">
+          <div class="text-muted small mb-1">
+            Status
+          </div>
+
+          @if (payment.settlement_status == 1) {
+            <span class="badge bg-success-subtle text-success">
+              Paid
+            </span>
+          } @else if (payment.settlement_status == 2) {
+            <span class="badge bg-warning-subtle text-warning">
+              Processing
+            </span>
+          } @else {
+            <span class="badge bg-danger-subtle text-danger">
+              Pending
+            </span>
+          }
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.dismiss()"
+    >
+      Close
+    </button>
+  </div>
+
+</ng-template>

@@ -1,0 +1,54 @@
+<div class="card">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">
+      Top Traffic Sources
+      <span placement="top" ngbTooltip="Shows which channels drive the most traffic."><app-icon icon="info-circle" class="text-muted ms-1"></app-icon></span>
+    </h4>
+
+    <div ngbDropdown class="ms-auto">
+      <a ngbDropdownToggle [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none">
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="chart-bar" class="me-2"></app-icon> View Detailed Report </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Export Traffic Data </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="filter-2" class="me-2"></app-icon> Filter by Source </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="trash" class="me-2"></app-icon> Remove Widget </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      @for (chunk of sourcesChunks; track $index) {
+      <div class="col">
+        @for (item of chunk; track $index; let last = $last) {
+        <div class="custom-progress" [class]="$last ? '':'mb-3'">
+          <div class="progress-info d-flex justify-content-between align-items-center">
+            <div>
+              <img [src]="item.image" alt="logo" class="me-1" height="24" />
+              <span class="align-middle fw-semibold fs-md"> {{ item.name }} </span>
+            </div>
+
+            <span class="fw-semibold text-muted float-end"> {{ item.value }}k </span>
+          </div>
+
+          <div class="progress-data" [class]="'bg-' + item.variant" [style.width.%]="item.progress"></div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>

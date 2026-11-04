@@ -1,0 +1,55 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Finance" subTitle="Dashboard" />
+
+  @if(showAlert){
+  <ngb-alert type="primary" [dismissible]="true" (closed)="showAlert = false" class="d-flex align-items-center" role="alert">
+    <app-icon icon="lifebuoy" class="fs-24 me-1"></app-icon>
+    <div><strong> Dear {{ username }} - </strong> We kindly encourage you to review your recent transactions and financial commitments to ensure that your account is in good standing.</div>
+    <a [routerLink]="[]" class="text-reset text-decoration-underline ms-auto link-offset-2"><b>Action Now</b></a>
+  </ngb-alert>
+  }
+
+  <div class="row">
+    <div class="col-xxl-4">
+      <app-balance-info />
+    </div>
+
+    <div class="col-xxl-8">
+      <div class="row">
+        @for(card of financeStatData; track $index){
+        <div class="col-xl-3 col-md-6">
+          <app-finance-stat [card]="card" />
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-8">
+      <app-financial-overview />
+    </div>
+    <div class="col-xl-4">
+      <app-financial-statistics />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-recent-transactions />
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center mb-3 mt-2">
+    <h4 class="fw-bold fs-md">My Targets & Goals</h4>
+    <a [routerLink]="[]" class="text-decoration-underline fw-semibold fs-15 ms-auto link-offset-2 link-dark">See All </a>
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-5">
+    @for(target of targetData; track $index){
+    <div class="col">
+      <app-target-stat [target]="target" />
+    </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="card mb-2">
+  <div class="card-body">
+    <div class="d-flex gap-3">
+      <div class="avatar-lg rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
+        <app-icon [icon]="ticket.icon" class="fs-xxl"></app-icon>
+      </div>
+      <div class="flex-grow-1">
+        <div class="mb-2 d-flex justify-content-between align-items-center">
+          <h5 class="fs-xl mb-0">
+            {{ticket.value}} @if(ticket.unit){
+            <small class="fs-6">{{ ticket.unit }}</small>
+            }
+          </h5>
+          @if (ticket.change !== undefined) {
+          <span>
+            {{ ticket.change > 0 ? '+' : ticket.change < 0 ? '' : '' }}{{ ticket.change }}% @if(ticket.change > 0){
+            <app-icon icon="arrow-up" class="text-success"></app-icon>
+            } @if(ticket.change < 0){ <app-icon icon="arrow-down" class="text-danger"></app-icon>
+            }
+          </span>
+          }
+        </div>
+        <p class="text-muted mb-0">{{ticket.title}}</p>
+      </div>
+    </div>
+  </div>
+</div>

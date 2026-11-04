@@ -1,0 +1,309 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Coupons" subTitle="Marketing" />
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        title="Coupons"
+        searchPlaceholder="Search coupons..."
+        itemsName="coupons"
+        addLabel="Add Coupon"
+        emptyMessage="No coupons created yet."
+        [rows]="rows()"
+        [columns]="columns"
+        [actions]="actions"
+        [loading]="loading()"
+        (add)="openAdd()"
+        (action)="onAction($event)"
+      />
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- VIEW MODAL (Quick Glance / Read-Only)      -->
+  <!-- ========================================== -->
+  <ng-template #viewModal let-modal>
+    <div class="modal-header bg-light border-bottom">
+      <h5 class="modal-title fw-semibold">View Coupon Details</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+
+    <div class="modal-body p-4">
+      @if (selectedRow(); as row) {
+        <div class="row g-4">
+          
+          <!-- Left Column: Basic Info -->
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-muted fw-bold mb-3 fs-xs border-bottom pb-2">Basic Info</h6>
+            
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Coupon Code:</span>
+              <span class="fw-bold text-dark w-50 text-uppercase">{{ row.coupon_code || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Description:</span>
+              <span class="fw-medium text-dark w-50">{{ row.description || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Location:</span>
+              <span class="fw-medium text-dark w-50">{{ row.location_name || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Shop:</span>
+              <span class="fw-medium text-dark w-50">{{ row.shop_name || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2 align-items-center">
+              <span class="text-muted w-50">Status:</span>
+              <span class="w-50">
+                <span class="badge" [ngClass]="row.is_active === 1 ? 'bg-success' : 'bg-secondary'">
+                  {{ row.is_active === 1 ? 'Active' : 'Inactive' }}
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Right Column: Discount Details -->
+          <div class="col-md-6">
+            <h6 class="text-uppercase text-muted fw-bold mb-3 fs-xs border-bottom pb-2">Discount Details</h6>
+            
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Discount Type:</span>
+              <span class="fw-medium text-dark w-50 text-capitalize">{{ row.discount_type || '-' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Discount Value:</span>
+              <span class="fw-bold text-success w-50">
+                {{ row.discount_value }}{{ row.discount_type === 'percentage' ? '%' : '' }}
+              </span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Max Discount:</span>
+              <span class="fw-medium text-dark w-50">{{ row.max_discount_amount ? '₹' + row.max_discount_amount : 'No Limit' }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Min Order Value:</span>
+              <span class="fw-medium text-dark w-50">₹{{ row.min_order_value || 0 }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Usage Limit (Per User):</span>
+              <span class="fw-medium text-dark w-50">{{ row.usage_limit_per_user || 0 }}</span>
+            </div>
+            <div class="d-flex mb-2">
+              <span class="text-muted w-50">Total Usage Limit:</span>
+              <span class="fw-medium text-dark w-50">{{ row.total_usage_limit || 'Unlimited' }}</span>
+            </div>
+          </div>
+
+          <!-- Bottom Row: Validity Dates -->
+          <div class="col-12 mt-4">
+            <h6 class="text-uppercase text-muted fw-bold mb-3 fs-xs border-bottom pb-2">Validity Period</h6>
+            <div class="row bg-light rounded p-3 mx-1">
+              <div class="col-md-6 text-center border-end">
+                <small class="text-muted d-block mb-1">Valid From</small>
+                <span class="fw-bold text-dark">
+                  {{ row.valid_from ? (row.valid_from | date:'medium') : 'Not Set' }}
+                </span>
+              </div>
+              <div class="col-md-6 text-center">
+                <small class="text-muted d-block mb-1">Valid Upto</small>
+                <span class="fw-bold text-danger">
+                  {{ row.valid_upto ? (row.valid_upto | date:'medium') : 'Not Set' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      }
+    </div>
+
+    <div class="modal-footer bg-light border-top">
+      <button type="button" class="btn btn-primary" (click)="modal.dismiss()">
+        Close
+      </button>
+    </div>
+  </ng-template>
+
+
+  <!-- ========================================== -->
+  <!-- ADD / EDIT MODAL (Original Form)           -->
+  <!-- ========================================== -->
+  <ng-template #formModal let-modal>
+
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ editingId() ? 'Update Coupon' : 'Add Coupon' }}
+      </h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      ></button>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+
+      <!-- Scrollable Modal Body -->
+      <div
+        class="modal-body"
+        style="max-height: 65vh; overflow-y: auto;"
+      >
+
+        <div class="row g-3">
+
+          <!-- Coupon Code -->
+          <div class="col-md-6">
+            <label for="couponCode" class="form-label">Coupon Code <span class="text-danger">*</span></label>
+            <input type="text" id="couponCode" formControlName="coupon_code" class="form-control" placeholder="Enter coupon code" />
+            @if (fieldError(form, 'coupon_code', 'Coupon Code')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'coupon_code', 'Coupon Code') }}</div>
+            }
+          </div>
+
+          <!-- Description -->
+          <div class="col-md-12">
+            <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+            <input type="text" id="description" formControlName="description" class="form-control" placeholder="Enter description" />
+            @if (fieldError(form, 'description', 'Description')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'description', 'Description') }}</div>
+            }
+          </div>
+
+          <!-- Discount Type -->
+          <div class="col-md-4">
+            <label for="discountType" class="form-label">Discount Type <span class="text-danger">*</span></label>
+            <select id="discountType" formControlName="discount_type" class="form-select">
+              <option value="percentage">Percentage</option>
+              <option value="fixed">Fixed</option>
+            </select>
+            @if (fieldError(form, 'discount_type', 'Discount Type')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'discount_type', 'Discount Type') }}</div>
+            }
+          </div>
+
+          <!-- Discount Value -->
+          <div class="col-md-4">
+            <label for="discountValue" class="form-label">Discount Value <span class="text-danger">*</span></label>
+            <input type="number" id="discountValue" formControlName="discount_value" class="form-control" min="0" step="0.01" placeholder="Enter discount value" />
+            @if (fieldError(form, 'discount_value', 'Discount Value')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'discount_value', 'Discount Value') }}</div>
+            }
+          </div>
+
+          <!-- Max Discount Amount -->
+          <div class="col-md-6">
+            <label for="maxDiscountAmount" class="form-label">Max Discount Amount <span class="text-danger">*</span></label>
+            <input type="number" id="maxDiscountAmount" formControlName="max_discount_amount" class="form-control" min="0" step="0.01" placeholder="Enter maximum discount" />
+            @if (fieldError(form, 'max_discount_amount', 'Max Discount Amount')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'max_discount_amount', 'Max Discount Amount') }}</div>
+            }
+          </div>
+
+          <!-- Minimum Order Value -->
+          <div class="col-md-6">
+            <label for="minOrderValue" class="form-label">Minimum Order Value <span class="text-danger">*</span></label>
+            <input type="number" id="minOrderValue" formControlName="min_order_value" class="form-control" min="0" step="0.01" placeholder="Enter minimum order value" />
+            @if (fieldError(form, 'min_order_value', 'Minimum Order Value')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'min_order_value', 'Minimum Order Value') }}</div>
+            }
+          </div>
+
+          <!-- Location -->
+          <div class="col-md-6">
+            <label for="couponLocation" class="form-label">Location <span class="text-danger">*</span></label>
+            <select id="couponLocation" formControlName="location_id" class="form-select">
+              <option [ngValue]="null">Select Location</option>
+              @for (location of locations(); track location.id) {
+                <option [ngValue]="location.id">{{ location.city || location.location_name || location.name }}</option>
+              }
+            </select>
+            @if (fieldError(form, 'location_id', 'Location')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'location_id', 'Location') }}</div>
+            }
+          </div>
+
+          <!-- Shop -->
+          <div class="col-md-6">
+            <label for="couponShop" class="form-label">Shop <span class="text-danger">*</span></label>
+            <select id="couponShop" formControlName="vendor_id" class="form-select">
+              <option [ngValue]="null">Select Shop</option>
+              @for (shop of shops(); track shop.id) {
+                <option [ngValue]="shop.id">{{ shop.vendor_name || shop.shop_name || shop.name }}</option>
+              }
+            </select>
+            @if (fieldError(form, 'vendor_id', 'Shop')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'vendor_id', 'Shop') }}</div>
+            }
+          </div>
+
+          <!-- Usage Limit Per User -->
+          <div class="col-md-6">
+            <label for="usageLimitPerUser" class="form-label">Usage Limit Per User <span class="text-danger">*</span></label>
+            <input type="number" id="usageLimitPerUser" formControlName="usage_limit_per_user" class="form-control" min="1" />
+            @if (fieldError(form, 'usage_limit_per_user', 'Usage Limit Per User')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'usage_limit_per_user', 'Usage Limit Per User') }}</div>
+            }
+          </div>
+
+          <!-- Total Usage Limit -->
+          <div class="col-md-6">
+            <label for="totalUsageLimit" class="form-label">Total Usage Limit</label>
+            <input type="number" id="totalUsageLimit" formControlName="total_usage_limit" class="form-control" min="0" placeholder="Unlimited" />
+            @if (fieldError(form, 'total_usage_limit', 'Total Usage Limit')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'total_usage_limit', 'Total Usage Limit') }}</div>
+            }
+          </div>
+
+          <!-- Valid From -->
+          <div class="col-md-6">
+            <label for="validFrom" class="form-label">Valid From <span class="text-danger">*</span></label>
+            <input type="datetime-local" id="validFrom" formControlName="valid_from" class="form-control" />
+            @if (fieldError(form, 'valid_from', 'Valid From')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'valid_from', 'Valid From') }}</div>
+            }
+          </div>
+
+          <!-- Valid Upto -->
+          <div class="col-md-6">
+            <label for="validUpto" class="form-label">Valid Upto <span class="text-danger">*</span></label>
+            <input type="datetime-local" id="validUpto" formControlName="valid_upto" class="form-control" />
+            @if (fieldError(form, 'valid_upto', 'Valid Upto')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'valid_upto', 'Valid Upto') }}</div>
+            }
+          </div>
+
+          <!-- Active Status -->
+          <div class="col-md-6">
+            <label for="isActive" class="form-label">Active Status <span class="text-danger">*</span></label>
+            <select id="isActive" formControlName="is_active" class="form-select">
+              <option [ngValue]="1">Active</option>
+              <option [ngValue]="0">Inactive</option>
+            </select>
+            @if (fieldError(form, 'is_active', 'Active Status')) {
+              <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'is_active', 'Active Status') }}</div>
+            }
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving()">
+          @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          }
+          {{ editingId() ? 'Update Coupon' : 'Add Coupon' }}
+        </button>
+      </div>
+
+    </form>
+
+  </ng-template>
+</div>

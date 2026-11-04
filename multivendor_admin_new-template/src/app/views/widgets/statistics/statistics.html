@@ -1,0 +1,67 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Statistics" subTitle="Widgets" />
+
+  <app-statistic-card1 />
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 g-0 text-center align-items-center">
+            @for (item of summaryData; track $index) {
+            <app-statistic-card2 [item]="item" />
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-cols-xxl-4 row-cols-md-2 row-cols-1 g-3 align-items-center">
+    @for (item of progressData; track $index) {
+    <div class="col">
+      <app-statistic-card3 [item]="item" />
+    </div>
+    }
+  </div>
+
+  <div class="row row-cols-xxl-4 row-cols-md-2 row-cols-1">
+    @for (item of metricData; track $index) {
+    <div class="col">
+      <app-statistic-card4 [item]="item" />
+    </div>
+    }
+  </div>
+
+  <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 g-2">
+    @for (item of dealStatData; track item.title) {
+    <div class="col">
+      <app-statistic-card5 [item]="item" />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    @for (item of statData; track item.title) {
+    <div class="col-md-6 col-xxl-3">
+      <app-statistic-card6 [item]="item" />
+    </div>
+    }
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-6">
+    @for (item of miniStatData; track item.title) {
+    <div class="col">
+      <app-statistic-card7 [item]="item" />
+    </div>
+    }
+  </div>
+
+  <div class="row row-cols-xxl-4 row-cols-md-2 row-cols-1">
+    @for (item of businessStatData; track item.title) {
+    <div class="col">
+      <app-statistic-card8 [item]="item" />
+    </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,2622 @@
+{
+  "forms": [
+    {
+      "template": "src/app/views/widgets/social/components/create-post1/create-post1.html",
+      "component": "src/app/views/widgets/social/components/create-post1/create-post1.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/widgets/social/components/create-post2/create-post2.html",
+      "component": "src/app/views/widgets/social/components/create-post2/create-post2.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/widgets/social/components/post-tweet2/post-tweet2.html",
+      "component": "src/app/views/widgets/social/components/post-tweet2/post-tweet2.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/widgets/social/components/post-tweet5/post-tweet5.html",
+      "component": "src/app/views/widgets/social/components/post-tweet5/post-tweet5.ts",
+      "forms": [
+        "<form class=\"poll-form\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/ui/dropdowns/dropdowns.html",
+      "component": "src/app/views/ui/dropdowns/dropdowns.ts",
+      "forms": [
+        "<form class=\"px-4 py-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/ui/notifications/notifications.html",
+      "component": "src/app/views/ui/notifications/notifications.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/pages/contact-us/contact-us.html",
+      "component": "src/app/views/pages/contact-us/contact-us.ts",
+      "forms": [
+        "<form class=\"p-4 border rounded-4 border-dashed\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/multivendor/banners/banners.html",
+      "component": "src/app/views/multivendor/banners/banners.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "link_type",
+        "vendor_id",
+        "product_id",
+        "external_url",
+        "banner_order",
+        "is_active"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/brand-settings/brand-settings.html",
+      "component": "src/app/views/multivendor/brand-settings/brand-settings.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "tenant_name",
+        "website_title",
+        "tagline",
+        "support_email",
+        "support_phone"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/categories/categories.html",
+      "component": "src/app/views/multivendor/categories/categories.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "category_name",
+        "parent_id",
+        "category_name",
+        "parent_id",
+        "filter_name"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/charges/charges.html",
+      "component": "src/app/views/multivendor/charges/charges.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "rain_surge_charge",
+        "rain_surge_active",
+        "handling_charge",
+        "packing_charge",
+        "donation_charge"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/coupons/coupons.html",
+      "component": "src/app/views/multivendor/coupons/coupons.ts",
+      "forms": [
+        "<form\n      [formGroup]=\"form\"\n      (ngSubmit)=\"submit()\"\n    >"
+      ],
+      "controls": [
+        "coupon_code",
+        "description",
+        "discount_type",
+        "discount_value",
+        "max_discount_amount",
+        "min_order_value",
+        "location_id",
+        "vendor_id",
+        "usage_limit_per_user",
+        "total_usage_limit",
+        "valid_from",
+        "valid_upto",
+        "is_active"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/delivery-partners/delivery-partners.html",
+      "component": "src/app/views/multivendor/delivery-partners/delivery-partners.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "name",
+        "mobile_number",
+        "pwd",
+        "address",
+        "location_id",
+        "cod_limit",
+        "aadhar_number",
+        "pan_number",
+        "driving_license_number",
+        "bank_account_number",
+        "bank_ifsc_code"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/dev-support/dev-support.html",
+      "component": "src/app/views/multivendor/dev-support/dev-support.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">",
+        "<form [formGroup]=\"remarksForm\" (ngSubmit)=\"saveRemarks()\">"
+      ],
+      "controls": [
+        "application",
+        "subject",
+        "description",
+        "ticket_type",
+        "remarks"
+      ],
+      "submitHandlers": [
+        "submit()",
+        "saveRemarks()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/footer-settings/footer-settings.html",
+      "component": "src/app/views/multivendor/footer-settings/footer-settings.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "about_text",
+        "contact_email",
+        "contact_phone",
+        "contact_address",
+        "copyright_text",
+        "facebook_url",
+        "instagram_url",
+        "twitter_url",
+        "youtube_url",
+        "linkedin_url",
+        "playstore_url",
+        "appstore_url"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/home-page/home-page.html",
+      "component": "src/app/views/multivendor/home-page/home-page.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "section_key",
+        "heading",
+        "subheading",
+        "display_order",
+        "status"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/locations/locations.html",
+      "component": "src/app/views/multivendor/locations/locations.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "city",
+        "latitude",
+        "longitude",
+        "max_delivery_service_km"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/master-data/master-data.html",
+      "component": "src/app/views/multivendor/master-data/master-data.ts",
+      "forms": [
+        "<form\n      [formGroup]=\"form\"\n      (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "vendor_id",
+        "category_id",
+        "product_name",
+        "product_code",
+        "description",
+        "base_price",
+        "discount_price",
+        "stock_quantity",
+        "is_veg",
+        "is_returnable",
+        "is_featured"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/my-profile/my-profile.html",
+      "component": "src/app/views/multivendor/my-profile/my-profile.ts",
+      "forms": [
+        "<form [formGroup]=\"passwordForm\" (ngSubmit)=\"changePassword()\">"
+      ],
+      "controls": [
+        "new_password",
+        "confirm_password"
+      ],
+      "submitHandlers": [
+        "changePassword()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/notifications/notifications.html",
+      "component": "src/app/views/multivendor/notifications/notifications.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "title",
+        "message"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/orders/orders.html",
+      "component": "src/app/views/multivendor/orders/orders.ts",
+      "forms": [
+        "<form\n            [formGroup]=\"filterForm\"\n            (ngSubmit)=\"load()\"\n          >"
+      ],
+      "controls": [
+        "from_date",
+        "to_date",
+        "category_id",
+        "location_id",
+        "vendor_id"
+      ],
+      "submitHandlers": [
+        "load()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Read-only/report-filter form: not made mandatory."
+    },
+    {
+      "template": "src/app/views/multivendor/payment-history/payment-history.html",
+      "component": "src/app/views/multivendor/payment-history/payment-history.ts",
+      "forms": [
+        "<form\n            [formGroup]=\"filterForm\"\n            (ngSubmit)=\"load()\"\n          >"
+      ],
+      "controls": [
+        "from_date",
+        "to_date",
+        "location_id",
+        "category_id",
+        "vendor_id"
+      ],
+      "submitHandlers": [
+        "load()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Read-only/report-filter form: not made mandatory."
+    },
+    {
+      "template": "src/app/views/multivendor/payments/payments.html",
+      "component": "src/app/views/multivendor/payments/payments.ts",
+      "forms": [
+        "<form [formGroup]=\"filters\">"
+      ],
+      "controls": [
+        "payment_gateway",
+        "payment_status",
+        "from_date",
+        "to_date"
+      ],
+      "submitHandlers": [],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Read-only/report-filter form: not made mandatory."
+    },
+    {
+      "template": "src/app/views/multivendor/permissions/permissions.html",
+      "component": "src/app/views/multivendor/permissions/permissions.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "name",
+        "number",
+        "email",
+        "designation",
+        "pwd"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/product-assignment/product-assignment.html",
+      "component": "src/app/views/multivendor/product-assignment/product-assignment.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"getProducts()\">"
+      ],
+      "controls": [
+        "category_id",
+        "shop_id",
+        "phone_address"
+      ],
+      "submitHandlers": [
+        "getProducts()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/products/products.html",
+      "component": "src/app/views/multivendor/products/products.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "vendor_id",
+        "category_id",
+        "product_name",
+        "product_code",
+        "description",
+        "base_price",
+        "discount_price",
+        "stock_quantity",
+        "is_veg",
+        "is_returnable",
+        "is_featured"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/promotional-sections/promotional-sections.html",
+      "component": "src/app/views/multivendor/promotional-sections/promotional-sections.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "image",
+        "title",
+        "link_url",
+        "subtitle",
+        "display_order",
+        "status"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/settings/settings.html",
+      "component": "src/app/views/multivendor/settings/settings.ts",
+      "forms": [
+        "<form\n              [formGroup]=\"gatewayForm\"\n              (ngSubmit)=\"saveGateway()\"\n            >"
+      ],
+      "controls": [
+        "gateway_name",
+        "api_key",
+        "api_secret",
+        "webhook_secret",
+        "is_active"
+      ],
+      "submitHandlers": [
+        "saveGateway()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/settlements/settlements.html",
+      "component": "src/app/views/multivendor/settlements/settlements.ts",
+      "forms": [
+        "<form [formGroup]=\"settlementForm\" (ngSubmit)=\"submitSettlement()\">",
+        "<form [formGroup]=\"payoutForm\" (ngSubmit)=\"submitPayout()\">"
+      ],
+      "controls": [
+        "vendor_id",
+        "period_start",
+        "period_end",
+        "total_orders",
+        "gross_sales",
+        "commission_amount",
+        "net_payable",
+        "payout_amount",
+        "payout_method",
+        "transaction_reference",
+        "payout_proof"
+      ],
+      "submitHandlers": [
+        "submitSettlement()",
+        "submitPayout()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/shop-items/shop-items.html",
+      "component": "src/app/views/multivendor/shop-items/shop-items.ts",
+      "forms": [
+        "<form\n      [formGroup]=\"form\"\n      (ngSubmit)=\"submit()\"\n    >"
+      ],
+      "controls": [
+        "item",
+        "subcategory",
+        "filter",
+        "measurement",
+        "description",
+        "actual_price",
+        "selling_price",
+        "available_time",
+        "discount_percentage",
+        "discount_amount"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/testimonials/testimonials.html",
+      "component": "src/app/views/multivendor/testimonials/testimonials.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "customer_name",
+        "designation",
+        "message",
+        "rating",
+        "display_order",
+        "status"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/vendors/vendors.html",
+      "component": "src/app/views/multivendor/vendors/vendors.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "vendor_name",
+        "vendor_mobile_number",
+        "vendor_mobile_number2",
+        "vendor_email",
+        "pwd",
+        "location_id",
+        "subcategory",
+        "vendor_unique_code",
+        "filter",
+        "vendor_address",
+        "special_offer",
+        "opening_time",
+        "closing_time",
+        "commission_percentage",
+        "kyc_status",
+        "admin_service",
+        "packing_charges",
+        "max_free_delivery_cost",
+        "minimum_order_amount",
+        "minimum_km",
+        "minimum_delivery_charge",
+        "per_km_charges",
+        "maximum_delivery_km",
+        "fssai_license_number",
+        "gst_number",
+        "pan_number",
+        "latitude",
+        "longitude",
+        "bank_account_holder",
+        "bank_account_number",
+        "bank_ifsc_code",
+        "bank_name",
+        "upi_id"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Existing Vendor validation retained; 162 regression tests passed."
+    },
+    {
+      "template": "src/app/views/multivendor/website-banners/website-banners.html",
+      "component": "src/app/views/multivendor/website-banners/website-banners.ts",
+      "forms": [
+        "<form\n      [formGroup]=\"form\"\n      (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "location_id"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/multivendor/website-theme-settings/website-theme-settings.html",
+      "component": "src/app/views/multivendor/website-theme-settings/website-theme-settings.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "primary_color",
+        "primary_color",
+        "secondary_color",
+        "secondary_color",
+        "header_color",
+        "header_color",
+        "button_color",
+        "button_color",
+        "font_family",
+        "custom_css"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-multivendor",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/form/layout/layout.html",
+      "component": "src/app/views/form/layout/layout.ts",
+      "forms": [
+        "<form>",
+        "<form>",
+        "<form>",
+        "<form class=\"form-horizontal\">",
+        "<form>",
+        "<form class=\"row row-cols-lg-auto g-3 align-items-center\">",
+        "<form>",
+        "<form>",
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/form/validation/validation.html",
+      "component": "src/app/views/form/validation/validation.ts",
+      "forms": [
+        "<form class=\"row g-3 needs-validation\" novalidate (ngSubmit)=\"validSubmit()\" [formGroup]=\"validationform\">",
+        "<form class=\"row g-3 needs-validation\" novalidate novalidate (ngSubmit)=\"formSubmit()\" [formGroup]=\"tooltipvalidationform\">",
+        "<form class=\"row g-3\">",
+        "<form class=\"was-validated\">",
+        "<form class=\"row g-3\">"
+      ],
+      "controls": [
+        "firstName",
+        "lastName",
+        "username",
+        "city",
+        "state",
+        "zip",
+        "firstName",
+        "lastName",
+        "standfordId",
+        "city",
+        "department",
+        "zip"
+      ],
+      "submitHandlers": [
+        "validSubmit()",
+        "formSubmit()"
+      ],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/form/wizard/components/vertical-wizard/vertical-wizard.html",
+      "component": "src/app/views/form/wizard/components/vertical-wizard/vertical-wizard.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/form/wizard/components/wizard-with-progressbar/wizard-with-progressbar.html",
+      "component": "src/app/views/form/wizard/components/wizard-with-progressbar/wizard-with-progressbar.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/lock-screen/lock-screen.html",
+      "component": "src/app/views/auth/lock-screen/lock-screen.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/login-pin/login-pin.html",
+      "component": "src/app/views/auth/login-pin/login-pin.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/new-pass/new-pass.html",
+      "component": "src/app/views/auth/new-pass/new-pass.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/reset-pass/reset-pass.html",
+      "component": "src/app/views/auth/reset-pass/reset-pass.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/sign-in/sign-in.html",
+      "component": "src/app/views/auth/sign-in/sign-in.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">"
+      ],
+      "controls": [
+        "mobile",
+        "password"
+      ],
+      "submitHandlers": [
+        "onSubmit()"
+      ],
+      "classification": "working-sign-in",
+      "hasApiIntegration": true,
+      "validationStatus": "Existing phone/password validation preserved; whitespace-only password blocked and tested."
+    },
+    {
+      "template": "src/app/views/auth/sign-up/sign-up.html",
+      "component": "src/app/views/auth/sign-up/sign-up.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/success-mail/success-mail.html",
+      "component": "src/app/views/auth/success-mail/success-mail.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/two-factor/two-factor.html",
+      "component": "src/app/views/auth/two-factor/two-factor.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/delete-account/delete-account.html",
+      "component": "src/app/views/auth/split/delete-account/delete-account.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/lock-screen/lock-screen.html",
+      "component": "src/app/views/auth/split/lock-screen/lock-screen.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/login-pin/login-pin.html",
+      "component": "src/app/views/auth/split/login-pin/login-pin.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/new-pass/new-pass.html",
+      "component": "src/app/views/auth/split/new-pass/new-pass.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/reset-pass/reset-pass.html",
+      "component": "src/app/views/auth/split/reset-pass/reset-pass.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/sign-in/sign-in.html",
+      "component": "src/app/views/auth/split/sign-in/sign-in.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/sign-up/sign-up.html",
+      "component": "src/app/views/auth/split/sign-up/sign-up.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/success-mail/success-mail.html",
+      "component": "src/app/views/auth/split/success-mail/success-mail.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/split/two-factor/two-factor.html",
+      "component": "src/app/views/auth/split/two-factor/two-factor.ts",
+      "forms": [
+        "<form class=\"mt-4\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/card/lock-screen/lock-screen.html",
+      "component": "src/app/views/auth/card/lock-screen/lock-screen.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/card/login-pin/login-pin.html",
+      "component": "src/app/views/auth/card/login-pin/login-pin.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/card/new-pass/new-pass.html",
+      "component": "src/app/views/auth/card/new-pass/new-pass.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/card/reset-pass/reset-pass.html",
+      "component": "src/app/views/auth/card/reset-pass/reset-pass.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/card/sign-in/sign-in.html",
+      "component": "src/app/views/auth/card/sign-in/sign-in.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/card/sign-up/sign-up.html",
+      "component": "src/app/views/auth/card/sign-up/sign-up.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/card/success-mail/success-mail.html",
+      "component": "src/app/views/auth/card/success-mail/success-mail.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/auth/card/two-factor/two-factor.html",
+      "component": "src/app/views/auth/card/two-factor/two-factor.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/api-keys/api-keys.html",
+      "component": "src/app/views/apps/api-keys/api-keys.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/chat/chat.html",
+      "component": "src/app/views/apps/chat/chat.ts",
+      "forms": [
+        "<form [formGroup]=\"chatForm\" (ngSubmit)=\"sendMessage()\" class=\"d-flex gap-2\">"
+      ],
+      "controls": [
+        "message"
+      ],
+      "submitHandlers": [
+        "sendMessage()"
+      ],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/clients/clients.html",
+      "component": "src/app/views/apps/clients/clients.ts",
+      "forms": [
+        "<form id=\"addClientForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/companies/companies.html",
+      "component": "src/app/views/apps/companies/companies.ts",
+      "forms": [
+        "<form class=\"bg-light-subtle rounded border p-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/pin-board/pin-board.html",
+      "component": "src/app/views/apps/pin-board/pin-board.ts",
+      "forms": [
+        "<form id=\"addNoteForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/users/account-settings/account-settings.html",
+      "component": "src/app/views/apps/users/account-settings/account-settings.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/users/contacts/contacts.html",
+      "component": "src/app/views/apps/users/contacts/contacts.ts",
+      "forms": [
+        "<form class=\"card border p-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/users/roles/roles.html",
+      "component": "src/app/views/apps/users/roles/roles.ts",
+      "forms": [
+        "<form id=\"addRoleForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/users/roles/components/user-table/user-table.html",
+      "component": "src/app/views/apps/users/roles/components/user-table/user-table.ts",
+      "forms": [
+        "<form id=\"addUserForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/users/role-details/components/user-role-details-card/user-role-details-card.html",
+      "component": "src/app/views/apps/users/role-details/components/user-role-details-card/user-role-details-card.ts",
+      "forms": [
+        "<form id=\"editRoleForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/users/role-details/components/user-role-details-table/user-role-details-table.html",
+      "component": "src/app/views/apps/users/role-details/components/user-role-details-table/user-role-details-table.ts",
+      "forms": [
+        "<form id=\"addUserForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/users/profile/components/settings/settings.html",
+      "component": "src/app/views/apps/users/profile/components/settings/settings.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/users/profile/components/timeline/timeline.html",
+      "component": "src/app/views/apps/users/profile/components/timeline/timeline.ts",
+      "forms": [
+        "<form class=\"mb-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/todo/components/todo-sidebar/todo-sidebar.html",
+      "component": "src/app/views/apps/todo/components/todo-sidebar/todo-sidebar.ts",
+      "forms": [
+        "<form id=\"addTaskForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ticket/create/create.html",
+      "component": "src/app/views/apps/ticket/create/create.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/task/create/create.html",
+      "component": "src/app/views/apps/task/create/create.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/task/details/components/comments/comments.html",
+      "component": "src/app/views/apps/task/details/components/comments/comments.ts",
+      "forms": [
+        "<form class=\"mb-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/social-feed/components/feeds/feeds.html",
+      "component": "src/app/views/apps/social-feed/components/feeds/feeds.ts",
+      "forms": [
+        "<form action=\"#\">",
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/promo/discounts/discounts.html",
+      "component": "src/app/views/apps/promo/discounts/discounts.ts",
+      "forms": [
+        "<form id=\"addDiscountForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/promo/gift-cards/gift-cards.html",
+      "component": "src/app/views/apps/promo/gift-cards/gift-cards.ts",
+      "forms": [
+        "<form id=\"addGiftCardForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/promo/coupons/components/coupons-table/coupons-table.html",
+      "component": "src/app/views/apps/promo/coupons/components/coupons-table/coupons-table.ts",
+      "forms": [
+        "<form id=\"addCouponForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/projects/grid/grid.html",
+      "component": "src/app/views/apps/projects/grid/grid.ts",
+      "forms": [
+        "<form class=\"bg-light-subtle rounded border p-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/projects/kanban/kanban.html",
+      "component": "src/app/views/apps/projects/kanban/kanban.ts",
+      "forms": [
+        "<form id=\"taskForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/projects/team-board/team-board.html",
+      "component": "src/app/views/apps/projects/team-board/team-board.ts",
+      "forms": [
+        "<form id=\"teamForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/projects/details/components/comments/comments.html",
+      "component": "src/app/views/apps/projects/details/components/comments/comments.ts",
+      "forms": [
+        "<form action=\"#\" class=\"mb-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/outlook/components/outlook-nav/outlook-nav.html",
+      "component": "src/app/views/apps/outlook/components/outlook-nav/outlook-nav.ts",
+      "forms": [
+        "<form action=\"#\" class=\"my-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/invoice/create/create.html",
+      "component": "src/app/views/apps/invoice/create/create.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/create-salary-slip/create-salary-slip.html",
+      "component": "src/app/views/apps/hrm/create-salary-slip/create-salary-slip.ts",
+      "forms": [
+        "<form id=\"salarySlipForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/departments/departments.html",
+      "component": "src/app/views/apps/hrm/departments/departments.ts",
+      "forms": [
+        "<form id=\"addDepartmentForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/leave-add/leave-add.html",
+      "component": "src/app/views/apps/hrm/leave-add/leave-add.ts",
+      "forms": [
+        "<form id=\"applyLeaveForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/payroll/payroll.html",
+      "component": "src/app/views/apps/hrm/payroll/payroll.ts",
+      "forms": [
+        "<form id=\"addPayrollForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/staff-add/staff-add.html",
+      "component": "src/app/views/apps/hrm/staff-add/staff-add.ts",
+      "forms": [
+        "<form id=\"addStaffForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/staffs/staffs.html",
+      "component": "src/app/views/apps/hrm/staffs/staffs.ts",
+      "forms": [
+        "<form id=\"addStaffForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/leaves/components/leaves-table/leaves-table.html",
+      "component": "src/app/views/apps/hrm/leaves/components/leaves-table/leaves-table.ts",
+      "forms": [
+        "<form id=\"addLeaveForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/holidays/components/holiday-table/holiday-table.html",
+      "component": "src/app/views/apps/hrm/holidays/components/holiday-table/holiday-table.ts",
+      "forms": [
+        "<form id=\"addHolidayForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/hrm/attendance/components/attendance-table/attendance-table.html",
+      "component": "src/app/views/apps/hrm/attendance/components/attendance-table/attendance-table.ts",
+      "forms": [
+        "<form id=\"addAttendanceForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/forum/post/components/post-details/post-details.html",
+      "component": "src/app/views/apps/forum/post/components/post-details/post-details.ts",
+      "forms": [
+        "<form class=\"mb-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/finance/expense-category/expense-category.html",
+      "component": "src/app/views/apps/finance/expense-category/expense-category.ts",
+      "forms": [
+        "<form id=\"categoryForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/finance/transactions/components/transactions-table/transactions-table.html",
+      "component": "src/app/views/apps/finance/transactions/components/transactions-table/transactions-table.ts",
+      "forms": [
+        "<form id=\"transactionForm\" novalidate>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/finance/income/components/income-table/income-table.html",
+      "component": "src/app/views/apps/finance/income/components/income-table/income-table.ts",
+      "forms": [
+        "<form id=\"incomeForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/finance/expenses/components/expenses-table/expenses-table.html",
+      "component": "src/app/views/apps/finance/expenses/components/expenses-table/expenses-table.ts",
+      "forms": [
+        "<form id=\"addExpenseForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/finance/banks-cards/components/bank-account/bank-account.html",
+      "component": "src/app/views/apps/finance/banks-cards/components/bank-account/bank-account.ts",
+      "forms": [
+        "<form id=\"bankForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/finance/banks-cards/components/bank-card/bank-card.html",
+      "component": "src/app/views/apps/finance/banks-cards/components/bank-card/bank-card.ts",
+      "forms": [
+        "<form id=\"cardForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/attributes/attributes.html",
+      "component": "src/app/views/apps/ecommerce/attributes/attributes.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/categories/categories.html",
+      "component": "src/app/views/apps/ecommerce/categories/categories.ts",
+      "forms": [
+        "<form id=\"addCategoryForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/customers/customers.html",
+      "component": "src/app/views/apps/ecommerce/customers/customers.ts",
+      "forms": [
+        "<form id=\"addCustomerForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/order-add/order-add.html",
+      "component": "src/app/views/apps/ecommerce/order-add/order-add.ts",
+      "forms": [
+        "<form id=\"orderForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/product-add/product-add.html",
+      "component": "src/app/views/apps/ecommerce/product-add/product-add.ts",
+      "forms": [
+        "<form action=\"/\" method=\"post\" id=\"myAwesomeDropzone\" data-plugin=\"dropzone\" data-previews-container=\"#file-previews\" data-upload-preview-template=\"#uploadPreviewTemplate\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/products-grid/products-grid.html",
+      "component": "src/app/views/apps/ecommerce/products-grid/products-grid.ts",
+      "forms": [
+        "<form class=\"bg-light-subtle rounded border p-3\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/purchased-orders/purchased-orders.html",
+      "component": "src/app/views/apps/ecommerce/purchased-orders/purchased-orders.ts",
+      "forms": [
+        "<form method=\"post\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/settings/settings.html",
+      "component": "src/app/views/apps/ecommerce/settings/settings.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/warehouse/warehouse.html",
+      "component": "src/app/views/apps/ecommerce/warehouse/warehouse.ts",
+      "forms": [
+        "<form method=\"post\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/settings/components/notifications/notifications.html",
+      "component": "src/app/views/apps/ecommerce/settings/components/notifications/notifications.ts",
+      "forms": [
+        "<form [formGroup]=\"form\" (ngSubmit)=\"submit()\">"
+      ],
+      "controls": [
+        "title",
+        "description"
+      ],
+      "submitHandlers": [
+        "submit()"
+      ],
+      "classification": "working-legacy-notifications",
+      "hasApiIntegration": true,
+      "validationStatus": "Implemented; covered by the 263-test component/form suite."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/seller-details/components/seller-contacts/seller-contacts.html",
+      "component": "src/app/views/apps/ecommerce/seller-details/components/seller-contacts/seller-contacts.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/refunds/components/refunds-table/refunds-table.html",
+      "component": "src/app/views/apps/ecommerce/refunds/components/refunds-table/refunds-table.ts",
+      "forms": [
+        "<form action=\"#!\" method=\"post\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/checkout/components/billing-info/billing-info.html",
+      "component": "src/app/views/apps/ecommerce/checkout/components/billing-info/billing-info.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/ecommerce/checkout/components/shipping-info/shipping-info.html",
+      "component": "src/app/views/apps/ecommerce/checkout/components/shipping-info/shipping-info.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/crm/customers/customers.html",
+      "component": "src/app/views/apps/crm/customers/customers.ts",
+      "forms": [
+        "<form id=\"addCustomerForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/crm/proposals/components/proposals-table/proposals-table.html",
+      "component": "src/app/views/apps/crm/proposals/components/proposals-table/proposals-table.ts",
+      "forms": [
+        "<form id=\"createProposalForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/crm/leads/components/leads-table/leads-table.html",
+      "component": "src/app/views/apps/crm/leads/components/leads-table/leads-table.ts",
+      "forms": [
+        "<form id=\"leadForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/crm/estimations/components/estimations-table/estimations-table.html",
+      "component": "src/app/views/apps/crm/estimations/components/estimations-table/estimations-table.ts",
+      "forms": [
+        "<form id=\"createEstimationForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/crm/deals/components/deals-table/deals-table.html",
+      "component": "src/app/views/apps/crm/deals/components/deals-table/deals-table.ts",
+      "forms": [
+        "<form id=\"createDealForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/crm/campaign/components/campaign-table/campaign-table.html",
+      "component": "src/app/views/apps/crm/campaign/components/campaign-table/campaign-table.ts",
+      "forms": [
+        "<form id=\"createCampaignForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/chat/components/chat-sidebar/chat-sidebar.html",
+      "component": "src/app/views/apps/chat/components/chat-sidebar/chat-sidebar.ts",
+      "forms": [
+        "<form id=\"createSingleChatForm\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/blog/add/add.html",
+      "component": "src/app/views/apps/blog/add/add.ts",
+      "forms": [
+        "<form>"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/blog/list/components/list-sidebar/list-sidebar.html",
+      "component": "src/app/views/apps/blog/list/components/list-sidebar/list-sidebar.ts",
+      "forms": [
+        "<form action=\"#\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    },
+    {
+      "template": "src/app/views/apps/blog/article/components/article-sidebar/article-sidebar.html",
+      "component": "src/app/views/apps/blog/article/components/article-sidebar/article-sidebar.ts",
+      "forms": [
+        "<form action=\"#\">"
+      ],
+      "controls": [],
+      "submitHandlers": [],
+      "classification": "unrouted-reference-template",
+      "hasApiIntegration": false,
+      "validationStatus": "Excluded: unrouted UI reference without application persistence integration."
+    }
+  ],
+  "modulesInspected": [
+    "banners",
+    "brand-settings",
+    "categories",
+    "charges",
+    "cod-settlements",
+    "coupons",
+    "customers",
+    "dashboard",
+    "delivery-boy-payment-history",
+    "delivery-boy-payments",
+    "delivery-partners",
+    "dev-support",
+    "footer-settings",
+    "home-page",
+    "locations",
+    "master-data",
+    "my-profile",
+    "notifications",
+    "orders",
+    "payment-history",
+    "payments",
+    "permissions",
+    "product-assignment",
+    "products",
+    "promotional-sections",
+    "settings",
+    "settlements",
+    "shop-items",
+    "testimonials",
+    "vendors",
+    "website-banners",
+    "website-theme-settings"
+  ],
+  "exceptions": [
+    "Search/report filters: blank means all records.",
+    "Banner No link and destinations not applicable to its selected link type.",
+    "Category/charge controls hidden for other operation types.",
+    "Coupon total_usage_limit=null means Unlimited; max_discount_amount only applies to percentage discounts.",
+    "Passwords not applicable to Vendor/Delivery Partner Edit; Admin User Edit retains existing password when blank.",
+    "Read-only product vendor on Edit and product assignment phone/address.",
+    "Permission/status switches accept false; permission assignment requires at least one module, not all flags.",
+    "Theme custom_css may be empty to retain the default theme.",
+    "Vendor Interior Image 3 cannot be uploaded by the documented existing contract.",
+    "Hidden controls not represented by editable fields are not made mandatory.",
+    "Unrouted UI reference templates have no application persistence integration; existing local demo handlers remain unchanged."
+  ],
+  "backend": "No backend source or database schema exists in this workspace.",
+  "validationCoverage": [
+    {
+      "module": "notifications-legacy",
+      "forms": "Add/Edit API-backed notification in the retained ecommerce settings component",
+      "files": [
+        "src/app/views/apps/ecommerce/settings/components/notifications/notifications.ts",
+        "src/app/views/apps/ecommerce/settings/components/notifications/notifications.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "title": "{ type: 'text' }",
+            "description": "{ type: 'text' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "banners",
+      "forms": "Add/Edit banner; link destination required only for the chosen link type",
+      "files": [
+        "src/app/views/multivendor/banners/banners.ts",
+        "src/app/views/multivendor/banners/banners.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "banner_image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.form?.controls.banner_image.value : '', file: () => this.selectedImageFile, accept: 'image/png,image/jpeg,image/jpg,image/webp' }",
+            "link_type": "{ choices: () => this.linkTypes.map((item) => item.value), allowEmptyChoice: true }",
+            "vendor_id": "{ when: (): boolean => this.form?.controls.link_type.value === 'vendor', choices: () => this.vendors().map((item) => item.id) }",
+            "product_id": "{ when: (): boolean => this.form?.controls.link_type.value === 'product', choices: () => this.products().map((item) => item.id) }",
+            "external_url": "{ type: 'url', when: (): boolean => this.form?.controls.link_type.value === 'external' }",
+            "banner_order": "{ type: 'integer', min: 0 }",
+            "is_active": "{ choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "brand-settings",
+      "forms": "Update brand name, website title/tagline, support contacts, logo and favicon",
+      "files": [
+        "src/app/views/multivendor/brand-settings/brand-settings.ts",
+        "src/app/views/multivendor/brand-settings/brand-settings.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "tenant_name": "{ type: 'text' }",
+            "website_title": "{ type: 'text' }",
+            "tagline": "{ type: 'text' }",
+            "support_email": "{ type: 'email' }",
+            "support_phone": "{ type: 'phone' }",
+            "logo_light": "{ type: 'image', saved: (): unknown => this.form?.controls.logo_light.value, accept: 'image/*' }",
+            "favicon": "{ type: 'image', saved: (): unknown => this.form?.controls.favicon.value, accept: 'image/*' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "categories",
+      "forms": "Add/Edit category, subcategory and main filter; validate only the operation fields",
+      "files": [
+        "src/app/views/multivendor/categories/categories.ts",
+        "src/app/views/multivendor/categories/categories.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "category_name": "{ when: (): boolean => this.editingSection() !== 'mainfilter' }",
+            "parent_id": "{ when: (): boolean => this.editingSection() !== 'category', choices: () => this.categories().map((item) => item.id) }",
+            "filter_name": "{ when: (): boolean => this.editingSection() === 'mainfilter' }",
+            "category_image": "{ type: 'image', when: (): boolean => this.editingSection() !== 'mainfilter', saved: (): unknown => this.editingId() ? this.form?.controls.category_image.value : '', accept: 'image/png,image/jpeg,image/jpg,image/webp' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "charges",
+      "forms": "Add/Edit ordinary charges and rain-surge charges/status separately",
+      "files": [
+        "src/app/views/multivendor/charges/charges.ts",
+        "src/app/views/multivendor/charges/charges.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "handling_charge": "{ type: 'number', min: 0, when: (): boolean => !this.editingSurge() }",
+            "packing_charge": "{ type: 'number', min: 0, when: (): boolean => !this.editingSurge() }",
+            "donation_charge": "{ type: 'number', min: 0, when: (): boolean => !this.editingSurge() }",
+            "rain_surge_charge": "{ type: 'number', min: 0, when: (): boolean => this.editingSurge() }",
+            "rain_surge_active": "{ when: (): boolean => this.editingSurge(), choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "coupons",
+      "forms": "Add/Edit coupon; discount type/value/cap, scope, usage limits and validity dates",
+      "files": [
+        "src/app/views/multivendor/coupons/coupons.ts",
+        "src/app/views/multivendor/coupons/coupons.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "coupon_code": "{ type: 'text' }",
+            "description": "{ type: 'text' }",
+            "discount_type": "{ choices: () => ['percentage', 'fixed'] }",
+            "discount_value": "{ type: 'number', min: 0, max: (): number => this.form?.controls.discount_type.value === 'percentage' ? 100 : Infinity }",
+            "max_discount_amount": "{ type: 'number', min: 0, when: (): boolean => this.form?.controls.discount_type.value === 'percentage' }",
+            "min_order_value": "{ type: 'number', min: 0 }",
+            "location_id": "{ choices: () => this.locations().map((item) => item.id) }",
+            "vendor_id": "{ choices: () => this.shops().map((item) => item.id) }",
+            "usage_limit_per_user": "{ type: 'integer', min: 1 }",
+            "total_usage_limit": "{ type: 'integer', min: 0, required: false }",
+            "valid_from": "{ type: 'datetime' }",
+            "valid_upto": "{ type: 'datetime', afterField: 'valid_from' }",
+            "is_active": "{ choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "delivery-partners",
+      "forms": "Add/Edit delivery partner (also Delivery Boys route); contacts, identity, bank details and four images",
+      "files": [
+        "src/app/views/multivendor/delivery-partners/delivery-partners.ts",
+        "src/app/views/multivendor/delivery-partners/delivery-partners.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "name": "{ type: 'text' }",
+            "address": "{ type: 'text' }",
+            "driving_license_number": "{ type: 'text' }",
+            "mobile_number": "{ type: 'phone' }",
+            "pwd": "{ when: (): boolean => !this.editingId() }",
+            "location_id": "{ choices: () => this.locations().map((item) => item.id) }",
+            "cod_limit": "{ type: 'number', min: 0 }",
+            "aadhar_number": "{ pattern: /^\\d{12}$/, formatMessage: 'Enter a 12-digit Aadhar number.' }",
+            "pan_number": "{ pattern: /^[A-Z]{5}\\d{4}[A-Z]$/i, formatMessage: 'Enter a valid PAN number (for example, ABCDE1234F).' }",
+            "bank_account_number": "{ pattern: /^\\d+$/, formatMessage: 'Account number must contain digits only.' }",
+            "bank_ifsc_code": "{ pattern: /^[A-Z]{4}0[A-Z0-9]{6}$/i, formatMessage: 'Enter a valid 11-character IFSC code.' }",
+            "aadhar_image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.savedImages().aadhar_image : '', accept: 'image/png,image/jpeg,image/jpg,image/webp' }",
+            "pan_image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.savedImages().pan_image : '', accept: 'image/png,image/jpeg,image/jpg,image/webp' }",
+            "driving_license_image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.savedImages().driving_license_image : '', accept: 'image/png,image/jpeg,image/jpg,image/webp' }",
+            "bank_details_image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.savedImages().bank_details_image : '', accept: 'image/png,image/jpeg,image/jpg,image/webp' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "dev-support",
+      "forms": "Create support ticket and update remarks",
+      "files": [
+        "src/app/views/multivendor/dev-support/dev-support.ts",
+        "src/app/views/multivendor/dev-support/dev-support.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "subject": "{ type: 'text' }",
+            "description": "{ type: 'text' }",
+            "application": "{ choices: () => this.applications.map((item) => item.value) }",
+            "ticket_type": "{ choices: () => this.ticketTypes.map((item) => item.value) }",
+            "image": "{ type: 'image', saved: (): unknown => '', accept: 'image/png,image/jpeg,image/jpg,image/webp' }"
+          }
+        },
+        {
+          "formGroup": "remarksForm",
+          "rules": {
+            "remarks": "{ type: 'text' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "footer-settings",
+      "forms": "Update footer content, contact details and social/app URLs",
+      "files": [
+        "src/app/views/multivendor/footer-settings/footer-settings.ts",
+        "src/app/views/multivendor/footer-settings/footer-settings.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "about_text": "{ type: 'text' }",
+            "contact_address": "{ type: 'text' }",
+            "copyright_text": "{ type: 'text' }",
+            "contact_email": "{ type: 'email' }",
+            "contact_phone": "{ type: 'phone' }",
+            "facebook_url": "{ type: 'url' }",
+            "instagram_url": "{ type: 'url' }",
+            "twitter_url": "{ type: 'url' }",
+            "youtube_url": "{ type: 'url' }",
+            "linkedin_url": "{ type: 'url' }",
+            "playstore_url": "{ type: 'url' }",
+            "appstore_url": "{ type: 'url' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "home-page",
+      "forms": "Add/Edit home-page section; text, image, display order and status",
+      "files": [
+        "src/app/views/multivendor/home-page/home-page.ts",
+        "src/app/views/multivendor/home-page/home-page.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "section_key": "{ type: 'text' }",
+            "heading": "{ type: 'text' }",
+            "subheading": "{ type: 'text' }",
+            "image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.form?.controls.image.value : '', accept: 'image/*' }",
+            "display_order": "{ type: 'integer', min: 0 }",
+            "status": "{ choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "locations",
+      "forms": "Add/Edit location; name, image, coordinates and delivery radius",
+      "files": [
+        "src/app/views/multivendor/locations/locations.ts",
+        "src/app/views/multivendor/locations/locations.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "city": "{ type: 'text' }",
+            "latitude": "{ type: 'number', min: -90, max: 90 }",
+            "longitude": "{ type: 'number', min: -180, max: 180 }",
+            "max_delivery_service_km": "{ type: 'number', min: 0 }",
+            "location_image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.existingImageName() : '', accept: 'image/png,image/jpeg,image/jpg,image/webp' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "master-data",
+      "forms": "Add/Edit master product; identifiers, description, prices, stock and flags",
+      "files": [
+        "src/app/views/multivendor/master-data/master-data.ts",
+        "src/app/views/multivendor/master-data/master-data.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "vendor_id": "{ choices: () => this.vendors().map((item) => item.id) }",
+            "category_id": "{ choices: () => this.categories().map((item) => item.id) }",
+            "product_name": "{ type: 'text' }",
+            "product_code": "{ type: 'text' }",
+            "description": "{ type: 'text' }",
+            "base_price": "{ type: 'number', min: 0 }",
+            "discount_price": "{ type: 'number', min: 0, maxField: 'base_price' }",
+            "stock_quantity": "{ type: 'integer', min: 0 }",
+            "is_veg": "{ choices: () => [0, 1] }",
+            "is_returnable": "{ choices: () => [0, 1] }",
+            "is_featured": "{ choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "my-profile",
+      "forms": "Change password; existing minimum length, whitespace rejection and confirmation match",
+      "files": [
+        "src/app/views/multivendor/my-profile/my-profile.ts",
+        "src/app/views/multivendor/my-profile/my-profile.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "passwordForm",
+          "rules": {
+            "new_password": "{ minLength: 6 }",
+            "confirm_password": "{ equalsField: 'new_password' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "notifications",
+      "forms": "Add/Edit notification title/message",
+      "files": [
+        "src/app/views/multivendor/notifications/notifications.ts",
+        "src/app/views/multivendor/notifications/notifications.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "title": "{ type: 'text' }",
+            "message": "{ type: 'text' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "permissions",
+      "forms": "Add/Edit admin user and assign at least one module; preserve optional Edit password and false permission flags",
+      "files": [
+        "src/app/views/multivendor/permissions/permissions.ts",
+        "src/app/views/multivendor/permissions/permissions.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "name": "{ type: 'text' }",
+            "number": "{ type: 'phone' }",
+            "email": "{ type: 'email' }",
+            "designation": "{ type: 'text' }",
+            "pwd": "{ when: (): boolean => !this.editingId() || this.form?.controls.pwd.value !== '' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "product-assignment",
+      "forms": "Select category/shop and at least one product; phone/address remains derived/read-only",
+      "files": [
+        "src/app/views/multivendor/product-assignment/product-assignment.ts",
+        "src/app/views/multivendor/product-assignment/product-assignment.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "category_id": "{ choices: () => this.categories().map((item) => item.id) }",
+            "shop_id": "{ choices: () => this.shops().map((item) => item.id) }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "products",
+      "forms": "Add/Edit product; identifiers, description, prices, stock and flags",
+      "files": [
+        "src/app/views/multivendor/products/products.ts",
+        "src/app/views/multivendor/products/products.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "vendor_id": "{ choices: () => this.vendors().map((item) => item.id) }",
+            "category_id": "{ choices: () => this.categories().map((item) => item.id) }",
+            "product_name": "{ type: 'text' }",
+            "product_code": "{ type: 'text' }",
+            "description": "{ type: 'text' }",
+            "base_price": "{ type: 'number', min: 0 }",
+            "discount_price": "{ type: 'number', min: 0, maxField: 'base_price' }",
+            "stock_quantity": "{ type: 'integer', min: 0 }",
+            "is_veg": "{ choices: () => [0, 1] }",
+            "is_returnable": "{ choices: () => [0, 1] }",
+            "is_featured": "{ choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "promotional-sections",
+      "forms": "Add/Edit promotional section; title/subtitle, image URL/link, order and status",
+      "files": [
+        "src/app/views/multivendor/promotional-sections/promotional-sections.ts",
+        "src/app/views/multivendor/promotional-sections/promotional-sections.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "title": "{ type: 'text' }",
+            "subtitle": "{ type: 'text' }",
+            "image": "{ type: 'url' }",
+            "link_url": "{ type: 'url' }",
+            "display_order": "{ type: 'integer', min: 0 }",
+            "status": "{ choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "settings",
+      "forms": "Update payment gateway fields; preserve explicit online-payment disable operation",
+      "files": [
+        "src/app/views/multivendor/settings/settings.ts",
+        "src/app/views/multivendor/settings/settings.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "gatewayForm",
+          "rules": {
+            "gateway_name": "{ choices: () => ['razorpay', 'stripe', 'payu', 'cashfree'] }",
+            "api_key": "{ type: 'text' }",
+            "api_secret": "{ type: 'text' }",
+            "webhook_secret": "{ type: 'text' }",
+            "is_active": "{ choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "settlements",
+      "forms": "Create settlement and record payout; dates, amounts, method, reference and proof URL",
+      "files": [
+        "src/app/views/multivendor/settlements/settlements.ts",
+        "src/app/views/multivendor/settlements/settlements.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "settlementForm",
+          "rules": {
+            "vendor_id": "{ choices: () => this.vendors().map((item) => item.id) }",
+            "period_start": "{ type: 'date' }",
+            "period_end": "{ type: 'date', afterField: 'period_start' }",
+            "total_orders": "{ type: 'integer', min: 0 }",
+            "gross_sales": "{ type: 'number', min: 0 }",
+            "commission_amount": "{ type: 'number', min: 0, maxField: 'gross_sales' }",
+            "net_payable": "{ type: 'number', min: 0 }"
+          }
+        },
+        {
+          "formGroup": "payoutForm",
+          "rules": {
+            "payout_amount": "{ type: 'number', min: 0.01 }",
+            "payout_method": "{ choices: () => ['bank_transfer', 'upi', 'cash'] }",
+            "transaction_reference": "{ type: 'text' }",
+            "payout_proof": "{ type: 'url' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "shop-items",
+      "forms": "Add/Edit shop item; descriptions/classification, prices/discounts, availability and image",
+      "files": [
+        "src/app/views/multivendor/shop-items/shop-items.ts",
+        "src/app/views/multivendor/shop-items/shop-items.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "item": "{ type: 'text' }",
+            "description": "{ type: 'text' }",
+            "measurement": "{ type: 'text' }",
+            "available_time": "{ type: 'text' }",
+            "subcategory": "{ choices: () => this.subcategories().map((item) => item.category_name) }",
+            "filter": "{ choices: () => this.filters().map((item) => item.filter_name) }",
+            "actual_price": "{ type: 'number', min: 0 }",
+            "selling_price": "{ type: 'number', min: 0, maxField: 'actual_price' }",
+            "discount_percentage": "{ type: 'number', min: 0, max: 100 }",
+            "discount_amount": "{ type: 'number', min: 0, maxField: 'actual_price' }",
+            "shop_image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.form?.controls.shop_image.value : '', file: () => this.selectedShopImage, accept: 'image/*' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "testimonials",
+      "forms": "Add/Edit testimonial; customer, designation, message, rating, order and status",
+      "files": [
+        "src/app/views/multivendor/testimonials/testimonials.ts",
+        "src/app/views/multivendor/testimonials/testimonials.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "customer_name": "{ type: 'text' }",
+            "designation": "{ type: 'text' }",
+            "rating": "{ type: 'number', min: 0, max: 5 }",
+            "message": "{ type: 'text' }",
+            "display_order": "{ type: 'integer', min: 0 }",
+            "status": "{ choices: () => [0, 1] }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "website-banners",
+      "forms": "Add/Edit website banner; location and image",
+      "files": [
+        "src/app/views/multivendor/website-banners/website-banners.ts",
+        "src/app/views/multivendor/website-banners/website-banners.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "location_id": "{ choices: () => this.locations().map((item) => item.id) }",
+            "banner_image": "{ type: 'image', saved: (): unknown => this.editingId() ? this.form?.controls.banner_image.value : '', accept: 'image/*' }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    },
+    {
+      "module": "website-theme-settings",
+      "forms": "Update required colors/font; custom CSS remains optional",
+      "files": [
+        "src/app/views/multivendor/website-theme-settings/website-theme-settings.ts",
+        "src/app/views/multivendor/website-theme-settings/website-theme-settings.html"
+      ],
+      "validationGroups": [
+        {
+          "formGroup": "form",
+          "rules": {
+            "primary_color": "{ type: 'color' }",
+            "secondary_color": "{ type: 'color' }",
+            "header_color": "{ type: 'color' }",
+            "button_color": "{ type: 'color' }",
+            "font_family": "{ type: 'text' }",
+            "custom_css": "{ required: false }"
+          }
+        }
+      ],
+      "status": "implemented and covered by automated component/form tests"
+    }
+  ],
+  "validationChangedFiles": [
+    "form-validation-inventory.json",
+    "src/app/core/validation/form-validation.test.mjs",
+    "src/app/core/validation/form-validation.ts",
+    "src/app/views/apps/ecommerce/settings/components/notifications/notifications.html",
+    "src/app/views/apps/ecommerce/settings/components/notifications/notifications.ts",
+    "src/app/views/auth/sign-in/sign-in.html",
+    "src/app/views/auth/sign-in/sign-in.ts",
+    "src/app/views/multivendor/banners/banners.html",
+    "src/app/views/multivendor/banners/banners.ts",
+    "src/app/views/multivendor/brand-settings/brand-settings.html",
+    "src/app/views/multivendor/brand-settings/brand-settings.ts",
+    "src/app/views/multivendor/categories/categories.html",
+    "src/app/views/multivendor/categories/categories.ts",
+    "src/app/views/multivendor/charges/charges.html",
+    "src/app/views/multivendor/charges/charges.ts",
+    "src/app/views/multivendor/coupons/coupons.html",
+    "src/app/views/multivendor/coupons/coupons.ts",
+    "src/app/views/multivendor/delivery-partners/delivery-partners.html",
+    "src/app/views/multivendor/delivery-partners/delivery-partners.ts",
+    "src/app/views/multivendor/dev-support/dev-support.html",
+    "src/app/views/multivendor/dev-support/dev-support.ts",
+    "src/app/views/multivendor/footer-settings/footer-settings.html",
+    "src/app/views/multivendor/footer-settings/footer-settings.ts",
+    "src/app/views/multivendor/home-page/home-page.html",
+    "src/app/views/multivendor/home-page/home-page.ts",
+    "src/app/views/multivendor/locations/locations.html",
+    "src/app/views/multivendor/locations/locations.ts",
+    "src/app/views/multivendor/master-data/master-data.html",
+    "src/app/views/multivendor/master-data/master-data.ts",
+    "src/app/views/multivendor/my-profile/my-profile.html",
+    "src/app/views/multivendor/my-profile/my-profile.ts",
+    "src/app/views/multivendor/notifications/notifications.html",
+    "src/app/views/multivendor/notifications/notifications.ts",
+    "src/app/views/multivendor/permissions/permissions.html",
+    "src/app/views/multivendor/permissions/permissions.ts",
+    "src/app/views/multivendor/product-assignment/product-assignment.html",
+    "src/app/views/multivendor/product-assignment/product-assignment.ts",
+    "src/app/views/multivendor/products/products.html",
+    "src/app/views/multivendor/products/products.ts",
+    "src/app/views/multivendor/promotional-sections/promotional-sections.html",
+    "src/app/views/multivendor/promotional-sections/promotional-sections.ts",
+    "src/app/views/multivendor/settings/settings.html",
+    "src/app/views/multivendor/settings/settings.ts",
+    "src/app/views/multivendor/settlements/settlements.html",
+    "src/app/views/multivendor/settlements/settlements.ts",
+    "src/app/views/multivendor/shop-items/shop-items.html",
+    "src/app/views/multivendor/shop-items/shop-items.ts",
+    "src/app/views/multivendor/testimonials/testimonials.html",
+    "src/app/views/multivendor/testimonials/testimonials.ts",
+    "src/app/views/multivendor/website-banners/website-banners.html",
+    "src/app/views/multivendor/website-banners/website-banners.ts",
+    "src/app/views/multivendor/website-theme-settings/website-theme-settings.html",
+    "src/app/views/multivendor/website-theme-settings/website-theme-settings.ts"
+  ],
+  "existingVendorValidationRetained": [
+    "src/app/views/multivendor/vendors/vendors.ts",
+    "src/app/views/multivendor/vendors/vendors.html",
+    "src/app/views/multivendor/vendors/vendors.validation.test.mjs"
+  ],
+  "additionalValidation": {
+    "module": "auth/sign-in",
+    "changes": "Reject whitespace-only passwords and display the existing password error; login API/payload and optional remember-me preference unchanged."
+  },
+  "readOnlyOrNonAddEditModules": [
+    "cod-settlements",
+    "customers",
+    "dashboard",
+    "delivery-boy-payment-history",
+    "delivery-boy-payments",
+    "orders",
+    "payment-history",
+    "payments"
+  ],
+  "preExistingUnrelatedChangesNotModifiedByValidation": [
+    "src/app/components/data-table/data-table.ts",
+    "src/app/core/services/multivendor.service.ts"
+  ],
+  "compilerFix": {
+    "errors": [
+      "TS7022",
+      "TS7023"
+    ],
+    "cause": "Circular type inference from callbacks reading their own typed form initializer, including the existing pwd control. No control was missing.",
+    "fix": "Explicit boolean/unknown/number callback return types; preserve the original typed FormGroup and conditional rules."
+  },
+  "verification": {
+    "angularCompiler": {
+      "command": "node node_modules/@angular/compiler-cli/bundles/src/bin/ngc.js -p tsconfig.app.json --noEmit",
+      "result": "passed"
+    },
+    "productionBuild": {
+      "command": "npm run build",
+      "result": "passed",
+      "output": "dist/angular",
+      "initialBundle": "4.57 MB"
+    },
+    "projectValidationTests": {
+      "command": "node --test src/app/core/validation/form-validation.test.mjs",
+      "tests": 263,
+      "passed": 263,
+      "failed": 0,
+      "environment": "Actual component methods and Angular forms with mocked APIs, template dependencies and FileReader."
+    },
+    "vendorValidationTests": {
+      "command": "node --test src/app/views/multivendor/vendors/vendors.validation.test.mjs",
+      "tests": 162,
+      "passed": 162,
+      "failed": 0
+    },
+    "formControlInventoryComparison": {
+      "result": "passed",
+      "removedOrRenamedControls": [],
+      "templatesInventoried": 131,
+      "multivendorModulesInspected": 33
+    },
+    "diffWhitespaceCheck": "passed"
+  },
+  "remainingLimitations": [
+    "No backend implementation or database schema is present; backend constraints and live persistence were not verified.",
+    "No browser interaction/end-to-end test was run. Component/form logic and template compilation were verified.",
+    "Vendor Interior Image 3 remains read-only/non-mandatory because the existing documented upload contract excludes it.",
+    "101 unrouted reference-template entries were inspected and inventoried but not given new submission/persistence functionality.",
+    "No existing business-specific maximum image upload size was found. Empty/type-invalid images are rejected; the shared helper also supports an explicit size limit when specified."
+  ]
+}

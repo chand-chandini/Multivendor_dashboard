@@ -1,0 +1,282 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <div class="d-flex gap-2">
+      <!-- Search -->
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" class="form-control" placeholder="Search transactions..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Add New Transaction -->
+      <button class="btn btn-primary" (click)="openTransactionModal(content)"><app-icon icon="plus" class="me-1"></app-icon> Add Transaction</button>
+
+      <!-- Delete Selected -->
+      @if (hasSelection) {
+      <button (click)="deleteSelected()" class="btn btn-danger">Delete</button>
+      }
+    </div>
+
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <!-- Type Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterCategory" (ngModelChange)="tableService.setFilter('type', filterCategory)" class="form-select form-control my-1 my-md-0">
+          <option value="">Type</option>
+          <option value="credit">Credit</option>
+          <option value="debit">Debit</option>
+          <option value="refund">Refund</option>
+          <option value="adjustment">Adjustment</option>
+        </select>
+        <app-icon icon="transaction-dollar" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+          <option value="">Status</option>
+          <option value="completed">Completed</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Failed</option>
+          <option value="refunded">Refunded</option>
+        </select>
+        <app-icon icon="circle-check" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Records Per Page -->
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="8">8</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+        <thead class="bg-light align-middle bg-opacity-25 thead-sm text-nowrap">
+          <tr class="text-uppercase fs-xxs">
+            <th class="ps-3" style="width: 1%">
+              <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+            </th>
+            <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">ID</th>
+            <th>Description</th>
+            <th sortable="type" (sort)="tableService.setSort($event.column, $event.direction)">Type</th>
+            <th>Payment Method</th>
+            <th sortable="amount" (sort)="tableService.setSort($event.column, $event.direction)">Amount</th>
+            <th sortable="balance" (sort)="tableService.setSort($event.column, $event.direction)">Balance</th>
+            <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+            <th sortable="date" (sort)="tableService.setSort($event.column, $event.direction)">Date</th>
+            <th sortable="processedBy.name" (sort)="tableService.setSort($event.column, $event.direction)">Processed By</th>
+            <th class="text-center" style="width: 1%">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-nowrap">
+          @if ((total$ | async)! > 0) { @for (transaction of (transactionData$ | async); track $index) {
+          <tr>
+            <!-- Checkbox -->
+            <td class="ps-3">
+              <input [checked]="selectedIds.has(transaction.id)" (change)="toggleSingleSelection(transaction)" class="form-check-input form-check-input-light fs-14 product-item-check mt-0" type="checkbox" />
+            </td>
+
+            <!-- ID -->
+            <td>
+              <a [routerLink]="[]" class="fw-semibold link-reset"> {{ transaction.id }} </a>
+            </td>
+
+            <!-- Description -->
+            <td>{{ transaction.description }}</td>
+
+            <!-- Transaction Type Badge -->
+            <td>
+              <span
+                class="badge"
+                [class]="
+                  transaction.type === 'credit'
+                    ? 'bg-success-subtle text-success'
+                    : transaction.type === 'debit'
+                    ? 'bg-danger-subtle text-danger'
+                    : transaction.type === 'refund'
+                    ? 'bg-info-subtle text-info'
+                    : 'bg-secondary-subtle text-secondary'
+                "
+              >
+                {{ toPascalCase(transaction.type) }}
+              </span>
+            </td>
+
+            <!-- Payment Method -->
+            <td>
+              <div class="d-flex align-items-center">
+                <img [src]="transaction.paymentMethod.image" alt="payment method" class="me-2" height="26" />
+
+                <!-- Card -->
+                @if (transaction.paymentMethod.type === 'card') {
+                <span>{{ transaction.paymentMethod.number }}</span>
+                }
+
+                <!-- Other (PayPal, UPI etc.) -->
+                @if (transaction.paymentMethod.type === 'other') {
+                <span>{{ transaction.paymentMethod.name }}</span>
+                }
+              </div>
+            </td>
+
+            <!-- Amount -->
+            <td class="fw-semibold" [class]="transaction.type === 'debit' ? 'text-danger' : 'text-success'">{{ transaction.amount }}</td>
+
+            <!-- Balance -->
+            <td class="fw-semibold">{{ transaction.balance }}</td>
+
+            <!-- Status Badge -->
+            <td>
+              <span
+                class="badge badge-label"
+                [class]="
+                  transaction.status === 'completed'
+                    ? 'bg-success-subtle text-success'
+                    : transaction.status === 'pending'
+                    ? 'bg-warning-subtle text-warning'
+                    : transaction.status === 'failed'
+                    ? 'bg-danger-subtle text-danger'
+                    : 'bg-info-subtle text-info'
+                "
+              >
+                {{ toPascalCase(transaction.status) }}
+              </span>
+            </td>
+
+            <!-- Date & Time -->
+            <td>
+              {{ transaction.date }}
+              <small class="text-muted">{{ transaction.time }}</small>
+            </td>
+
+            <!-- Processed By -->
+            <td>
+              <div class="d-flex gap-2 align-items-center">
+                <img [src]="transaction.processedBy.image" [alt]="transaction.processedBy.name" class="avatar-xs rounded-circle" />
+                <span>{{ transaction.processedBy.name }}</span>
+              </div>
+            </td>
+
+            <!-- Action Buttons -->
+            <td>
+              <div class="d-flex justify-content-center gap-1">
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="eye" class="fs-lg"></app-icon>
+                </a>
+                <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="edit" class="fs-lg"></app-icon>
+                </a>
+                <a [routerLink]="[]" (click)="tableService.deleteItem(transaction)" class="btn btn-default btn-icon btn-sm">
+                  <app-icon icon="trash" class="fs-lg"></app-icon>
+                </a>
+              </div>
+            </td>
+          </tr>
+          } } @else {
+          <tr class="no-results">
+            <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <!-- end table responsive -->
+  </div>
+  <!-- end card-body -->
+
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="Transactions" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title fw-semibold" id="transactionModalLabel"><app-icon icon="plus" class="me-1 text-primary"></app-icon> Add New Transaction</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <!-- Body -->
+  <div class="modal-body">
+    <form id="transactionForm" novalidate>
+      <div class="row g-3">
+        <!-- Transaction Type -->
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Transaction Type</label>
+          <select class="form-select" name="transactionType" required>
+            <option value="">Select Type</option>
+            <option value="credit">Credit</option>
+            <option value="debit">Debit</option>
+            <option value="refund">Refund</option>
+            <option value="adjustment">Adjustment</option>
+          </select>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Payment Method</label>
+          <select class="form-select" name="paymentMethod" required>
+            <option value="">Select Method</option>
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="PayPal">PayPal</option>
+            <option value="Amex">American Express</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+          <label class="form-label fw-medium">Description</label>
+          <input type="text" class="form-control" name="description" placeholder="Enter transaction description" required />
+        </div>
+
+        <!-- Amount -->
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Amount ($)</label>
+          <input type="number" class="form-control" name="amount" placeholder="0.00" min="0" step="0.01" required />
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Status</label>
+          <select class="form-select" name="status" required>
+            <option value="">Select Status</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="failed">Failed</option>
+            <option value="refunded">Refunded</option>
+          </select>
+        </div>
+
+        <!-- Date -->
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Date</label>
+          <input type="text" mwlFlatpickr [options]="flatPickrOptions" class="form-control" name="date" required />
+        </div>
+
+        <!-- Processed By -->
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Processed By</label>
+          <input type="text" class="form-control" name="processedBy" placeholder="Enter staff name" required />
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <div class="modal-footer border-0">
+    <button type="button" class="btn btn-light" (click)="modal.dismiss()"><app-icon icon="x" class="me-1"></app-icon> Cancel</button>
+    <button type="submit" form="transactionForm" class="btn btn-primary"><app-icon icon="device-floppy" class="me-1"></app-icon> Save Transaction</button>
+  </div>
+</ng-template>

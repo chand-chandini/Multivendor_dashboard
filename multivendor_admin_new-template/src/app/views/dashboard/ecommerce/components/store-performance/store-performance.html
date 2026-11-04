@@ -1,0 +1,22 @@
+<div class="card card-h-100">
+  <div class="card-header justify-content-between">
+    <h4 class="card-title">Store Performance Analytics</h4>
+    <div>
+      <button class="btn btn-sm btn-default" (click)="reload()" [disabled]="isReloading"><app-icon icon="refresh" class="me-1" [class.spin]="isReloading"></app-icon> Refresh</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div dir="ltr">
+      <app-apexchart class="apex-charts" [getOptions]="totalSalesChart" />
+    </div>
+    <div class="text-center mb-1">
+      <span class="badge badge-outline-light text-dark p-1 px-2 rounded-pill fs-12"><app-icon icon="star-filled" class="text-danger me-1"></app-icon> POOR SALES</span>
+    </div>
+
+    @if (isReloading) {
+    <div class="card-overlay d-flex">
+      <div class="spinner-border text-primary"></div>
+    </div>
+    }
+  </div>
+</div>

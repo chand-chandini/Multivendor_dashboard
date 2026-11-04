@@ -1,0 +1,280 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Discounts" subTitle="Promo" />
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header border-light justify-content-between">
+          <div class="d-flex gap-2">
+            <!-- Search -->
+            <div class="app-search">
+              <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search discount..." />
+              <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Delete Selected -->
+            @if (hasSelection) {
+            <button (click)="deleteSelected()" class="btn btn-danger">Delete</button>
+            }
+          </div>
+
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="me-2 fw-semibold">Filter By:</span>
+
+            <!-- Status Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterStatus" (ngModelChange)="tableService.setFilter('status', filterStatus)" class="form-select form-control my-1 my-md-0">
+                <option value="">Discount Status</option>
+                <option value="active">Active</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="expired">Expired</option>
+                <option value="disabled">Disabled</option>
+              </select>
+              <app-icon icon="circle-check" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Type Filter -->
+            <div class="app-search">
+              <select [(ngModel)]="filterType" (ngModelChange)="tableService.setFilter('type', filterType)" class="form-select form-control my-1 my-md-0">
+                <option value="">Discount Type</option>
+                <option value="percentage">Percentage</option>
+                <option value="flat">Flat Amount</option>
+                <option value="bogo">Buy One Get One (BOGO)</option>
+                <option value="bundle">Bundle Offer</option>
+              </select>
+              <app-icon icon="tag" class="app-search-icon text-muted"></app-icon>
+            </div>
+
+            <!-- Records Per Page -->
+            <div>
+              <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="15">15</option>
+                <option [ngValue]="20">20</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-flex gap-1">
+            <button class="btn btn-danger" (click)="openModal(content)"><app-icon icon="plus" class="me-1"></app-icon> Add Discount</button>
+          </div>
+        </div>
+
+        <!-- /.card-header -->
+
+        <div class="table-responsive">
+          <table class="table table-custom table-centered table-select table-hover w-100 mb-0">
+            <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+              <tr class="text-uppercase fs-xxs">
+                <th class="ps-3" style="width: 1%">
+                  <input [checked]="selectAll" (change)="toggleAllSelection($event.target.checked)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+                </th>
+                <th sortable="name" (sort)="tableService.setSort($event.column, $event.direction)">Discount Name</th>
+                <th sortable="type" (sort)="tableService.setSort($event.column, $event.direction)">Discount Type</th>
+                <th sortable="value" (sort)="tableService.setSort($event.column, $event.direction)">Discount Value</th>
+                <th sortable="startDate" (sort)="tableService.setSort($event.column, $event.direction)">Start Date</th>
+                <th sortable="endDate" (sort)="tableService.setSort($event.column, $event.direction)">End Date</th>
+                <th sortable="minPurchase" (sort)="tableService.setSort($event.column, $event.direction)">Min Purchase</th>
+                <th sortable="maxDiscount" (sort)="tableService.setSort($event.column, $event.direction)">Max Discount</th>
+                <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Status</th>
+                <th class="text-center" style="width: 1%">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @if ((total$ | async)! > 0) { @for (item of (discountData$ | async); track $index; let i = $index) {
+              <tr>
+                <td class="ps-3">
+                  <input (change)="toggleSingleSelection(i)" [checked]="selectedIds.has(i)" class="form-check-input form-check-input-light fs-14 mt-0" type="checkbox" />
+                </td>
+
+                <!-- Name + Description -->
+                <td>
+                  <h5 class="fs-sm mb-0">
+                    <a [routerLink]="[]" class="link-reset">{{ item.name }}</a>
+                  </h5>
+                  <small class="text-muted">{{ item.details }}</small>
+                </td>
+
+                <!-- Type -->
+                <td>
+                  <span
+                    class="badge badge-label fs-xs"
+                    [class]="
+                                        item.type === 'percentage' ? 'badge-soft-primary' :
+                                        item.type === 'flat' ? 'badge-soft-success' :
+                                        'badge-soft-info' 
+                                    "
+                  >
+                    {{ toPascalCase(item.type) }}
+                  </span>
+                </td>
+
+                <!-- Value -->
+                <td>@if (item.value) { {{ item.type === 'percentage' ? item.value + '%' : '$' + item.value }} } @else { - }</td>
+
+                <!-- Dates -->
+                <td>{{ item.startDate }}</td>
+                <td>{{ item.endDate }}</td>
+
+                <!-- Min Purchase -->
+                <td>${{ item.minPurchase }}</td>
+
+                <!-- Max Discount -->
+                <td>@if (item.maxDiscount) { ${{ item.maxDiscount }} } @else { - }</td>
+
+                <!-- Status -->
+                <td
+                  class="fw-semibold"
+                  [class]="
+                                    item.status === 'active' ? 'text-success' :
+                                    item.status === 'scheduled' ? 'text-warning' :
+                                    item.status === 'expired' ? 'text-danger' :
+                                    'text-muted'
+                                "
+                >
+                  <app-icon icon="circle-filled" class="fs-sm me-1"></app-icon>
+                  {{ toPascalCase(item.status) }}
+                </td>
+
+                <!-- Actions -->
+                <td>
+                  <div class="d-flex justify-content-center gap-1">
+                    <a [routerLink]="[]" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="eye" class="fs-lg"></app-icon>
+                    </a>
+                    <a routerLink="/apps/ecommerce/discount-edit" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="edit" class="fs-lg"></app-icon>
+                    </a>
+                    <a [routerLink]="[]" (click)="tableService.deleteItem(item)" class="btn btn-default btn-icon btn-sm">
+                      <app-icon icon="trash" class="fs-lg"></app-icon>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              }} @else {
+              <tr class="no-results">
+                <td colspan="12" class="text-center text-muted py-3">Nothing found.</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- /.table-responsive -->
+
+        <div class="card-footer border-0">
+          @if ((total$ | async)! > 0) {
+          <app-custom-pagination itemsName="Discounts" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+          }
+        </div>
+        <!-- /.card-footer -->
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.col -->
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header bg-light">
+    <h5 class="modal-title fw-semibold" id="addDiscountModalLabel"><app-icon icon="discount" class="me-2 text-primary"></app-icon> Add New Discount</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+
+  <!-- Modal Form -->
+  <form id="addDiscountForm">
+    <div class="modal-body">
+      <div class="row g-3">
+        <!-- Discount Name -->
+        <div class="col-md-6">
+          <label class="form-label">Discount Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="discount_name" placeholder="e.g., Summer Sale" required />
+        </div>
+
+        <!-- Discount Code -->
+        <div class="col-md-6">
+          <label class="form-label">Discount Code <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="discount_code" placeholder="e.g., SUMMER25" required />
+        </div>
+
+        <!-- Discount Type -->
+        <div class="col-md-6">
+          <label class="form-label">Discount Type <span class="text-danger">*</span></label>
+          <select class="form-select" name="discount_type" required>
+            <option value="">Select Type</option>
+            <option value="percentage">Percentage</option>
+            <option value="flat">Flat Amount</option>
+            <option value="bogo">Buy One Get One (BOGO)</option>
+            <option value="bundle">Bundle Offer</option>
+          </select>
+        </div>
+
+        <!-- Discount Value -->
+        <div class="col-md-6">
+          <label class="form-label">Discount Value <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" name="discount_value" placeholder="e.g., 25 (for 25%) or 50 (for $50)" required />
+        </div>
+
+        <!-- Minimum Purchase -->
+        <div class="col-md-6">
+          <label class="form-label">Minimum Purchase ($)</label>
+          <input type="number" class="form-control" name="min_purchase" placeholder="e.g., 100" />
+        </div>
+
+        <!-- Maximum Discount -->
+        <div class="col-md-6">
+          <label class="form-label">Maximum Discount ($)</label>
+          <input type="number" class="form-control" name="max_discount" placeholder="e.g., 300" />
+        </div>
+
+        <!-- Start Date -->
+        <div class="col-md-6">
+          <label class="form-label">Start Date <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" mwlFlatpickr [options]="flatPickrOptions" name="start_date" placeholder="Select start date" required />
+        </div>
+
+        <!-- End Date -->
+        <div class="col-md-6">
+          <label class="form-label">End Date <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" mwlFlatpickr [options]="flatPickrOptions" name="end_date" placeholder="Select end date" required />
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="discount_description" rows="2" placeholder="Short description about this discount..."></textarea>
+        </div>
+
+        <!-- Toggles -->
+        <div class="col-12">
+          <div class="d-flex flex-wrap gap-3 mt-2">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isDiscountActive" checked />
+              <label class="form-check-label" for="isDiscountActive">Active</label>
+            </div>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isDiscountAutoApply" />
+              <label class="form-check-label" for="isDiscountAutoApply">Auto Apply at Checkout</label>
+            </div>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="isDiscountFirstPurchase" />
+              <label class="form-check-label" for="isDiscountFirstPurchase">Only for First Purchase</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.modal-body -->
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-primary"><app-icon icon="plus" class="me-1"></app-icon> Add Discount</button>
+    </div>
+  </form>
+</ng-template>

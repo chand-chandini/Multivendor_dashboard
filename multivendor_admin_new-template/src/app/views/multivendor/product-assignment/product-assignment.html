@@ -1,0 +1,208 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Product Assignment" subTitle="Products" />
+
+  <ng-template #selectCell let-row>
+    <div class="form-check d-inline-block">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        [checked]="isSelected(row)"
+        [disabled]="!permissions.canAdd()"
+        (change)="toggleRow(row, $any($event.target).checked)"
+        [attr.aria-label]="'Select ' + row.item"
+      />
+    </div>
+  </ng-template>
+
+  <!-- Assignment Filter Card -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="getProducts()">
+            <div class="row g-4 align-items-end">
+
+              <!-- Category -->
+              <div class="col-md-3">
+                <label for="paCategory" class="form-label">
+                  Category<span class="text-danger">*</span>
+                </label>
+
+                <select
+                  id="paCategory"
+                  formControlName="category_id"
+                  class="form-select"
+                >
+                  <option [ngValue]="null">Select Category</option>
+
+                  @for (category of categories(); track category.id) {
+                    <option [ngValue]="category.id">
+                      {{ category.category_name }}
+                    </option>
+                  }
+                </select>
+                @if (fieldError(form, 'category_id', 'Category')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'category_id', 'Category') }}</div>
+                }
+
+
+              </div>
+
+              <!-- Shop -->
+              <div class="col-md-3">
+                <label for="paShop" class="form-label">
+                  Shops<span class="text-danger">*</span>
+                </label>
+
+                <select
+                  id="paShop"
+                  formControlName="shop_id"
+                  class="form-select"
+                >
+                  <option [ngValue]="null">Select Shop</option>
+
+                  @for (shop of shops(); track shop.id) {
+                    <option [ngValue]="shop.id">
+                      {{ shop.vendor_name }}
+                    </option>
+                  }
+                </select>
+                @if (fieldError(form, 'shop_id', 'Shops')) {
+                  <div class="text-danger fs-xs mt-1">{{ fieldError(form, 'shop_id', 'Shops') }}</div>
+                }
+
+
+              </div>
+
+              <!-- Phone / Address -->
+              <div class="col-md-3">
+                <label for="paPhoneAddress" class="form-label">
+                  Phn No/Address
+                </label>
+
+                <textarea
+                  id="paPhoneAddress"
+                  formControlName="phone_address"
+                  class="form-control"
+                  rows="1"
+                  placeholder="Phone number / address"
+                  readonly
+                ></textarea>
+              </div>
+
+              <!-- Get Products -->
+              <div class="col-md-3">
+                <button
+                  type="submit"
+                  class="btn btn-primary px-4"
+                  [disabled]="loading()"
+                >
+                  @if (loading()) {
+                    <span
+                      class="spinner-border spinner-border-sm me-1"
+                      role="status"
+                    ></span>
+                  }
+
+                  Get Products
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Assignment Table Card -->
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card">
+
+        <div class="card-header">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+          >
+            <h5 class="card-title mb-0">
+              Product Assignment
+            </h5>
+
+            <span class="text-muted fs-xs">
+              {{ selectedCount() }} selected
+            </span>
+          </div>
+        </div>
+
+        <div class="card-body">
+
+          <!-- Select All -->
+          <div class="d-flex align-items-center mb-3">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="paSelectAll"
+                [checked]="allSelected"
+                [disabled]="
+                  !permissions.canAdd() ||
+                  items().length === 0
+                "
+                (change)="toggleAll($any($event.target).checked)"
+              />
+
+              <label
+                class="form-check-label"
+                for="paSelectAll"
+              >
+                Select All
+              </label>
+            </div>
+          </div>
+
+          @if (form.touched && productsLoaded() && selectedCount() === 0) {
+            <div class="text-danger fs-xs mt-1">Select at least one product.</div>
+          }
+
+          <!-- Product Table -->
+          <app-data-table
+            title=""
+            searchPlaceholder="Search"
+            itemsName="products"
+            emptyMessage="No Records Found"
+            [rows]="items()"
+            [columns]="columns"
+            [cellTemplates]="cellTemplates()"
+            [loading]="loading()"
+          />
+
+          <!-- Submit -->
+          <div class="text-center mt-4">
+            @if (permissions.canAdd()) {
+              <button
+                type="button"
+                class="btn btn-primary px-5"
+                [disabled]="
+                  submitting() ||
+                  selectedCount() === 0 ||
+                  !productsLoaded()
+                "
+                (click)="submit()"
+              >
+                @if (submitting()) {
+                  <span
+                    class="spinner-border spinner-border-sm me-1"
+                    role="status"
+                  ></span>
+                }
+
+                Submit
+              </button>
+            }
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="card">
+  <div class="card-header border-light justify-content-between">
+    <h4 class="card-title">Deal Status</h4>
+
+    <div class="d-flex align-items-center gap-2">
+      <span class="me-2 fw-semibold">Filter By:</span>
+
+      <!-- Deal Status Filter -->
+      <div class="app-search">
+        <select [(ngModel)]="filterStage" (ngModelChange)="tableService.setFilter('status', filterStage)" class="form-select form-control my-1 my-md-0">
+          <option value="All">Deal Status</option>
+          <option value="paused">Paused</option>
+          <option value="new">New</option>
+          <option value="cold-lead">Cold Lead</option>
+          <option value="canceled">Canceled</option>
+          <option value="deal-won">Deal Won</option>
+        </select>
+        <app-icon icon="briefcase" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <div class="app-search">
+        <input [(ngModel)]="tableService.searchTerm" type="search" class="form-control" placeholder="Search deals..." />
+        <app-icon icon="search" class="app-search-icon text-muted"></app-icon>
+      </div>
+
+      <!-- Records Per Page -->
+      <div>
+        <select [(ngModel)]="tableService.pageSize" class="form-select form-control my-1 my-md-0">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-custom table-nowrap table-centered table-select table-hover w-100 mb-0">
+      <thead class="bg-light align-middle bg-opacity-25 thead-sm">
+        <tr class="text-uppercase fs-xxs">
+          <th sortable="id" (sort)="tableService.setSort($event.column, $event.direction)">Deal ID</th>
+          <th sortable="name" (sort)="tableService.setSort($event.column, $event.direction)">Deal Name</th>
+          <th sortable="company" (sort)="tableService.setSort($event.column, $event.direction)">Company</th>
+          <th style="width: 12%">Pipeline</th>
+          <th sortable="date" (sort)="tableService.setSort($event.column, $event.direction)">Closing Date</th>
+          <th sortable="user.name" (sort)="tableService.setSort($event.column, $event.direction)">User Responsible</th>
+          <th sortable="value" (sort)="tableService.setSort($event.column, $event.direction)">Deal Value</th>
+          <th sortable="status" (sort)="tableService.setSort($event.column, $event.direction)">Deal Status</th>
+          <th>•••</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if ((total$ | async)! > 0) { @for(item of (dealData$ | async); track $index){
+        <tr>
+          <td>
+            <a [routerLink]="[]" class="fw-medium text-reset">{{ item.id }}</a>
+          </td>
+          <td>
+            <div class="avatar-xs d-inline-block me-1">
+              <span class="avatar-title fw-bold rounded-circle {{ item.className }}"> {{ item.name.charAt(0) }} </span>
+            </div>
+            <a [routerLink]="[]" class="text-reset ms-1">{{ item.name }}</a>
+          </td>
+          <td>{{ item.company }}</td>
+          <td>
+            <div class="d-flex gap-1">
+              @for (i of [].constructor(5); track $index) { @if ($index < item.progress) { @if (item.progress === 1) {
+              <ngb-progressbar [value]="100" type="danger" class="flex-fill rounded-0" style="height: 12px"> </ngb-progressbar>
+              } @else {
+              <ngb-progressbar [value]="100" type="success" class="flex-fill rounded-0" style="height: 12px"> </ngb-progressbar>
+              } } @else {
+              <ngb-progressbar [value]="100" type="light" class="flex-fill rounded-0" style="height: 12px"> </ngb-progressbar>
+              } }
+            </div>
+          </td>
+
+          <td>{{ item.date }}</td>
+          <td>
+            <img [src]="item.user.image" alt="" class="avatar-xs rounded-circle me-1" />
+            <a [routerLink]="[]" class="text-body fw-medium">{{ item.user.name }}</a>
+          </td>
+          <td>
+            <div class="text-nowrap">{{ item.prefix }}{{ item.value }}{{ item.suffix }}</div>
+          </td>
+          <td>
+            <span
+              class="badge bg-info-subtle text-info p-1"
+              [class]="
+                item.status === 'paused'
+                  ? 'bg-info-subtle text-info'
+                  : item.status === 'new'
+                  ? 'text-bg-light'
+                  : item.status === 'cold-lead'
+                  ? 'bg-warning-subtle text-warning'
+                  : item.status === 'deal-won'
+                  ? 'bg-success-subtle text-success'
+                  : 'bg-danger-subtle text-danger'
+              "
+              >{{ toPascalCase(item.status) }}</span
+            >
+          </td>
+          <td>
+            <a [routerLink]="[]" class="text-muted fs-20"> <app-icon icon="edit"></app-icon></a>
+          </td>
+        </tr>
+        } } @else {
+        <tr class="no-results">
+          <td colspan="8" class="text-center text-muted py-3">Nothing found.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer border-0">
+    @if ((total$ | async)! > 0) {
+    <app-custom-pagination itemsName="deals" [showingRange]="tableService.showingRange" [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize"> </app-custom-pagination>
+    }
+  </div>
+</div>

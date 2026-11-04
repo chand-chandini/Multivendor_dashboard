@@ -1,0 +1,58 @@
+<div class="card card-h-100">
+  <div class="card-header border-0 justify-content-between">
+    <h4 class="card-title">Financial Overview</h4>
+    <div ngbDropdown class="ms-auto">
+      <a ngbDropdownToggle [routerLink]="[]" class="btn btn-sm btn-default btn-icon drop-arrow-none">
+        <app-icon icon="dots-vertical" class="fs-lg"></app-icon>
+      </a>
+      <ul ngbDropdownMenu class="dropdown-menu-end">
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="refresh" class="me-2"></app-icon> Refresh Data </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="chart-bar" class="me-2"></app-icon> View Analytics </a>
+        </li>
+        <li>
+          <a ngbDropdownItem [routerLink]="[]"> <app-icon icon="filter-2" class="me-2"></app-icon> Filter Report </a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a ngbDropdownItem class="text-danger" [routerLink]="[]"> <app-icon icon="download" class="me-2"></app-icon> Export Data </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="bg-light bg-opacity-40">
+      <div class="row text-center">
+        @for (item of overviewData; track $index) {
+        <div class="col">
+          <p class="text-muted mt-3 mb-1">{{ item.title }}</p>
+          <h4 class="mb-3">
+            <iconify-icon [icon]="item.icon" [class]="item.className" class="me-1"></iconify-icon>
+            <span
+              ><span
+                [countUp]="item.value"
+                [countUpOptions]="{
+                                    prefix: item.prefix || '',
+                                    suffix: item.suffix || '',
+                                    decimalPlaces: Number.isInteger(item.value) ? 0 : 2
+                  }"
+              ></span
+            ></span>
+          </h4>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="p-2">
+      <div dir="ltr">
+        <app-apexchart [getOptions]="financialOverviewChart" class="apex-charts" />
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <app-page-breadcrumb title="Leads" subTitle="CRM" />
+
+  <div class="row row-cols-2 row-cols-md-4 row-cols-xl-6 g-1 mb-1">
+    @for (lead of leadStatData; track $index) {
+    <div class="col">
+      <app-leads-widget [lead]="lead" />
+    </div>
+    }
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-leads-table />
+    </div>
+  </div>
+</div>
