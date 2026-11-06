@@ -4783,6 +4783,58 @@ exports.updateorderstatus = function(req, res) {
         }
     );
 };
+
+// =============================================
+// DRIVER ACTIVITY
+// =============================================
+exports.getdriveractivity = function(req, res) {
+    var tenant_id = req.admin.tenant_id;
+
+    // Query joins delivery_assignments, orders, and delivery_partners
+    var QRY = 
+        "SELECT " +
+        "da.id AS assignment_id, " +
+        "da.order_id, " +
+        "o.order_number, " +
+        "o.address_snapshot, " +
+        "o.grand_total, " +
+        "o.order_status, " +
+        "dp.name AS delivery_partner_name, " +
+        "dp.mobile_number AS delivery_partner_phone, " +
+        "da.assigned_at, " +
+        "da.picked_up_at " +
+        "FROM delivery_assignments da " +
+        "INNER JOIN orders o ON da.order_id = o.id " +
+        "INNER JOIN delivery_partners dp ON da.delivery_partner_id = dp.id " +
+        "INNER JOIN vendors v ON v.id = o.vendor_id " +
+        "WHERE v.tenant_id = ? " +
+        "AND IFNULL(da.d_in, 0) = 0 " +
+        "AND IFNULL(o.d_in, 0) = 0 " +
+        "ORDER BY da.assigned_at DESC";
+
+    dbutil.sqlinjection(
+        sqldb.MySQLConPool,
+        QRY,
+        [tenant_id],
+        'getdriveractivity',
+        function(err, rows) {
+            if (err) {
+                console.log('GET DRIVER ACTIVITY ERROR:', err);
+                return res.json({
+                    status: 500,
+                    message: 'Internal server error'
+                });
+            }
+
+            return res.json({
+                status: 200,
+                data: rows || []
+            });
+        }
+    );
+};
+
+
 // GET /getcategory
 exports.getcategory = function (req, res) {
     var tenant_id = req.admin.tenant_id;

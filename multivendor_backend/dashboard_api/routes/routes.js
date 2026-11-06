@@ -71,6 +71,32 @@ function deliveryPartnerUploadError(err, req, res, next) {
         : 'Choose one supported image for each document field.';
     return res.json({ status: 202, message: message, errors: { [field]: message } });
 }
+// --- ADD THIS BLOCK ---
+const franchiseStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadsDir);
+    },
+    filename: function (req, file, cb) {
+        const extension = path.extname(file.originalname);
+        const filename = 'franchise_' + file.fieldname + '_' + Date.now() + extension;
+        cb(null, filename);
+    }
+});
+
+const uploadFranchiseImages = multer({
+    storage: franchiseStorage,
+    limits: { fileSize: 8 * 1024 * 1024, files: 3 }
+});
+
+function franchiseUploadError(err, req, res, next) {
+    if (!err) return next();
+    var field = err.field || 'bank_image';
+    var message = err.code === 'LIMIT_FILE_SIZE'
+        ? 'Document image must be no larger than 8 MiB.'
+        : 'Choose one supported image for each document field.';
+    return res.json({ status: 202, message: message, errors: { [field]: message } });
+}
+
 const devSupportStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadsDir);
@@ -155,11 +181,34 @@ router.get('/getmasterdata1', authMiddleware, mainCtrl.getmasterdata1);
 
 // Franchise administration: JWT plus database-backed action permissions.
 router.get('/getfranchises', authMiddleware, franchiseCtrl.getfranchises);
-router.post('/addfranchise', authMiddleware, franchiseCtrl.addfranchise);
-router.post('/updatefranchise', authMiddleware, franchiseCtrl.updatefranchise);
+router.post(
+    '/addfranchise', 
+    authMiddleware, 
+    uploadFranchiseImages.fields([
+        { name: 'bank_image', maxCount: 1 },
+        { name: 'aadhar_image', maxCount: 1 },
+        { name: 'pan_image', maxCount: 1 }
+    ]), 
+    franchiseUploadError,
+    franchiseCtrl.addfranchise
+);
+router.post(
+    '/updatefranchise', 
+    authMiddleware, 
+    uploadFranchiseImages.fields([
+        { name: 'bank_image', maxCount: 1 },
+        { name: 'aadhar_image', maxCount: 1 },
+        { name: 'pan_image', maxCount: 1 }
+    ]), 
+    franchiseUploadError,
+    franchiseCtrl.updatefranchise
+);
 router.post('/deletefranchise', authMiddleware, franchiseCtrl.deletefranchise);
 router.post('/updatefranchiseloginstatus', authMiddleware, franchiseCtrl.updatefranchiseloginstatus);
 router.post('/updatefranchiseactivestatus', authMiddleware, franchiseCtrl.updatefranchiseactivestatus);
+
+router.get('/getfranchisesettlements', authMiddleware, franchiseCtrl.getfranchisesettlements);
+router.get('/getfranchisesettlementhistory', authMiddleware, franchiseCtrl.getfranchisesettlementhistory);
 
 // Dashboard
 router.get('/getDashboard', authMiddleware, mainCtrl.getDashboard);
@@ -445,6 +494,8 @@ router.post(
 router.post('/getorders', authMiddleware,  mainCtrl.getorders);
 router.post('/getorderdetails', authMiddleware,  mainCtrl.getorderdetails);
 router.post('/updateorderstatus', authMiddleware,  mainCtrl.updateorderstatus);
+
+router.post('/getdriveractivity', authMiddleware, mainCtrl.getdriveractivity);
 
 // Customers
 router.get('/getcustomers', authMiddleware,  mainCtrl.getcustomers);
